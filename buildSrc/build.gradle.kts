@@ -7,10 +7,7 @@ repositories {
     mavenCentral()
     gradlePluginPortal()
     maven("https://maven.fabricmc.net/")
-    maven("https://server.bbkr.space/artifactory/libs-release/")
     maven("https://papermc.io/repo/repository/maven-public/")
-    maven("https://maven.quiltmc.org/repository/release/")
-    maven("https://repo.codemc.org/repository/maven-public/")
 }
 
 dependencies {

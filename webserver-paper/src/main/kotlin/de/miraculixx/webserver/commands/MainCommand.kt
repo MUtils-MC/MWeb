@@ -1,10 +1,11 @@
 package de.miraculixx.webserver.commands
 
-import de.miraculixx.webserver.utils.ServerData
-import de.miraculixx.webserver.utils.messages.*
-import de.miraculixx.webserver.utils.prefix
-import de.miraculixx.webserver.utils.settings
-import de.miraculixx.webserver.web.WebServer
+import de.miraculixx.mvanilla.commands.MainCommandInstance
+import de.miraculixx.mvanilla.data.ServerData
+import de.miraculixx.mvanilla.data.prefix
+import de.miraculixx.mvanilla.data.settings
+import de.miraculixx.mvanilla.messages.*
+import de.miraculixx.mvanilla.web.WebServer
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.LiteralArgument
 import dev.jorel.commandapi.arguments.StringArgument
@@ -12,11 +13,11 @@ import dev.jorel.commandapi.kotlindsl.*
 import net.kyori.adventure.text.event.ClickEvent
 import java.io.File
 
-class MainCommand {
+class MainCommand: MainCommandInstance {
     val command = commandTree("webserver") {
         withAliases("ws")
         playerExecutor { player, _ ->
-            
+
         }
 
         argument(LiteralArgument("whitelist").withPermission("webserver.whitelist")) {

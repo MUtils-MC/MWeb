@@ -1,6 +1,5 @@
 plugins {
     `core-script`
-    `shadow-script`
     id("fabric-loom")
     id("io.github.juuxel.loom-quiltflower")
 }
@@ -36,6 +35,12 @@ dependencies {
     modImplementation(include("me.lucko", "fabric-permissions-api", "0.2-SNAPSHOT"))
     modImplementation(include("net.kyori:adventure-platform-fabric:5.8.0")!!)
     transitiveInclude(implementation("org.yaml:snakeyaml:1.33")!!)
+
+    val ktorVersion = property("ktorVersion")
+    transitiveInclude("io.ktor:ktor-server-core-jvm:$ktorVersion")
+    transitiveInclude("io.ktor:ktor-server-content-negotiation-jvm:$ktorVersion")
+    transitiveInclude("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktorVersion")
+    transitiveInclude("io.ktor:ktor-server-cio:$ktorVersion")
 
     transitiveInclude.resolvedConfiguration.resolvedArtifacts.forEach {
         include(it.moduleVersion.id.toString())
