@@ -1,0 +1,44 @@
+#----------------------- Translation ------------------------#
+#       Content of all messages in MUtils-WebServer.         #
+#------------------------------------------------------------#
+# Some messages support MiniMessage styling (marked with #m) #
+#          and extra variables (marked with #v).             #
+# Syntax: <input-i> ->                                       #
+#         i is a number from 0 to the message max            #
+#------------------------------------------------------------#
+
+creator: MUtils
+version: 1.0.0
+
+#-----------------------------------------#
+#           Common Translations           #
+# Translation keys that persist in every  #
+#        project for simple values        #
+#-----------------------------------------#
+common:
+  boolTrue: "Enabled"
+  boolFalse: "Disabled"
+  left: "Left"
+  right: "Right"
+  click: "Click"
+  sneak: "Sneak"
+  none: "None"
+  confirm: "Confirm"
+  cancel: "Cancel"
+
+#-----------------------------------------#
+#            Command Responses            #
+#   Every command supports MiniMessages   #
+#-----------------------------------------#
+
+#-----------------------------------------#
+#                 Events                  #
+# Messages that occur on multiple places  #
+#-----------------------------------------#
+
+#-----------------------------------------#
+#                  Items                  #
+#   Messages only visible on GUI items    #
+# Syntax: n -> Item Name                  #
+#         l -> Item Lore                  #
+#-----------------------------------------#
