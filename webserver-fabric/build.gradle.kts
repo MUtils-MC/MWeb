@@ -23,6 +23,7 @@ dependencies {
     minecraft("com.mojang:minecraft:1.19.4")
     mappings(loom.officialMojangMappings())
 
+    val ktorVersion = property("ktorVersion")
     val silkVersion = "1.9.8"
     modImplementation("net.silkmc:silk-commands:$silkVersion")
     modImplementation("net.silkmc:silk-core:$silkVersion")
@@ -34,13 +35,14 @@ dependencies {
     modImplementation("net.fabricmc:fabric-language-kotlin:1.9.4+kotlin.1.8.21")
     modImplementation(include("me.lucko", "fabric-permissions-api", "0.2-SNAPSHOT"))
     modImplementation(include("net.kyori:adventure-platform-fabric:5.8.0")!!)
-    transitiveInclude(implementation("org.yaml:snakeyaml:1.33")!!)
+    modImplementation(include("org.yaml:snakeyaml:1.33")!!)
 
-    val ktorVersion = property("ktorVersion")
     transitiveInclude("io.ktor:ktor-server-core-jvm:$ktorVersion")
     transitiveInclude("io.ktor:ktor-server-content-negotiation-jvm:$ktorVersion")
     transitiveInclude("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktorVersion")
     transitiveInclude("io.ktor:ktor-server-cio:$ktorVersion")
+
+    implementation(include(project(":vanilla"))!!)
 
     transitiveInclude.resolvedConfiguration.resolvedArtifacts.forEach {
         include(it.moduleVersion.id.toString())
@@ -52,6 +54,14 @@ tasks {
         kotlinOptions {
             jvmTarget = "17"
             freeCompilerArgs += "-Xskip-prerelease-check"
+        }
+    }
+}
+
+kotlin {
+    sourceSets {
+        all {
+            languageSettings.optIn("net.silkmc.silk.core.annotations.ExperimentalSilkApi")
         }
     }
 }
