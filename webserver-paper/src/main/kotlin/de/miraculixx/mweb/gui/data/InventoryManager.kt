@@ -1,9 +1,9 @@
-package de.miraculixx.webserver.gui.data
+package de.miraculixx.mweb.gui.data
 
-import de.miraculixx.webserver.gui.CustomGUI
-import de.miraculixx.webserver.gui.ScrollGUI
-import de.miraculixx.webserver.gui.SettingsGUI
-import de.miraculixx.webserver.gui.StorageGUI
+import de.miraculixx.mweb.gui.CustomGUI
+import de.miraculixx.mweb.gui.ScrollGUI
+import de.miraculixx.mweb.gui.SettingsGUI
+import de.miraculixx.mweb.gui.StorageGUI
 
 object InventoryManager {
     /**

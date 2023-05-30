@@ -1,4 +1,4 @@
-package de.miraculixx.webserver.gui.items
+package de.miraculixx.mweb.gui.items
 
 import org.bukkit.inventory.ItemStack
 

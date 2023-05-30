@@ -1,4 +1,4 @@
-package de.miraculixx.webserver.gui.items
+package de.miraculixx.mweb.gui.items
 
 enum class Head64(val value: String) {
     // Arrows

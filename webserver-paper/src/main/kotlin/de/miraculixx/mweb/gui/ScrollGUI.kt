@@ -1,10 +1,10 @@
-package de.miraculixx.webserver.gui
+package de.miraculixx.mweb.gui
 
 import de.miraculixx.mvanilla.messages.*
-import de.miraculixx.webserver.gui.data.CustomInventory
-import de.miraculixx.webserver.gui.data.InventoryManager
-import de.miraculixx.webserver.gui.items.Head64
-import de.miraculixx.webserver.gui.items.ItemProvider
+import de.miraculixx.mweb.gui.data.CustomInventory
+import de.miraculixx.mweb.gui.data.InventoryManager
+import de.miraculixx.mweb.gui.items.Head64
+import de.miraculixx.mweb.gui.items.ItemProvider
 import net.axay.kspigot.items.customModel
 import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta

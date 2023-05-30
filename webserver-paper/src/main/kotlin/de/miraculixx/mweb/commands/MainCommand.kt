@@ -1,4 +1,4 @@
-package de.miraculixx.webserver.commands
+package de.miraculixx.mweb.commands
 
 import de.miraculixx.mvanilla.commands.MainCommandInstance
 import de.miraculixx.mvanilla.data.ServerData

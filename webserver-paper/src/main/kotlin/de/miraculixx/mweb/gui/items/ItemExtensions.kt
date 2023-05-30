@@ -1,4 +1,4 @@
-package de.miraculixx.webserver.gui.items
+package de.miraculixx.mweb.gui.items
 
 import com.mojang.authlib.GameProfile
 import com.mojang.authlib.properties.Property

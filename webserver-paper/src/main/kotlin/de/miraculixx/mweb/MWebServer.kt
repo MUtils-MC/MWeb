@@ -1,4 +1,4 @@
-package de.miraculixx.webserver
+package de.miraculixx.mweb
 
 import de.miraculixx.mvanilla.data.*
 import de.miraculixx.mvanilla.messages.Localization
@@ -6,8 +6,8 @@ import de.miraculixx.mvanilla.messages.cError
 import de.miraculixx.mvanilla.messages.cmp
 import de.miraculixx.mvanilla.messages.plus
 import de.miraculixx.mvanilla.web.WebServer
-import de.miraculixx.webserver.commands.MainCommand
-import de.miraculixx.webserver.module.GlobalListener
+import de.miraculixx.mweb.commands.MainCommand
+import de.miraculixx.mweb.module.GlobalListener
 import dev.jorel.commandapi.CommandAPI
 import dev.jorel.commandapi.CommandAPIConfig
 import kotlinx.serialization.decodeFromString

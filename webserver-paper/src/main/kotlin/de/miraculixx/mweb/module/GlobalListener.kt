@@ -1,4 +1,4 @@
-package de.miraculixx.webserver.module
+package de.miraculixx.mweb.module
 
 import de.miraculixx.mvanilla.data.ServerData
 import net.axay.kspigot.event.listen

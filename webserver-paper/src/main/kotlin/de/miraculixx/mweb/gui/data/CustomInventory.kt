@@ -1,4 +1,4 @@
-package de.miraculixx.webserver.gui.data
+package de.miraculixx.mweb.gui.data
 
 import de.miraculixx.mvanilla.data.consoleAudience
 import de.miraculixx.mvanilla.data.prefix
@@ -6,7 +6,7 @@ import de.miraculixx.mvanilla.data.settings
 import de.miraculixx.mvanilla.messages.cmp
 import de.miraculixx.mvanilla.messages.emptyComponent
 import de.miraculixx.mvanilla.messages.plus
-import de.miraculixx.webserver.gui.items.ItemProvider
+import de.miraculixx.mweb.gui.items.ItemProvider
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
 import net.kyori.adventure.text.Component
