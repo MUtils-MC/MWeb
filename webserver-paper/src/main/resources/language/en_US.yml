@@ -42,3 +42,10 @@ common:
 # Syntax: n -> Item Name                  #
 #         l -> Item Lore                  #
 #-----------------------------------------#
+items:
+  fileManager:
+    n: "Manage Files"
+  fileWhitelist:
+    n: "Manage Download Access"
+  fileUpload:
+    n: "Manage Upload Access"

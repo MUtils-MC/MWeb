@@ -25,3 +25,19 @@ dependencies {
 
     implementation("org.yaml:snakeyaml:1.33")
 }
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+tasks {
+    compileJava {
+        options.encoding = "UTF-8"
+        options.release.set(17)
+    }
+    compileKotlin {
+        kotlinOptions.jvmTarget = "17"
+    }
+}

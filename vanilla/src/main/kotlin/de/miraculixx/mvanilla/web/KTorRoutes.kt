@@ -13,45 +13,51 @@ import io.ktor.server.plugins.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import java.io.File
-import java.util.*
 
 fun Application.configureDownloads() {
     routing {
-        get("/download") {
-            val path = call.parameters["path"]
-            val shouldZip = call.parameters["zip"] == "true"
-            if (path == null) {
+        get("/download/{id}") {
+            val id = call.parameters["id"]
+            val passphrase = call.parameters["pw"]
+            if (id == null) {
                 call.respond(HttpStatusCode.BadRequest)
                 return@get
             }
 
-            // Check if file is whitelisted
-            if (!ServerData.getWhitelistedFiles().contains(path)) {
-                call.respond(HttpStatusCode.Forbidden)
-                return@get
-            }
-
-            // Check if file exist and is no folder (or zipping is active)
-            val targetFile = File(path)
-            if (!targetFile.exists() || (targetFile.isDirectory && !shouldZip)) {
+            // Check if file exist and is not timed out
+            val fileData = ServerData.getFileData(id)
+            val currentTime = System.currentTimeMillis()
+            if (fileData == null || (fileData.timeout != null && fileData.timeout!! >= currentTime)) {
                 call.respond(HttpStatusCode.NotFound, "Invalid Path")
                 return@get
             }
 
+            // Check if user has access to download
             val requestIP = call.request.origin.remoteHost
-
-            // Return final file and zip if file is folder
-            val finalFile = if (targetFile.isDirectory) {
-                if (!WebServer.tempFolder.exists()) WebServer.tempFolder.mkdir()
-                val zipFile = File(WebServer.tempFolder, "${UUID.randomUUID()}.zip")
-                Zipping.zipFolder(targetFile, zipFile)
-                zipFile.deleteOnExit()
-                if (settings.logAccess) consoleAudience.sendMessage(prefix + cmp("REQUEST ${ServerData.ipToPlayer(requestIP) ?: requestIP}: $path (zipped to $zipFile)"))
-                zipFile
-            } else {
-                if (settings.logAccess) consoleAudience.sendMessage(prefix + cmp("REQUEST ${ServerData.ipToPlayer(requestIP) ?: requestIP}: $path"))
-                targetFile
+            if (!ServerData.hasAccess(requestIP, id, passphrase)) {
+                call.respond(HttpStatusCode.Forbidden)
+                return@get
             }
+
+            // Return final file. If zip target is provided a cache check is performed
+            val playerID = ServerData.ipToPlayer(requestIP)
+            val playerName = playerID?.let { uuid -> LoaderSpecific.INSTANCE?.uuidToPlayerName(uuid) ?: uuid } ?: requestIP
+
+            val realFileTarget = File(fileData.path)
+            val finalFile = if (fileData.zippedTo != null) {
+                val zipFile = File(fileData.zippedTo)
+                if (!zipFile.exists()) {
+                    if (settings.logAccess) consoleAudience.sendMessage(prefix + cmp("REQUEST Zip target $id to ${zipFile.path}"))
+                    Zipping.zipFolder(realFileTarget, zipFile)
+                    zipFile.deleteOnExit() // Clean up temp cache
+                }
+                zipFile
+            } else if (realFileTarget.isDirectory || !realFileTarget.exists()) {
+                call.respond(HttpStatusCode.BadRequest, "Target file got moved")
+                return@get
+            } else realFileTarget
+            if (settings.logAccess) consoleAudience.sendMessage(prefix + cmp("REQUEST $playerName: $id"))
+
             call.respondFile(finalFile)
         }
     }

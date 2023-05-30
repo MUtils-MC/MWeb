@@ -9,6 +9,7 @@ tasks {
         dependencies {
             val moduleName = properties["module_name"]
             include(dependency("dev.jorel::"))
+//            include(dependency("io.ktor:ktor-server-cio:2.3.0"))
             include {
                 val split = it.moduleGroup.split('.')
                 val prefix = "${split.getOrNull(0)}.${split.getOrNull(1)}"

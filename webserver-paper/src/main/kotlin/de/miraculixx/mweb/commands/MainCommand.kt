@@ -1,66 +1,66 @@
 package de.miraculixx.mweb.commands
 
 import de.miraculixx.mvanilla.commands.MainCommandInstance
+import de.miraculixx.mvanilla.data.GUITypes
 import de.miraculixx.mvanilla.data.ServerData
-import de.miraculixx.mvanilla.data.prefix
+import de.miraculixx.mvanilla.data.WhitelistType
 import de.miraculixx.mvanilla.data.settings
-import de.miraculixx.mvanilla.messages.*
+import de.miraculixx.mvanilla.serializer.enumOf
 import de.miraculixx.mvanilla.web.WebServer
+import de.miraculixx.mweb.gui.actions.ActionFilesManage
+import de.miraculixx.mweb.gui.buildInventory
+import de.miraculixx.mweb.gui.items.ItemFilesManage
+import dev.jorel.commandapi.StringTooltip
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.LiteralArgument
 import dev.jorel.commandapi.arguments.StringArgument
 import dev.jorel.commandapi.kotlindsl.*
-import net.kyori.adventure.text.event.ClickEvent
 import java.io.File
+import kotlin.time.Duration
 
-class MainCommand: MainCommandInstance {
+class MainCommand : MainCommandInstance {
     val command = commandTree("webserver") {
         withAliases("ws")
         playerExecutor { player, _ ->
-
+            GUITypes.FILE_MANAGE.buildInventory(player, "${player.uniqueId}-MANAGE", ItemFilesManage(File("./")), ActionFilesManage())
         }
 
         argument(LiteralArgument("whitelist").withPermission("webserver.whitelist")) {
             literalArgument("add") {
                 stringArgument("file") {
-                    anyExecutor { sender, args ->
-                        val path = args[0] as String
-                        if (ServerData.getWhitelistedFiles().add(path)) {
-                            val url = toUrl(path)
-                            sender.sendMessage(
-                                prefix + cmp("The file ") + cmp(path, cHighlight) + cmp(" is now downloadable via ") +
-                                        cmp(url, cHighlight).clickEvent(ClickEvent.openUrl(url)).addHover(cmp("Click to download file"))
-                            )
-                        } else {
-                            sender.sendMessage(prefix + cmp("The file ", cError) + cmp(path, cError, underlined = true) + cmp(" is already whitelisted!", cError))
+                    argument(StringArgument("access").replaceSuggestions(ArgumentSuggestions.strings(WhitelistType.values().map { it.name }))) {
+                        anyExecutor { sender, args ->
+                            val path = args[0] as String
+                            val access = enumOf<WhitelistType>(args[1] as String) ?: WhitelistType.GLOBAL
+                            sender.whitelistFile(path, access)
+                        }
+                        stringArgument("restriction") {
+                            anyExecutor { sender, args ->
+                                val path = args[0] as String
+                                val access = enumOf<WhitelistType>(args[1] as String) ?: WhitelistType.GLOBAL
+                                val restriction = args[2] as String
+                                sender.whitelistFile(path, access, restriction)
+                            }
+                            stringArgument("timeout") {
+                                anyExecutor { sender, args ->
+                                    val path = args[0] as String
+                                    val access = enumOf<WhitelistType>(args[1] as String) ?: WhitelistType.GLOBAL
+                                    val restriction = args[2] as String
+                                    val timeout = Duration.parse(args[3] as String)
+                                    sender.whitelistFile(path, access, restriction, timeout)
+                                }
+                            }
                         }
                     }
                 }
             }
 
             literalArgument("remove") {
-                argument(StringArgument("file").replaceSuggestions(ArgumentSuggestions.strings(ServerData.getWhitelistedFiles()))) {
+                argument(StringArgument("file").replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(ServerData.getWhitelists().map { StringTooltip.ofString(it.first, it.second) }))) {
                     anyExecutor { sender, args ->
-                        val path = args[0] as String
-                        if (ServerData.getWhitelistedFiles().remove(path)) {
-                            sender.sendMessage(prefix + cmp("The file ") + cmp(path, cHighlight) + cmp(" is now privat! The download will stop working (Note, some browsers cache files!)"))
-                        } else {
-                            sender.sendMessage(prefix + cmp("Your selected file is already privat!", cError))
-                        }
+                        val id = args[0] as String
+                        sender.removeWhitelist(id)
                     }
-                }
-            }
-        }
-
-        argument(LiteralArgument("downloads").withPermission("webserver.downloads")) {
-            playerExecutor { player, _ ->
-
-            }
-            argument(StringArgument("file").replaceSuggestions(ArgumentSuggestions.strings(ServerData.getWhitelistedFiles()))) {
-                anyExecutor { sender, args ->
-                    val path = args[0] as String
-                    val url = toUrl(path)
-                    sender.sendMessage(prefix + cmp("Download - ") + cmp(url, cMark).clickEvent(ClickEvent.openUrl(url)).addHover(cmp("Click to download file")))
                 }
             }
         }

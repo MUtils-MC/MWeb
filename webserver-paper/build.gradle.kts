@@ -29,11 +29,4 @@ tasks {
         dependsOn(shadowJar)
         dependsOn(reobfJar)
     }
-    compileJava {
-        options.encoding = "UTF-8"
-        options.release.set(17)
-    }
-    compileKotlin {
-        kotlinOptions.jvmTarget = "17"
-    }
 }

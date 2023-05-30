@@ -7,30 +7,31 @@ import de.miraculixx.mvanilla.data.settings
 import de.miraculixx.mvanilla.messages.cmp
 import de.miraculixx.mvanilla.messages.plus
 import io.ktor.server.application.*
+import io.ktor.server.cio.*
 import io.ktor.server.engine.*
-import io.ktor.server.netty.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import java.io.File
+import java.net.URL
 
 object WebServer {
     val json = Json {
         ignoreUnknownKeys = true
         prettyPrint = true
     }
-    private lateinit var server: NettyApplicationEngine
+    private lateinit var server: ApplicationEngine
     lateinit var publicIP: String
     val tempFolder = File(configFolder, "temp")
 
     fun startServer() {
         CoroutineScope(Dispatchers.Default).launch {
-//            publicIP = URL("http://ifconfig.me/ip").readText().trim()
-            publicIP = "localhost"
+            publicIP = URL("http://ifconfig.me/ip").readText().trim()
+//            publicIP = "localhost"
             val port = settings.port
             consoleAudience.sendMessage(prefix + cmp("Creating web server via $publicIP:$port..."))
-            server = embeddedServer(Netty, port = port, host = "0.0.0.0", module = Application::module).start(wait = false)
+            server = embeddedServer(CIO, port = port, host = "0.0.0.0", module = Application::module).start(wait = false)
         }
     }
 
