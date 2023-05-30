@@ -1,13 +1,13 @@
-package de.miraculixx.mweb.gui
+package de.miraculixx.mweb.gui.logic
 
 import de.miraculixx.mvanilla.data.consoleAudience
 import de.miraculixx.mvanilla.data.prefix
 import de.miraculixx.mvanilla.messages.cError
 import de.miraculixx.mvanilla.messages.cmp
 import de.miraculixx.mvanilla.messages.plus
-import de.miraculixx.mweb.gui.data.CustomInventory
-import de.miraculixx.mweb.gui.data.InventoryManager
-import de.miraculixx.mweb.gui.items.ItemProvider
+import de.miraculixx.mweb.gui.logic.data.CustomInventory
+import de.miraculixx.mweb.gui.logic.data.InventoryManager
+import de.miraculixx.mweb.gui.logic.items.ItemProvider
 import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta
 import net.kyori.adventure.text.Component

@@ -8,6 +8,7 @@ import de.miraculixx.mvanilla.messages.plus
 import de.miraculixx.mvanilla.web.WebServer
 import de.miraculixx.mweb.commands.MainCommand
 import de.miraculixx.mweb.module.GlobalListener
+import de.miraculixx.mweb.module.LoaderImplementation
 import dev.jorel.commandapi.CommandAPI
 import dev.jorel.commandapi.CommandAPIConfig
 import kotlinx.serialization.decodeFromString
@@ -21,7 +22,8 @@ import java.io.File
  * - Whitelist files (publish)
  *      -> global
  *      -> player only
- *      -> IP only
+ *      -> IP only (nah)
+ *      -> Password protected
  *    -> Unlimited
  *    -> Time limited
  *    -> Request limited
@@ -29,7 +31,7 @@ import java.io.File
  *      -> Auto Packing
  * - Clear temp folder
  */
-class MWebServer : KSpigot() {
+class MWeb : KSpigot() {
     companion object {
         lateinit var INSTANCE: KSpigot
         lateinit var localization: Localization
@@ -56,6 +58,7 @@ class MWebServer : KSpigot() {
     }
 
     override fun startup() {
+        LoaderImplementation()
         WebServer.startServer()
         ServerData.loadData()
 
@@ -72,4 +75,4 @@ class MWebServer : KSpigot() {
     }
 }
 
-val PluginInstance by lazy { MWebServer.INSTANCE }
+val PluginInstance by lazy { MWeb.INSTANCE }

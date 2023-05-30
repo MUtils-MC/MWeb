@@ -1,6 +1,6 @@
-package de.miraculixx.mweb.gui
+package de.miraculixx.mweb.gui.logic
 
-import de.miraculixx.mweb.gui.data.CustomInventory
+import de.miraculixx.mweb.gui.logic.data.CustomInventory
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 

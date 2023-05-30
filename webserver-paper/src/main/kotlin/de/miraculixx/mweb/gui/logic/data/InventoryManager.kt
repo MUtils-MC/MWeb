@@ -1,9 +1,9 @@
-package de.miraculixx.mweb.gui.data
+package de.miraculixx.mweb.gui.logic.data
 
-import de.miraculixx.mweb.gui.CustomGUI
-import de.miraculixx.mweb.gui.ScrollGUI
-import de.miraculixx.mweb.gui.SettingsGUI
-import de.miraculixx.mweb.gui.StorageGUI
+import de.miraculixx.mweb.gui.logic.CustomGUI
+import de.miraculixx.mweb.gui.logic.ScrollGUI
+import de.miraculixx.mweb.gui.logic.SettingsGUI
+import de.miraculixx.mweb.gui.logic.StorageGUI
 
 object InventoryManager {
     /**

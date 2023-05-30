@@ -1,9 +1,9 @@
-package de.miraculixx.mweb.gui
+package de.miraculixx.mweb.gui.logic
 
 import de.miraculixx.mvanilla.messages.*
-import de.miraculixx.mweb.gui.data.CustomInventory
-import de.miraculixx.mweb.gui.items.Head64
-import de.miraculixx.mweb.gui.items.skullTexture
+import de.miraculixx.mweb.gui.logic.data.CustomInventory
+import de.miraculixx.mweb.gui.logic.items.Head64
+import de.miraculixx.mweb.gui.logic.items.skullTexture
 import net.axay.kspigot.items.customModel
 import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta

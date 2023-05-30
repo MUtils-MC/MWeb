@@ -1,11 +1,11 @@
-package de.miraculixx.mweb.gui
+package de.miraculixx.mweb.gui.logic
 
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mvanilla.serializer.toMap
-import de.miraculixx.mweb.gui.data.CustomInventory
-import de.miraculixx.mweb.gui.items.Head64
-import de.miraculixx.mweb.gui.items.ItemFilterProvider
-import de.miraculixx.mweb.gui.items.ItemProvider
+import de.miraculixx.mweb.gui.logic.data.CustomInventory
+import de.miraculixx.mweb.gui.logic.items.Head64
+import de.miraculixx.mweb.gui.logic.items.ItemFilterProvider
+import de.miraculixx.mweb.gui.logic.items.ItemProvider
 import net.axay.kspigot.items.customModel
 import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta
@@ -133,7 +133,9 @@ class StorageGUI(
     }
 
     override fun update() {
-        val content = itemProvider?.getItemList()?.toMap(false)?.plus(itemProvider.getBooleanMap(0, 99)) ?: emptyMap()
+        val from = page * 9
+        val to = page * 9 + (9 * 4)
+        val content = itemProvider?.getItemList(from, to)?.toMap(false)?.plus(itemProvider.getBooleanMap(from, to)) ?: emptyMap()
         val filter = (itemProvider as? ItemFilterProvider)?.filter
         fillPlaceholder(false)
 
@@ -181,13 +183,7 @@ class StorageGUI(
 
 
         //Visible Content
-        val visible = if (scrollable) {
-//            println("Content - ${page * 9} -> ${page * 9 + (if (filterable) 9*4 else 9*5)}")
-            content.toList().subList(
-                (page * 9).coerceIn(0 until content.size),
-                (page * 9 + (if (filterable) 9 * 4 else 9 * 5)).coerceIn(0 until content.size + 1)
-            )
-        } else content.toList()
+        val visible = content.toList()
 
         //Scroll Apply
         if (scrollable) {
