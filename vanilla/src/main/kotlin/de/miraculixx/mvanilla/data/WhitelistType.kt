@@ -1,3 +1,5 @@
 package de.miraculixx.mvanilla.data
 
-data class WhitelistType()
+enum class WhitelistType {
+    GLOBAL, USER_RESTRICTED, PERMISSION_RESTRICTED
+}
