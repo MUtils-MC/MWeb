@@ -13,6 +13,7 @@ fun GUITypes.buildInventory(player: Player, id: String, itemProvider: ItemProvid
             this.player = player
             this.filterable = false
             this.scrollable = true
+            this.headers = itemProvider?.getExtra() ?: emptyList()
             this.itemProvider = itemProvider
             this.clickAction = clickAction.run
         }

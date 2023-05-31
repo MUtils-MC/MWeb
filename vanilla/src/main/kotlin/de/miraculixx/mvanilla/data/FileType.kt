@@ -22,13 +22,14 @@ enum class FileType(val desc: String) {
     ;
 
     companion object {
-        private val pattern = "dd.MM.yyyy HH:mm:ss"
+        private const val pattern = "dd.MM.yyyy HH:mm:ss"
         fun getType(extension: String): FileType {
             return when (extension) {
                 "zip", "rar", "tar", "gz" -> ARCHIVE
                 "jar" -> JAR
+                "json", "yml", "yaml", "toml", "conf" -> CONFIGURATION
                 "properties", "lock" -> DANGEROUS
-                "mcfunction", "mcmeta", "dat", "mca" -> MEDIA_FILES
+                "mcfunction", "mcmeta", "dat", "dat_old", "mca" -> MC_FILES
                 "png", "jpg", "jpeg", "gif", "webp", "mov", "ogg", "mp4", "mp3" -> MEDIA_FILES
                 else -> DATA
             }

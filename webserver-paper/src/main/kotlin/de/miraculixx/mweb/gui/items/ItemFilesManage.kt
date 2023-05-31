@@ -25,18 +25,28 @@ import java.nio.file.Files
 import java.time.Instant
 
 class ItemFilesManage(startFolder: File) : ItemProvider {
-    private val nameManage = cmp(msgString("items.fileManage.n"))
-    private val nameWhitelist = cmp(msgString("items.fileWhitelist.n"))
-    private val nameUpload = cmp(msgString("items.fileUpload.n"))
+    private val msgNavBack = cmp(msgString("items.navigateBack.n"))
 
-    private var currentFolder = startFolder
-    private val pathNamespace = NamespacedKey("de.miraculixx.api", "file-path")
+    var currentFolder = startFolder
+    val pathNamespace = NamespacedKey("de.miraculixx.api", "file-path")
 
     override fun getItemList(from: Int, to: Int): List<ItemStack> {
         val folderFiles = currentFolder.listFiles()
-        val files = folderFiles?.slice(from..to.coerceAtMost(folderFiles.size - 1)) ?: emptyList()
+        val files = folderFiles?.slice(from..to.coerceAtMost(folderFiles.size - 1))?.sortedByDescending { it.isDirectory } ?: emptyList()
 
         return buildList {
+            val parentFIle = currentFolder.parentFile
+            if (parentFIle != null) {
+                add(itemStack(Material.PLAYER_HEAD) {
+                    meta {
+                        name = msgNavBack
+                        lore(listOf(cmp(parentFIle.path)))
+                        customModel = 99
+                    }
+                    itemMeta = (itemMeta as SkullMeta).skullTexture(Head64.ARROW_CURLY_LEFT_WHITE.value)
+                })
+            }
+
             if (files.isEmpty()) {
                 add(itemStack(Material.BARRIER) {
                     meta {
@@ -67,15 +77,16 @@ class ItemFilesManage(startFolder: File) : ItemProvider {
                     it.customModel = 100
                     it.persistentDataContainer.set(pathNamespace, PersistentDataType.STRING, file.path)
                 }
+                add(item)
             }
         }
     }
 
     override fun getExtra(): List<ItemStack> {
         return listOf(
-            getHeader(1, nameManage, Head64.HASHTAG_BLUE),
-            getHeader(2, nameWhitelist, Head64.ARROW_DOWN_BLUE),
-            getHeader(3, nameUpload, Head64.PLUS_BLUE)
+            getHeader(1, cmp(msgString("items.fileManage.n")), Head64.HASHTAG_BLUE),
+            getHeader(2, cmp(msgString("items.fileWhitelist.n")), Head64.ARROW_DOWN_BLUE),
+            getHeader(3, cmp(msgString("items.fileUpload.n")), Head64.PLUS_BLUE)
         )
     }
 

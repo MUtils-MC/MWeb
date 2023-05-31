@@ -15,11 +15,11 @@ fun FileType.getItem(): ItemStack {
     return when (this) {
         FileType.FOLDER -> itemStack(Material.PLAYER_HEAD) { itemMeta = (itemMeta as SkullMeta).skullTexture(Head64.CHEST.value) }
         FileType.ARCHIVE -> itemStack(Material.PLAYER_HEAD) { itemMeta = (itemMeta as SkullMeta).skullTexture(Head64.WINRAR.value) }
-        FileType.JAR -> itemStack(Material.MAP) { meta<MapMeta> { color = Color.PURPLE } }
-        FileType.CONFIGURATION -> itemStack(Material.MAP) { meta<MapMeta> { color = Color.GREEN } }
-        FileType.DANGEROUS -> itemStack(Material.MAP) { meta<MapMeta> { color = Color.RED } }
-        FileType.MC_FILES -> itemStack(Material.MAP) { meta<MapMeta> { color = Color.YELLOW } }
-        FileType.MEDIA_FILES -> itemStack(Material.MAP) { meta<MapMeta> { color = Color.AQUA } }
-        FileType.DATA -> itemStack(Material.MAP) { meta<MapMeta> { color = Color.GRAY } }
+        FileType.JAR -> itemStack(Material.FILLED_MAP) { meta<MapMeta> { color = Color.PURPLE } }
+        FileType.CONFIGURATION -> itemStack(Material.FILLED_MAP) { meta<MapMeta> { color = Color.GREEN } }
+        FileType.DANGEROUS -> itemStack(Material.FILLED_MAP) { meta<MapMeta> { color = Color.RED } }
+        FileType.MC_FILES -> itemStack(Material.FILLED_MAP) { meta<MapMeta> { color = Color.YELLOW } }
+        FileType.MEDIA_FILES -> itemStack(Material.FILLED_MAP) { meta<MapMeta> { color = Color.AQUA } }
+        FileType.DATA -> itemStack(Material.FILLED_MAP) { meta<MapMeta> { color = Color.GRAY } }
     }
 }
