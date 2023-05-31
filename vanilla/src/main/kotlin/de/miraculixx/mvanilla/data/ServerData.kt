@@ -24,10 +24,17 @@ object ServerData {
     }
 
     /**
-     * @return <ID, Path>
+     * @return <ID, Data>
      */
-    fun getWhitelists(): List<Pair<String, String>> {
-        return webData.whitelistedFiles.map { it.key to it.value.path }
+    fun getWhitelists(): Map<String, WhitelistFile> {
+        return webData.whitelistedFiles
+    }
+
+    /**
+     * @return <ID, Data>
+     */
+    fun getWhitelists(path: String): Map<String, WhitelistFile> {
+        return webData.whitelistedFiles.filter { it.value.path == path }
     }
 
     fun setIpToPlayer(ip: String, uuid: UUID) {
@@ -46,6 +53,12 @@ object ServerData {
             WhitelistType.USER_RESTRICTED -> ipToPlayer(ip)?.toString() == file.restriction
             WhitelistType.PASSPHRASE_RESTRICTED -> passphrase == file.restriction
         }
+    }
+
+    fun isUnavailable(fileData: WhitelistFile): Boolean {
+        return fileData.disabled ||
+                (fileData.timeout != null && fileData.timeout!! >= System.currentTimeMillis()) ||
+                (fileData.maxAmount != null && fileData.requestAmount > fileData.maxAmount!!)
     }
 
     fun getFileData(id: String): WhitelistFile? {

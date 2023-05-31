@@ -11,7 +11,7 @@ import kotlin.random.Random
 import kotlin.random.nextInt
 import kotlin.time.Duration
 
-interface MainCommandInstance {
+interface WhitelistHandling {
     private val charList: Array<Char>
         get() = arrayOf('a', 'b', 'c', 'e', 'g', 'h', 'k', 'n', 's', 'x')
 
@@ -22,7 +22,7 @@ interface MainCommandInstance {
      * @param restriction Needed if access type is restricted. UUID, passphrase, ...
      * @param duration Access only for a limited duration. Null = infinity
      */
-    fun Audience.whitelistFile(path: String, access: WhitelistType, restriction: String? = null, duration: Duration? = null) {
+    fun Audience.whitelistFile(path: String, access: WhitelistType, restriction: String? = null, duration: Duration? = null, maxDownloads: Int? = null) {
         val id = calcID()
         val file = File(path)
         if (!file.exists()) {
@@ -41,7 +41,7 @@ interface MainCommandInstance {
             System.currentTimeMillis() + duration.inWholeMilliseconds
         } else null
 
-        ServerData.addWhitelist(id, WhitelistFile(file.path, zipTarget, access, restriction, timeoutTimestamp))
+        ServerData.addWhitelist(id, WhitelistFile(file.path, zipTarget, access, restriction, timeoutTimestamp, maxDownloads))
 
         val containsPassphrase = access == WhitelistType.PASSPHRASE_RESTRICTED
         soundEnable()
@@ -65,10 +65,9 @@ interface MainCommandInstance {
 
     private fun calcID(): String {
         val id = System.currentTimeMillis().toString()
-        val a = 123
         return buildString {
             id.forEach { digit ->
-                append(charList[digit.digitToInt()])
+                append(if (Random.nextBoolean()) charList[digit.digitToInt()] else digit)
             }
         }
     }

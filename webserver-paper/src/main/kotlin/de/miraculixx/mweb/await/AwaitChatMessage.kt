@@ -73,7 +73,7 @@ class AwaitChatMessage(
         if (advancedMode && before != null) {
             val realBefore = before.replace(' ', '_')
             player.sendMessage(
-                prefix + (cmp(realBefore) + cmp(" (copy)", cMark)).addHover(msg("event.clickToCopy", listOf(realBefore)))
+                cmp(" ├> ") + (cmp(realBefore) + cmp(" (copy)", cMark)).addHover(msg("event.clickToCopy", listOf(realBefore)))
                 .clickEvent(ClickEvent.suggestCommand(realBefore)))
         }
     }

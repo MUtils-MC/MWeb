@@ -3,7 +3,7 @@ package de.miraculixx.mweb.gui.logic
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mvanilla.serializer.toMap
 import de.miraculixx.mweb.gui.logic.data.CustomInventory
-import de.miraculixx.mweb.gui.logic.items.Head64
+import de.miraculixx.mvanilla.data.Head64
 import de.miraculixx.mweb.gui.logic.items.ItemFilterProvider
 import de.miraculixx.mweb.gui.logic.items.ItemProvider
 import net.axay.kspigot.items.customModel
@@ -134,7 +134,7 @@ class StorageGUI(
 
     override fun update() {
         val from = page * 9
-        val to = page * 9 + (9 * 4)
+        val to = from + (9 * 4) - 1
         val content = itemProvider?.getItemList(from, to)?.toMap(false)?.plus(itemProvider.getBooleanMap(from, to)) ?: emptyMap()
         val filter = (itemProvider as? ItemFilterProvider)?.filter
         fillPlaceholder(false)

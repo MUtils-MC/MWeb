@@ -12,3 +12,7 @@ val msgShiftClickLeft = cmp(msgString("common.sneak"), cHighlight).append(separa
 val msgTrue = msgString("common.boolTrue")
 val msgFalse = msgString("common.boolFalse")
 val msgNone = msgString("common.none")
+
+fun Boolean.msg(): String {
+    return if (this) msgTrue else msgFalse
+}

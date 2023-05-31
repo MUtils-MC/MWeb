@@ -1,6 +1,6 @@
 package de.miraculixx.mweb.commands
 
-import de.miraculixx.mvanilla.commands.MainCommandInstance
+import de.miraculixx.mvanilla.commands.WhitelistHandling
 import de.miraculixx.mvanilla.data.GUITypes
 import de.miraculixx.mvanilla.data.ServerData
 import de.miraculixx.mvanilla.data.WhitelistType
@@ -8,6 +8,7 @@ import de.miraculixx.mvanilla.data.settings
 import de.miraculixx.mvanilla.serializer.enumOf
 import de.miraculixx.mvanilla.web.WebServer
 import de.miraculixx.mweb.gui.actions.ActionFilesManage
+import de.miraculixx.mweb.gui.actions.ActionFilesWhitelist
 import de.miraculixx.mweb.gui.buildInventory
 import de.miraculixx.mweb.gui.items.ItemFilesManage
 import dev.jorel.commandapi.StringTooltip
@@ -15,17 +16,23 @@ import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.LiteralArgument
 import dev.jorel.commandapi.arguments.StringArgument
 import dev.jorel.commandapi.kotlindsl.*
+import org.bukkit.Sound
 import java.io.File
 import kotlin.time.Duration
 
-class MainCommand : MainCommandInstance {
+class MainCommand : WhitelistHandling {
     val command = commandTree("webserver") {
         withAliases("ws")
         playerExecutor { player, _ ->
-            GUITypes.FILE_MANAGE.buildInventory(player, "${player.uniqueId}-MANAGE", ItemFilesManage(File("./")), ActionFilesManage())
+            player.playSound(player, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 1f)
+            GUITypes.FILE_MANAGE.buildInventory(player, "${player.uniqueId}-MANAGE", ItemFilesManage(File("./"), GUITypes.FILE_MANAGE), ActionFilesManage())
         }
 
         argument(LiteralArgument("whitelist").withPermission("webserver.whitelist")) {
+            playerExecutor { player, _ ->
+                player.playSound(player, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 1f)
+                GUITypes.FILE_WHITELISTING.buildInventory(player, "${player.uniqueId}-WHITELIST", ItemFilesManage(File("./"), GUITypes.FILE_WHITELISTING), ActionFilesWhitelist())
+            }
             literalArgument("add") {
                 stringArgument("file") {
                     argument(StringArgument("access").replaceSuggestions(ArgumentSuggestions.strings(WhitelistType.values().map { it.name }))) {

@@ -1,7 +1,7 @@
 package de.miraculixx.mweb.gui
 
 import de.miraculixx.mvanilla.data.FileType
-import de.miraculixx.mweb.gui.logic.items.Head64
+import de.miraculixx.mvanilla.data.Head64
 import de.miraculixx.mweb.gui.logic.items.skullTexture
 import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta

@@ -25,6 +25,7 @@ common:
   none: "None"
   confirm: "Confirm"
   cancel: "Cancel"
+  button: "Button"
 
 #-----------------------------------------#
 #            Command Responses            #
@@ -35,6 +36,32 @@ common:
 #                 Events                  #
 # Messages that occur on multiple places  #
 #-----------------------------------------#
+event:
+  clickToCopy: "Click to copy"
+  invalidName: "Failed to rename file to <input-1>! Please check for invalid characters" #v1
+  invalidDelete: "Failed to delete file <input-1>!" #v1
+  rename: "<grey><blue><b>Input Formatting</b></blue>\n ├> File names can not contain characters like <color:#6e94ff>\\/<>:*|\"</color>\n ├> Use <color:#6e94ff>_</color> for spaces\n ├> <color:#6e94ff>#exit</color> to leave</grey>" #m
+  fileType:
+    folder: "Directory"
+    config: "Configuration File"
+    dangerous: "System File"
+    mc: "Minecraft File"
+    archive: "Compressed Archive"
+    jar: "Jar File"
+    media: "Media File"
+    default: "Data File"
+  fileNotFound: "Failed to resolve file <input-1>. Refreshing all files..."
+  action:
+    riseDownloads: "Rise Max Downloads"
+    riseTimeout: "Rise Timeout"
+    createGlobal: "Create Global Link"
+    createPersonal: "Create Personal Link"
+    createCustom: "Create Custom Link"
+    manageLinks: "Manage Links"
+    navigate: "Navigate"
+    rename: "Rename"
+    zip: "ZIP"
+    copyLink: "Copy Link"
 
 #-----------------------------------------#
 #                  Items                  #
@@ -43,7 +70,22 @@ common:
 #         l -> Item Lore                  #
 #-----------------------------------------#
 items:
-  fileManager:
+  general:
+    arrowRightEnd:
+      n: "<red>Scroll Right"
+      l: "You can not scroll any<br>further to the right"
+    arrowLeftEnd:
+      n: "<red>Scroll Left"
+      l: "You can not scroll any<br>further to the left"
+    arrowRight:
+      n: "<green>Scroll Right"
+      l: "<blue>Click ≫ +1 page<br><blue>Sneak-Click ≫ +5 pages"
+    arrowLeft:
+      n: "<green>Scroll Left"
+      l: "<blue>Click ≫ -1 page<br><blue>Sneak-Click ≫ -5 pages"
+    pageIndicator:
+      l: "Click to open a compact<br>GUI with quick access"
+  fileManage:
     n: "Manage Files"
   fileWhitelist:
     n: "Manage Download Access"
