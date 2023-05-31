@@ -37,6 +37,15 @@ class ActionFilesManage: GUIEvent {
                         inv.update()
                     }
 
+                    ClickType.NUMBER_KEY -> {
+                        when (it.hotbarButton) {
+                            0 -> {
+                                player.closeInventory()
+                                Await
+                            }
+                        }
+                    }
+
                     else -> player.soundStone()
                 }
             }

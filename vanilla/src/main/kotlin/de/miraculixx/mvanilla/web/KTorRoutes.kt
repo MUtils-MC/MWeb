@@ -27,7 +27,7 @@ fun Application.configureDownloads() {
             // Check if file exist and is not timed out
             val fileData = ServerData.getFileData(id)
             val currentTime = System.currentTimeMillis()
-            if (fileData == null || (fileData.timeout != null && fileData.timeout!! >= currentTime)) {
+            if (fileData == null || (fileData.timeout != null && fileData.timeout!! >= currentTime) || (fileData.maxAmount != null && fileData.requestAmount > fileData.maxAmount!!)) {
                 call.respond(HttpStatusCode.NotFound, "Invalid Path")
                 return@get
             }
@@ -58,6 +58,7 @@ fun Application.configureDownloads() {
             } else realFileTarget
             if (settings.logAccess) consoleAudience.sendMessage(prefix + cmp("REQUEST $playerName: $id"))
 
+            fileData.requestAmount += 1
             call.respondFile(finalFile)
         }
     }

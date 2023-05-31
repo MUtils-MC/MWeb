@@ -148,9 +148,9 @@ class StorageGUI(
             }
 
             3 -> {
-                i.setItem(2, header[0])
+                i.setItem(3, header[0])
                 i.setItem(4, header[1])
-                i.setItem(6, header[2])
+                i.setItem(5, header[2])
             }
 
             4 -> {
@@ -205,15 +205,19 @@ class StorageGUI(
                 pair.first.addItemFlags(ItemFlag.HIDE_ENCHANTS)
             }
             if (filterable && index >= 9 * 4) return
-            i.setItem(9 + index, pair.first)
+            i.setItem(18 + index, pair.first)
         }
     }
 
     private fun fillPlaceholder(full: Boolean) {
-        val darkHolder = itemStack(Material.GRAY_STAINED_GLASS_PANE) { meta { displayName(emptyComponent()) } }
-        if (full) (0..8).forEach { i.setItem(it, darkHolder) }
+        val darkHolder = InventoryUtils.phPrimary
+        val blackHolder = InventoryUtils.phSecondary
+        if (full) {
+            (0..8).forEach { i.setItem(it, darkHolder) }
+            (9..17).forEach { i.setItem(it, blackHolder) }
+        }
 
-        (9..53 - (if (filterable) 9 else 0)).forEach { i.setItem(it, lightHolder) }
+        (18..53 - (if (filterable) 9 else 0)).forEach { i.setItem(it, lightHolder) }
         if (filterable) (45..53).forEach { i.setItem(it, darkHolder) }
     }
 

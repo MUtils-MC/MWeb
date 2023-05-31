@@ -39,5 +39,13 @@ enum class FileType(val desc: String) {
             val formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault())
             return formatter.format(instant)
         }
+
+        fun formatPath(path: String): String {
+            val segments = path.split('\\')
+            val size = segments.size
+            return if (size > 3) {
+                "...\\${segments[size - 2]}\\${segments[size - 1]}"
+            } else path
+        }
     }
 }

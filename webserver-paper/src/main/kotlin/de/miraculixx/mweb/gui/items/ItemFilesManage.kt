@@ -26,6 +26,9 @@ import java.time.Instant
 
 class ItemFilesManage(startFolder: File) : ItemProvider {
     private val msgNavBack = cmp(msgString("items.navigateBack.n"))
+    private val msgButton = cmp(msgString("common.button") + " ", cHighlight)
+    private val msgDot = cmp("  • ", NamedTextColor.DARK_GRAY)
+    private val loreInfo = listOf(emptyComponent(), cmp("• ", NamedTextColor.DARK_GRAY, bold = true) + cmp("Info", cHighlight, underlined = true))
 
     var currentFolder = startFolder
     val pathNamespace = NamespacedKey("de.miraculixx.api", "file-path")
@@ -63,16 +66,18 @@ class ItemFilesManage(startFolder: File) : ItemProvider {
                 item.editMeta {
                     it.name = cmp(file.name, cHighlight)
                     it.lore(
-                        listOf(
-                            cmp(file.path, NamedTextColor.DARK_GRAY),
-                            cmp("• ${type.desc}", NamedTextColor.DARK_GRAY),
-                            cmp("• ${FileUtils.byteCountToDisplaySize(Files.size(file.toPath()))}", NamedTextColor.DARK_GRAY),
-                            cmp("• ${FileType.getTime(Instant.ofEpochMilli(file.lastModified()))}", NamedTextColor.DARK_GRAY),
-                            emptyComponent(),
-                            msgClickLeft + cmp(if (isFolder) "ZIP" else "Add ZIP"),
-                            msgClickRight + cmp("Rename"),
-                            msgShiftClickRight + cmp("Delete ${if (isFolder) "Recursive" else ""}")
-                        )
+                        buildList {
+                            add(cmp(FileType.formatPath(file.path), NamedTextColor.DARK_GRAY))
+                            addAll(loreInfo)
+                            add(msgDot + cmp(type.desc))
+                            add(msgDot + cmp(FileType.getTime(Instant.ofEpochMilli(file.lastModified()))))
+                            if (!isFolder) add(msgDot + cmp(FileUtils.byteCountToDisplaySize(Files.size(file.toPath()))))
+                            add(emptyComponent())
+                            if (isFolder) add(msgClickLeft + cmp("Navigate"))
+                            add(msgButton + Component.keybind("key.hotbar.1", cHighlight) + cmp(" ≫ Rename"))
+                            add(msgButton + Component.keybind("key.hotbar.2", cHighlight) + cmp(" ≫ ${if (isFolder) "ZIP" else "Add ZIP"}"))
+                            add(msgButton + Component.keybind("key.hotbar.3", cHighlight) + cmp(" ≫ Delete ${if (isFolder) "Recursively" else ""}"))
+                        }
                     )
                     it.customModel = 100
                     it.persistentDataContainer.set(pathNamespace, PersistentDataType.STRING, file.path)
@@ -84,7 +89,7 @@ class ItemFilesManage(startFolder: File) : ItemProvider {
 
     override fun getExtra(): List<ItemStack> {
         return listOf(
-            getHeader(1, cmp(msgString("items.fileManage.n")), Head64.HASHTAG_BLUE),
+            getHeader(1, cmp(msgString("items.fileManage.n")), Head64.HASHTAG_LIGHT_BLUE),
             getHeader(2, cmp(msgString("items.fileWhitelist.n")), Head64.ARROW_DOWN_BLUE),
             getHeader(3, cmp(msgString("items.fileUpload.n")), Head64.PLUS_BLUE)
         )

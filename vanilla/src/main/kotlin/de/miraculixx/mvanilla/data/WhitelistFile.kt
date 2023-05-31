@@ -16,4 +16,6 @@ data class WhitelistFile(
     val accessType: WhitelistType,
     val restriction: String? = null,
     var timeout: Long? = null,
+    var maxAmount: Int? = null,
+    var requestAmount: Int = 0
 )

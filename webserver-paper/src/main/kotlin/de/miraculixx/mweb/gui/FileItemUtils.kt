@@ -18,7 +18,7 @@ fun FileType.getItem(): ItemStack {
         FileType.JAR -> itemStack(Material.FILLED_MAP) { meta<MapMeta> { color = Color.PURPLE } }
         FileType.CONFIGURATION -> itemStack(Material.FILLED_MAP) { meta<MapMeta> { color = Color.GREEN } }
         FileType.DANGEROUS -> itemStack(Material.FILLED_MAP) { meta<MapMeta> { color = Color.RED } }
-        FileType.MC_FILES -> itemStack(Material.FILLED_MAP) { meta<MapMeta> { color = Color.YELLOW } }
+        FileType.MC_FILES -> itemStack(Material.FILLED_MAP) { meta<MapMeta> { color = Color.ORANGE } }
         FileType.MEDIA_FILES -> itemStack(Material.FILLED_MAP) { meta<MapMeta> { color = Color.AQUA } }
         FileType.DATA -> itemStack(Material.FILLED_MAP) { meta<MapMeta> { color = Color.GRAY } }
     }
