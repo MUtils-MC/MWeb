@@ -44,7 +44,7 @@ Creating a simple download link isn't more then one click!
 You can create a global link or personal link (only usable by you) directly from the navigator by using your 1 & 2 hotkey. After processing (bigger folders take some time to zip) a new link is generated for you. Click on copy to copy the link in your clipboard and share it with anyone or paste it in your browser!
 
 You can create multiple links for the same file. Press your 4 hotkey on a file or folder to manage all links. Here you can toggle, remove or even edit existing links.<br>
-![Click here to see preview (80mb video to large for GitHub)](https://imgur.com/kcUB1VT)<br>
+[Click here to see preview (80mb video to large for GitHub)](https://i.imgur.com/kcUB1VT.gif)<br>
 (the preview use `mweb.mutils.net` as proxy. This is not a default behaviour)
 
 
