@@ -16,6 +16,7 @@ fun Application.configureDownloads() {
     val respondForbidden = File(configFolder, "responses/forbidden.html")
     val respondNoID = File(configFolder, "responses/invalid.html")
     val respondNotFound = File(configFolder, "responses/notfound.html")
+    val respondIndex = File(configFolder, "responses/index.html")
 
     suspend fun PipelineContext<Unit, ApplicationCall>.handleDownloadRequest() {
         val id = call.parameters["id"]
@@ -72,5 +73,6 @@ fun Application.configureDownloads() {
         get("/d") { handleDownloadRequest() }
         get("/download/{id}") { handleDownloadRequest() }
         get("/download") { handleDownloadRequest() }
+        get{ call.respondText(respondIndex.takeIf { it.isFile }?.readText() ?: "Welcome to MWeb", ContentType.Text.Html, HttpStatusCode.OK) }
     }
 }
