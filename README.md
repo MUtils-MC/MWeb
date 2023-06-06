@@ -1,4 +1,6 @@
 # MWeb
+## [Download at Modrinth (click)](https://modrinth.com/mod/mweb)
+
 Don't want to read everything? Click on the spoiler below for a compact feature overview.<br>
 For developers that are interested into the MWeb API, scroll down to the bottom.
 <details><summary>MWeb Feature Summary</summary>
