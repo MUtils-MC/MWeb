@@ -18,6 +18,7 @@ dependencies {
 
     implementation("dev.jorel:commandapi-shade:8.8.0")
     implementation("dev.jorel:commandapi-kotlin:8.8.0")
+    implementation("de.miraculixx:minimessage-convertor:1.0.0")
 
     implementation("net.axay:kspigot:1.19.2")
 

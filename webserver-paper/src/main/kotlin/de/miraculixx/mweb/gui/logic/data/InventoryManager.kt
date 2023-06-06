@@ -1,9 +1,6 @@
 package de.miraculixx.mweb.gui.logic.data
 
-import de.miraculixx.mweb.gui.logic.CustomGUI
-import de.miraculixx.mweb.gui.logic.ScrollGUI
-import de.miraculixx.mweb.gui.logic.SettingsGUI
-import de.miraculixx.mweb.gui.logic.StorageGUI
+import de.miraculixx.mweb.gui.logic.*
 
 object InventoryManager {
     /**
@@ -79,4 +76,6 @@ object InventoryManager {
      * @author Miraculixx
      */
     inline fun settingsBuilder(id: String, builder: SettingsGUI.Builder.() -> Unit) = add(id, SettingsGUI.Builder(id).apply(builder).build())
+
+    inline fun animationBuilder(id: String, builder: CustomAnimationGUI.Builder.() -> Unit) = add(id, CustomAnimationGUI.Builder(id).apply(builder).build())
 }

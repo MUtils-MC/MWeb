@@ -4,14 +4,17 @@ import de.miraculixx.mvanilla.data.ServerData
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mweb.gui.logic.items.ItemProvider
 import de.miraculixx.mweb.gui.logic.items.skullTexture
+import net.axay.kspigot.items.customModel
 import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.items.name
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
+import org.bukkit.persistence.PersistentDataType
 import java.io.File
 
 class ItemWhitelists(private val file: File?) : ItemProvider {
@@ -20,6 +23,8 @@ class ItemWhitelists(private val file: File?) : ItemProvider {
     private val msgRiseMaxDownloads = msgString("event.action.riseDownloads")
     private val msgRiseTimeout = msgString("event.action.riseTimeout")
     private val msgCopyLink = msgString("event.action.copyLink")
+
+    val idKey = NamespacedKey("de.miraculixx.api", "file-whitelist-id")
 
     override fun getBooleanMap(from: Int, to: Int): Map<ItemStack, Boolean> {
         return buildMap {
@@ -42,6 +47,8 @@ class ItemWhitelists(private val file: File?) : ItemProvider {
                                         if (data.timeout != null) add(msgButton + Component.keybind("key.hotbar.3", cHighlight) + cmp(" ≫ $msgRiseTimeout"))
                                     }
                         )
+                        customModel = 100
+                        persistentDataContainer.set(idKey, PersistentDataType.STRING, id)
                     }
                     itemMeta = (itemMeta as SkullMeta).skullTexture(data.accessType.head.value)
                 }, !data.disabled)

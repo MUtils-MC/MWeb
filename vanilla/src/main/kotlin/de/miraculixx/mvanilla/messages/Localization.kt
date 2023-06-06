@@ -27,7 +27,7 @@ fun msgString(key: String, input: List<String> = emptyList()) = localization?.ge
  * @param input Input variables. <input-i>
  * @param inline Inline string before every line (useful for listing)
  */
-fun msgList(key: String, input: List<String> = emptyList(), inline: String = "<grey>   ") = msgString(key, input).split("<br>").map {
+fun msgList(key: String, input: List<String> = emptyList(), inline: String = "<grey>") = msgString(key, input).split("<br>").map {
     miniMessage.deserialize("$inline<!i>$it")
 }.ifEmpty { listOf(cmp(inline + key, cError)) }
 

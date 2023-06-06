@@ -1,7 +1,6 @@
 package de.miraculixx.mvanilla.data
 
 import de.miraculixx.mvanilla.serializer.UUIDSerializer
-import de.miraculixx.mvanilla.web.LoaderSpecific
 import de.miraculixx.mvanilla.web.WebServer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -20,30 +19,32 @@ object ServerData {
     }
 
     fun removeWhitelist(id: String): Boolean {
-        return webData.whitelistedFiles.remove(id) != null
+        val data = webData.whitelistedFiles.remove(id) ?: return false
+        data.zippedTo?.let { File(it).delete() }
+        return true
     }
 
     /**
      * @return <ID, Data>
      */
-    fun getWhitelists(): Map<String, WhitelistFile> {
-        return webData.whitelistedFiles
-    }
+    fun getWhitelists() =
+        webData.whitelistedFiles
 
     /**
      * @return <ID, Data>
      */
-    fun getWhitelists(path: String): Map<String, WhitelistFile> {
-        return webData.whitelistedFiles.filter { it.value.path == path }
-    }
+    fun getWhitelists(path: String) =
+        webData.whitelistedFiles.filter { it.value.path == path }
+
+    fun checkPlayer(uuid: UUID) =
+        webData.ipList.containsValue(uuid)
 
     fun setIpToPlayer(ip: String, uuid: UUID) {
         webData.ipList[ip] = uuid
     }
 
-    fun ipToPlayer(ip: String): UUID? {
-        return webData.ipList[ip]
-    }
+    fun ipToPlayer(ip: String) =
+        webData.ipList[ip]
 
     fun hasAccess(ip: String, id: String, passphrase: String?): Boolean {
         val file = webData.whitelistedFiles[id] ?: return false
@@ -57,16 +58,21 @@ object ServerData {
 
     fun isUnavailable(fileData: WhitelistFile): Boolean {
         return fileData.disabled ||
-                (fileData.timeout != null && fileData.timeout!! >= System.currentTimeMillis()) ||
-                (fileData.maxAmount != null && fileData.requestAmount > fileData.maxAmount!!)
+                (fileData.timeout != null && System.currentTimeMillis() >= fileData.timeout!!) ||
+                (fileData.maxAmount != null && fileData.requestAmount >= fileData.maxAmount!!)
     }
 
-    fun getFileData(id: String): WhitelistFile? {
-        return webData.whitelistedFiles[id]
+    fun getFileData(id: String) =
+        webData.whitelistedFiles[id]
+
+    fun getLink(id: String): String {
+        val data = getFileData(id)
+        val extension = if (data?.accessType == WhitelistType.PASSPHRASE_RESTRICTED) "?pw=${data.restriction}" else ""
+        return settings.proxy?.let { "$it/d/$id$extension" } ?: "http://${WebServer.publicIP}:${settings.port}/d/$id$extension"
     }
 
     fun saveData() {
-        dataFile.writeText(WebServer.json.encodeToString(webData))
+        dataFile.writeText(WebServer.jsonFull.encodeToString(webData))
     }
 
     fun loadData() {

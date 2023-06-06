@@ -21,17 +21,23 @@ object WebServer {
         ignoreUnknownKeys = true
         prettyPrint = true
     }
+    val jsonFull = Json {
+        ignoreUnknownKeys = true
+        prettyPrint = true
+        encodeDefaults = true
+    }
     private lateinit var server: ApplicationEngine
-    lateinit var publicIP: String
+    var publicIP = "localhost"
     val tempFolder = File(configFolder, "temp")
+    var isStarted = false
 
     fun startServer() {
         CoroutineScope(Dispatchers.Default).launch {
             publicIP = URL("http://ifconfig.me/ip").readText().trim()
-//            publicIP = "localhost"
             val port = settings.port
             consoleAudience.sendMessage(prefix + cmp("Creating web server via $publicIP:$port..."))
             server = embeddedServer(CIO, port = port, host = "0.0.0.0", module = Application::module).start(wait = false)
+            isStarted = true
         }
     }
 

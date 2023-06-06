@@ -31,6 +31,9 @@ common:
 #            Command Responses            #
 #   Every command supports MiniMessages   #
 #-----------------------------------------#
+command:
+  copyLink: "<grey>Click <hover:show_text:'<grey>Click to copy link</grey>'><click:copy_to_clipboard:'<input-1>'><color:#6e94ff>here</color></click></hover> to copy your link"
+  passphraseWarning: "(passphrase included)"
 
 #-----------------------------------------#
 #                 Events                  #
@@ -55,13 +58,19 @@ event:
     riseDownloads: "Rise Max Downloads"
     riseTimeout: "Rise Timeout"
     createGlobal: "Create Global Link"
-    createPersonal: "Create Personal Link"
+    createPrivate: "Create Personal Link"
     createCustom: "Create Custom Link"
     manageLinks: "Manage Links"
     navigate: "Navigate"
     rename: "Rename"
-    zip: "ZIP"
+    zip: "Zip"
+    unzip: "Unzip"
     copyLink: "Copy Link"
+  texturepackPrompt: "<blue><b>Load the request ressource pack <input-1>" #m v1
+  setTimeout: "<grey><blue><b>Input Formatting</b></blue>\n ├> s = seconds, m = minutes, h = hours, d = days\n ├> Use like <color:#6e94ff>2d 5m</color>"
+  setMaxAmount: "<grey><blue><b>Input Formatting</b></blue>\n ├> Enter a positive number like <color:#6e94ff>25</color>"
+  setPassphrase: "<grey><blue><b>Input Formatting</b></blue>\n ├> Enter any phrase (no url characters)"
+  setPlayer: "<grey><blue><b>Input Formatting</b></blue>\n ├> Enter the <color:#6e94ff>name</color> of any player\n ├> Must joined the server before (ip check)"
 
 #-----------------------------------------#
 #                  Items                  #
@@ -91,3 +100,27 @@ items:
     n: "Manage Download Access"
   fileUpload:
     n: "Manage Upload Access"
+  loading:
+    n: "Loading..."
+  GLOBAL:
+    n: "Global Access"
+    l: "A link that can be used<br>by anyone without restriction"
+  PASSPHRASE_RESTRICTED:
+    n: "Passphrase Restriction"
+    l: "A link restricted by a<br>custom passphrase. Passphrases are visible<br>to all players with whitelist manage permission!"
+  USER_RESTRICTED:
+    n: "User Restriction"
+    l: "A link restricted to a single<br>user. The user must joined the<br>server once before! (IP restricted)"
+  timeout:
+    n: "Link Timeout"
+    l: "After this duration the link<br>becomes invalid (can be modified afterwards)"
+  maxDownloads:
+    n: "Maximal Downloads"
+    l: "After this amount of downloads<br>the link becomes invalid (can be modified afterwards)"
+  passphrase:
+    n: "Passphrase"
+    l: "The passphrase used to access<br>the link ('https://example.url/d/<id>?pw=<pw>')"
+  userRestriction:
+    n: "User"
+    l: "The user that can access<br>the link (ip linking)"
+

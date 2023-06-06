@@ -23,3 +23,11 @@ object UUIDSerializer : KSerializer<UUID> {
         return UUID.fromString(decoder.decodeString())
     }
 }
+
+fun String.toUUID(): UUID? {
+    return try {
+        UUID.fromString(this)
+    } catch (_: IllegalArgumentException) {
+        null
+    }
+}

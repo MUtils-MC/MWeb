@@ -1,15 +1,21 @@
 package de.miraculixx.mweb.gui.actions
 
-import de.miraculixx.mvanilla.data.consoleAudience
-import de.miraculixx.mvanilla.data.prefix
+import de.miraculixx.mvanilla.data.*
 import de.miraculixx.mvanilla.messages.*
+import de.miraculixx.mvanilla.serializer.Zipping
 import de.miraculixx.mweb.await.AwaitChatMessage
 import de.miraculixx.mweb.await.AwaitConfirm
+import de.miraculixx.mweb.gui.buildInventory
 import de.miraculixx.mweb.gui.items.ItemFilesManage
+import de.miraculixx.mweb.gui.items.ItemLoading
 import de.miraculixx.mweb.gui.logic.GUIEvent
 import de.miraculixx.mweb.gui.logic.InventoryUtils.get
 import de.miraculixx.mweb.gui.logic.data.CustomInventory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.axay.kspigot.items.customModel
+import net.axay.kspigot.runnables.sync
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -56,6 +62,17 @@ class ActionFilesManage : GUIEvent, ActionFiles {
 
                             1 -> {
                                 //ZIP Logic
+                                if (file.isDirectory) {
+                                    GUITypes.LOADING.buildInventory(player, "LOADING", ItemLoading(), ActionEmpty())
+                                    CoroutineScope(Dispatchers.Default).launch {
+                                        Zipping.zipFolder(file, File("$path.zip"))
+                                        sync {
+                                            inv.update()
+                                            inv.open(player)
+                                            player.soundEnable()
+                                        }
+                                    }
+                                } else player.soundStone()
                             }
 
                             2 -> {
@@ -80,6 +97,24 @@ class ActionFilesManage : GUIEvent, ActionFiles {
                                     inv.open(player)
                                 }
                             }
+                            //Unzip Logic
+                            3 -> {
+                                val type = FileType.getType(file.extension)
+                                if (type != FileType.ARCHIVE) {
+                                    player.soundStone()
+                                    return@event
+                                }
+                                player.click()
+                                GUITypes.LOADING.buildInventory(player, "LOADING", ItemLoading(), ActionEmpty())
+                                CoroutineScope(Dispatchers.Default).launch {
+                                    Zipping.unzipArchive(file, File(path.removeSuffix(".${file.extension}")))
+                                    sync {
+                                        inv.update()
+                                        inv.open(player)
+                                        player.soundEnable()
+                                    }
+                                }
+                            }
 
                             else -> player.soundStone()
                         }
@@ -93,7 +128,7 @@ class ActionFilesManage : GUIEvent, ActionFiles {
 
             1 -> player.soundStone()
             2 -> player.openWhitelist(provider)
-            3 -> player.openDownload(provider)
+            3 -> player.openUpload(provider)
         }
     }
 }

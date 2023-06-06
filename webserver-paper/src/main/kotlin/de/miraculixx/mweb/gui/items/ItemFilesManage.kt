@@ -41,6 +41,7 @@ class ItemFilesManage(startFolder: File, private val guiType: GUITypes) : ItemPr
     private val msgManageLinks = if (guiType == GUITypes.FILE_WHITELISTING) msgString("event.action.manageLinks") else ""
     private val msgRename = if (guiType == GUITypes.FILE_MANAGE) msgString("event.action.rename") else ""
     private val msgZIP = if (guiType == GUITypes.FILE_MANAGE) msgString("event.action.zip") else ""
+    private val msgUnZIP = if (guiType == GUITypes.FILE_MANAGE) msgString("event.action.unzip") else ""
 
     var currentFolder = startFolder
     val pathNamespace = NamespacedKey("de.miraculixx.api", "file-path")
@@ -102,6 +103,7 @@ class ItemFilesManage(startFolder: File, private val guiType: GUITypes) : ItemPr
                 add(msgButton + Component.keybind("key.hotbar.1", cHighlight) + cmp(" ≫ $msgRename"))
                 add(msgButton + Component.keybind("key.hotbar.2", cHighlight) + cmp(" ≫ $msgZIP"))
                 add(msgButton + Component.keybind("key.hotbar.3", cHighlight) + cmp(" ≫ Delete ${if (isFolder) "Recursively" else ""}"))
+                if (type == FileType.ARCHIVE) add(msgButton + Component.keybind("key.hotbar.4", cHighlight) + cmp(" ≫ $msgUnZIP"))
             }
             GUITypes.FILE_WHITELISTING -> buildList {
                 addAll(loreWhitelists)
@@ -127,6 +129,8 @@ class ItemFilesManage(startFolder: File, private val guiType: GUITypes) : ItemPr
                 if (whitelists.isNotEmpty()) add(msgButton + Component.keybind("key.hotbar.4", cHighlight) + cmp(" ≫ $msgManageLinks"))
             }
             GUITypes.FILE_UPLOADING -> emptyList()
+
+            else -> emptyList()
         }
     }
 

@@ -1,9 +1,6 @@
 package de.miraculixx.mvanilla.web
 
-import de.miraculixx.mvanilla.data.ServerData
-import de.miraculixx.mvanilla.data.consoleAudience
-import de.miraculixx.mvanilla.data.prefix
-import de.miraculixx.mvanilla.data.settings
+import de.miraculixx.mvanilla.data.*
 import de.miraculixx.mvanilla.messages.cmp
 import de.miraculixx.mvanilla.messages.plus
 import de.miraculixx.mvanilla.serializer.Zipping
@@ -16,25 +13,29 @@ import io.ktor.util.pipeline.*
 import java.io.File
 
 fun Application.configureDownloads() {
+    val respondForbidden = File(configFolder, "responses/forbidden.html")
+    val respondNoID = File(configFolder, "responses/invalid.html")
+    val respondNotFound = File(configFolder, "responses/notfound.html")
+
     suspend fun PipelineContext<Unit, ApplicationCall>.handleDownloadRequest() {
         val id = call.parameters["id"]
         val passphrase = call.parameters["pw"]
         if (id == null) {
-            call.respond(HttpStatusCode.BadRequest)
+            call.respondText(respondNoID.takeIf { it.isFile }?.readText() ?: "Invalid ID", ContentType.Text.Html, HttpStatusCode.BadRequest)
             return
         }
 
         // Check if file exist and is not timed out
         val fileData = ServerData.getFileData(id)
         if (fileData == null || ServerData.isUnavailable(fileData)) {
-            call.respond(HttpStatusCode.NotFound, "Invalid Path")
+            call.respondText(respondNotFound.takeIf { it.isFile }?.readText() ?: "Access not found", ContentType.Text.Html, HttpStatusCode.NotFound)
             return
         }
 
         // Check if user has access to download
         val requestIP = call.request.origin.remoteHost
         if (!ServerData.hasAccess(requestIP, id, passphrase)) {
-            call.respond(HttpStatusCode.Forbidden)
+            call.respondText(respondForbidden.takeIf { it.isFile }?.readText() ?: "Forbidden Access", ContentType.Text.Html, HttpStatusCode.Forbidden)
             return
         }
 
@@ -52,14 +53,18 @@ fun Application.configureDownloads() {
             }
             zipFile
         } else if (realFileTarget.isDirectory || !realFileTarget.exists()) {
-            call.respond(HttpStatusCode.BadRequest, "Target file got moved")
+            call.respondText(respondNotFound.takeIf { it.isFile }?.readText() ?: "Access not found", ContentType.Text.Html, HttpStatusCode.NotFound)
             return
         } else realFileTarget
         if (settings.logAccess) consoleAudience.sendMessage(prefix + cmp("REQUEST $playerName: $id"))
 
-        fileData.requestAmount += 1
         call.response.header(HttpHeaders.ContentDisposition, "attachment; filename=\"${finalFile.name}\"")
         call.respondFile(finalFile)
+
+        // Update link requests
+        fileData.requestAmount += 1
+        fileData.maxAmount?.let { if (it >= fileData.requestAmount) fileData.disabled = true }
+        fileData.timeout?.let { if (System.currentTimeMillis() >= it) fileData.disabled = true }
     }
 
     routing {

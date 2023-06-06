@@ -24,6 +24,7 @@ dependencies {
 //    implementation("ch.qos.logback:logback-classic:$ktorVersion")
 
     implementation("org.yaml:snakeyaml:1.33")
+    implementation("commons-codec:commons-codec:1.15")
 }
 
 java {

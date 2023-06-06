@@ -39,7 +39,7 @@ interface ActionFiles {
         GUITypes.FILE_WHITELISTING.buildInventory(this, "${uniqueId}-WHITELIST", ItemFilesManage(provider.currentFolder, GUITypes.FILE_WHITELISTING), ActionFilesWhitelist())
     }
 
-    fun Player.openDownload(provider: ItemFilesManage) {
+    fun Player.openUpload(provider: ItemFilesManage) {
         click()
         GUITypes.FILE_UPLOADING.buildInventory(this, "${uniqueId}-UPLOAD", ItemFilesManage(provider.currentFolder, GUITypes.FILE_UPLOADING), ActionFilesUpload())
     }

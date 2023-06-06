@@ -10,4 +10,8 @@ enum class GUITypes(val title: Component) {
     FILE_MANAGE(cmp("• ", NamedTextColor.DARK_GRAY) + cmp("File Manager", cHighlight)),
     FILE_WHITELISTING(cmp("• ", NamedTextColor.DARK_GRAY) + cmp("File Whitelisting", cHighlight)),
     FILE_UPLOADING(cmp("• ", NamedTextColor.DARK_GRAY) + cmp("File Uploading", cHighlight)),
+
+    MANAGE_WHITELISTS(cmp("• ", NamedTextColor.DARK_GRAY) + cmp("Mange Whitelists", cHighlight)),
+    LOADING(cmp("• ", NamedTextColor.DARK_GRAY) + cmp("Processing...", cHighlight)),
+    CREATE_CUSTOM_WHITELIST(cmp("• ", NamedTextColor.DARK_GRAY) + cmp("Create Whitelist", cHighlight)),
 }
