@@ -25,6 +25,12 @@ dependencies {
     implementation(project(":vanilla"))
 }
 
+sourceSets {
+    main {
+        resources.srcDirs("$rootDir/commons/")
+    }
+}
+
 tasks {
     assemble {
         dependsOn(shadowJar)
