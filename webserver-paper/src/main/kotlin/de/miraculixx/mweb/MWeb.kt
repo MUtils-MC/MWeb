@@ -14,7 +14,6 @@ import dev.jorel.commandapi.CommandAPI
 import dev.jorel.commandapi.CommandAPIConfig
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import net.axay.kspigot.extensions.console
 import net.axay.kspigot.main.KSpigot
 import net.axay.kspigot.runnables.taskRunLater
@@ -59,7 +58,7 @@ class MWeb : KSpigot() {
         val languages = listOf("en_US", "de_DE").map { it to javaClass.getResourceAsStream("/language/$it.yml") }
         localization = Localization(File("${configFolder.path}/language"), settings.lang, languages)
 
-        val responseFolder = File(configFolder, "responses")
+        val responseFolder = File(configFolder, "webserver-data/responses")
         if (!responseFolder.exists()) {
             responseFolder.mkdir()
             dumpRessourceFile("/responses/forbidden.html", File(responseFolder, "forbidden.html"))

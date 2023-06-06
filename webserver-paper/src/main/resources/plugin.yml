@@ -1,10 +1,10 @@
-name: MUtils-WebServer
+name: MUtils-Web
 load: STARTUP
 version: 100
 main: de.miraculixx.mweb.MWeb
 api-version: 1.16
 authors: [ Miraculixx ]
-description: Something
+description: MWeb - Create links to your server files to share them!
 website: https://mutils.net
 libraries:
   - "org.jetbrains.kotlin:kotlin-stdlib:1.8.20"
