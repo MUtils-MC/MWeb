@@ -65,6 +65,7 @@ class MWeb : KSpigot() {
             dumpRessourceFile("/responses/forbidden.html", File(responseFolder, "forbidden.html"))
             dumpRessourceFile("/responses/invalid.html", File(responseFolder, "invalid.html"))
             dumpRessourceFile("/responses/notfound.html", File(responseFolder, "notfound.html"))
+            dumpRessourceFile("/responses/index.html", File(responseFolder, "index.html"))
         }
 
         CommandAPI.onLoad(CommandAPIConfig().verboseOutput(false).silentLogs(true))
