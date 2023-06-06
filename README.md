@@ -57,7 +57,7 @@ MWeb also adds helpful and simple file editing tools to make publishing easier! 
 - Delete files or folders (Hotkey 3)
 
 Additionally you can directly see file information like file size, file type (highlighted with item color), last edited and the path.
-![Preview is loading...](https://i.imgur.com/8u9bRRm.gifv)
+![Preview is loading...](https://i.imgur.com/8u9bRRm.gif)
 
 
 ## Resource pack integration
