@@ -9,12 +9,12 @@ import de.miraculixx.mweb.await.AwaitChatMessage
 import de.miraculixx.mweb.gui.items.ItemCreateWhitelist
 import de.miraculixx.mweb.gui.logic.GUIEvent
 import de.miraculixx.mweb.gui.logic.data.CustomInventory
+import de.miraculixx.mweb.module.permVisual
 import net.axay.kspigot.items.customModel
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import java.net.URLEncoder
-import java.nio.charset.Charset
 import kotlin.time.Duration
 
 class ActionCreateWhitelist : GUIEvent, WhitelistHandling {
@@ -95,6 +95,7 @@ class ActionCreateWhitelist : GUIEvent, WhitelistHandling {
             }
 
             10 -> {
+                if (!player.permVisual("mweb.whitelist.custom", true)) return@event
                 val type = provider.whitelistType
                 if ((type == WhitelistType.PASSPHRASE_RESTRICTED || type == WhitelistType.USER_RESTRICTED) && provider.restriction == null) {
                     player.soundError()

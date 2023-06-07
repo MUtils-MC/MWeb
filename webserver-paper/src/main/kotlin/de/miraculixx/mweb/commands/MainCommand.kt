@@ -3,16 +3,17 @@
 package de.miraculixx.mweb.commands
 
 import de.miraculixx.mvanilla.commands.WhitelistHandling
-import de.miraculixx.mvanilla.data.*
+import de.miraculixx.mvanilla.data.GUITypes
+import de.miraculixx.mvanilla.data.ServerData
+import de.miraculixx.mvanilla.data.WhitelistType
+import de.miraculixx.mvanilla.data.prefix
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mvanilla.serializer.enumOf
-import de.miraculixx.mvanilla.web.WebServer
-import de.miraculixx.mweb.gui.actions.ActionEmpty
 import de.miraculixx.mweb.gui.actions.ActionFilesManage
 import de.miraculixx.mweb.gui.actions.ActionFilesWhitelist
 import de.miraculixx.mweb.gui.buildInventory
 import de.miraculixx.mweb.gui.items.ItemFilesManage
-import de.miraculixx.mweb.gui.items.ItemLoading
+import de.miraculixx.mweb.module.permVisual
 import dev.jorel.commandapi.StringTooltip
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.LiteralArgument
@@ -26,22 +27,22 @@ import org.bukkit.Sound
 import org.bukkit.entity.Player
 import java.io.File
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
 
 class MainCommand : WhitelistHandling {
     val command = commandTree("webserver") {
         withAliases("ws")
         playerExecutor { player, _ ->
+            if (!player.permVisual("mweb.manage.list")) return@playerExecutor
             player.playSound(player, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 1f)
             GUITypes.FILE_MANAGE.buildInventory(player, "${player.uniqueId}-MANAGE", ItemFilesManage(File("./"), GUITypes.FILE_MANAGE), ActionFilesManage())
         }
 
-        argument(LiteralArgument("whitelist").withPermission("webserver.whitelist")) {
+        argument(LiteralArgument("whitelist").withPermission("webserver.whitelist").withPermission("mweb.whitelist.list")) {
             playerExecutor { player, _ ->
                 player.playSound(player, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 1f)
                 GUITypes.FILE_WHITELISTING.buildInventory(player, "${player.uniqueId}-WHITELIST", ItemFilesManage(File("./"), GUITypes.FILE_WHITELISTING), ActionFilesWhitelist())
             }
-            literalArgument("add") {
+            argument(LiteralArgument("add").withPermission("mweb.whitelist.custom")) {
                 stringArgument("file") {
                     argument(StringArgument("access").replaceSuggestions(ArgumentSuggestions.strings(WhitelistType.values().map { it.name }))) {
                         anyExecutor { sender, args ->
@@ -70,17 +71,26 @@ class MainCommand : WhitelistHandling {
                 }
             }
 
-            literalArgument("remove") {
-                argument(StringArgument("file").replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(ServerData.getWhitelists().map { StringTooltip.ofString(it.key, it.value.path) }))) {
+            argument(LiteralArgument("remove").withPermission("mweb.whitelist.delete")) {
+                argument(StringArgument("id").replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(ServerData.getWhitelists().map { StringTooltip.ofString(it.key, it.value.path) }))) {
                     anyExecutor { sender, args ->
                         val id = args[0] as String
                         sender.removeWhitelist(id)
                     }
                 }
             }
+
+            argument(LiteralArgument("get").withPermission("mweb.whitelist.info")) {
+                argument(StringArgument("id").replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(ServerData.getWhitelists().map { StringTooltip.ofString(it.key, it.value.path) }))) {
+                    anyExecutor { sender, args ->
+                        val id = args[0] as String
+                        ServerData.getFileData(id)?.let { sender.printLink(it, id) } ?: sender.sendMessage(prefix + cmp(msgString("event.idNotFound", listOf(id)), cError))
+                    }
+                }
+            }
         }
 
-        argument(LiteralArgument("texturepack").withPermission("webserver.texturepack")) {
+        argument(LiteralArgument("texturepack").withPermission("mweb.texturepack.send")) {
             textArgument("path") {
                 entitySelectorArgumentManyPlayers("target") {
                     anyExecutor { sender, args ->
@@ -97,12 +107,6 @@ class MainCommand : WhitelistHandling {
                         }
                     }
                 }
-            }
-        }
-
-        literalArgument("test") {
-            playerExecutor { player, _ ->
-                GUITypes.LOADING.buildInventory(player, "LOADING", ItemLoading(), ActionEmpty())
             }
         }
     }

@@ -44,13 +44,8 @@ interface WhitelistHandling {
         val data = WhitelistFile(file.path, zipTarget, access, restriction, timeoutTimestamp, maxDownloads)
         ServerData.addWhitelist(id, data)
 
-        soundEnable()
         sendMessage(prefix + cmp("New file access created!", cSuccess))
-        sendMessage(prefix + cmp("Click ") +
-                cmp("here", cMark)
-                    .clickEvent(ClickEvent.copyToClipboard(ServerData.getLink(id)))
-                    .addHover(cmp("Click to copy download link")) +
-                cmp(" to copy the download link ${if (access == WhitelistType.PASSPHRASE_RESTRICTED) "(passphrase included!)" else ""}"))
+        printLink(data, id)
         return id to data
     }
 
@@ -62,6 +57,15 @@ interface WhitelistHandling {
             soundError()
             sendMessage(prefix + cmp("Failed to remove file access! "))
         }
+    }
+
+    fun Audience.printLink(fileData: WhitelistFile, id: String) {
+        soundEnable()
+        sendMessage(prefix + cmp("Click ") +
+                cmp("here", cMark)
+                    .clickEvent(ClickEvent.copyToClipboard(ServerData.getLink(id)))
+                    .addHover(cmp("Click to copy download link")) +
+                cmp(" to copy the download link ${if (fileData.accessType == WhitelistType.PASSPHRASE_RESTRICTED) "(passphrase included!)" else ""}"))
     }
 
     private fun calcID(): String {

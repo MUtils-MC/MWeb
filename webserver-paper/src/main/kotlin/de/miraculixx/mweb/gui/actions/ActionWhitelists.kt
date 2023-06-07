@@ -9,6 +9,7 @@ import de.miraculixx.mweb.gui.items.ItemWhitelists
 import de.miraculixx.mweb.gui.logic.GUIEvent
 import de.miraculixx.mweb.gui.logic.InventoryUtils.get
 import de.miraculixx.mweb.gui.logic.data.CustomInventory
+import de.miraculixx.mweb.module.permVisual
 import net.axay.kspigot.items.customModel
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
@@ -39,6 +40,7 @@ class ActionWhitelists(previous: CustomInventory) : GUIEvent {
 
         when (it.click) {
             ClickType.LEFT -> {
+                if (!player.permVisual("mweb.whitelist.toggle")) return@event
                 data.disabled = player.toggle(data.disabled)
                 inv.update()
             }
@@ -53,7 +55,9 @@ class ActionWhitelists(previous: CustomInventory) : GUIEvent {
                 when (it.hotbarButton) {
                     // Delete Whitelist
                     0 -> {
+                        if (!player.permVisual("mweb.whitelist.delete")) return@event
                         AwaitConfirm(player, {
+                            if (!player.permVisual("mweb.whitelist.delete", true)) return@AwaitConfirm
                             ServerData.removeWhitelist(id)
                             player.soundDelete()
                             inv.update()
@@ -65,8 +69,10 @@ class ActionWhitelists(previous: CustomInventory) : GUIEvent {
                     }
                     // Rise max downloads
                     1 -> {
+                        if (!player.permVisual("mweb.whitelist.edit")) return@event
                         data.maxAmount?.let {
                             AwaitChatMessage(false, player, "Amount", 30, null, false, cmp("\n "), {
+                                if (!player.permVisual("mweb.whitelist.edit")) return@AwaitChatMessage
                                 val amount = it.toIntOrNull()
                                 if (amount == null) {
                                     player.soundError()
@@ -83,8 +89,10 @@ class ActionWhitelists(previous: CustomInventory) : GUIEvent {
                     }
                     // Rise timeout
                     2 -> {
+                        if (!player.permVisual("mweb.whitelist.edit")) return@event
                         data.timeout?.let {
                             AwaitChatMessage(false, player, "Time", 30, null, false, cmp("\n"), {
+                                if (!player.permVisual("mweb.whitelist.edit")) return@AwaitChatMessage
                                 val duration = try {
                                     Duration.parse(it)
                                 } catch (_: Exception) {

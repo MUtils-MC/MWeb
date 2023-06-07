@@ -53,7 +53,8 @@ event:
     jar: "Jar File"
     media: "Media File"
     default: "Data File"
-  fileNotFound: "Failed to resolve file <input-1>. Refreshing all files..."
+  fileNotFound: "Failed to resolve file <input-1>. Refreshing all files..." #v1
+  idNotFound: "The id <input-1> does not exist!" #v1
   action:
     riseDownloads: "Rise Max Downloads"
     riseTimeout: "Rise Timeout"
@@ -67,10 +68,11 @@ event:
     unzip: "Unzip"
     copyLink: "Copy Link"
   texturepackPrompt: "<blue><b>Load the request ressource pack <input-1>" #m v1
-  setTimeout: "<grey><blue><b>Input Formatting</b></blue>\n ├> s = seconds, m = minutes, h = hours, d = days\n ├> Use like <color:#6e94ff>2d 5m</color>"
-  setMaxAmount: "<grey><blue><b>Input Formatting</b></blue>\n ├> Enter a positive number like <color:#6e94ff>25</color>"
-  setPassphrase: "<grey><blue><b>Input Formatting</b></blue>\n ├> Enter any phrase (no url characters)"
-  setPlayer: "<grey><blue><b>Input Formatting</b></blue>\n ├> Enter the <color:#6e94ff>name</color> of any player\n ├> Must joined the server before (ip check)"
+  setTimeout: "<grey><blue><b>Input Formatting</b></blue>\n ├> s = seconds, m = minutes, h = hours, d = days\n ├> Use like <color:#6e94ff>2d 5m</color>" #m
+  setMaxAmount: "<grey><blue><b>Input Formatting</b></blue>\n ├> Enter a positive number like <color:#6e94ff>25</color>" #m
+  setPassphrase: "<grey><blue><b>Input Formatting</b></blue>\n ├> Enter any phrase (no url characters)" #m
+  setPlayer: "<grey><blue><b>Input Formatting</b></blue>\n ├> Enter the <color:#6e94ff>name</color> of any player\n ├> Must joined the server before (ip check)" #m
+  noPermission: "Missing Permissions: <input-1>"
 
 #-----------------------------------------#
 #                  Items                  #
@@ -92,6 +94,18 @@ items:
     arrowLeft:
       n: "<green>Scroll Left"
       l: "<blue>Click ≫ -1 page<br><blue>Sneak-Click ≫ -5 pages"
+    arrowUpGreen:
+      n: "<green>Scroll Up"
+      l: "<blue>Click ≫ -1 page<br><blue>Sneak-Click ≫ -3 pages"
+    arrowDownGreen:
+      n: "<green>Scroll Down"
+      l: "<blue>Click ≫ +1 page<br><blue>Sneak-Click ≫ +3 pages"
+    arrowUpRed:
+      n: "<red>Scroll Up"
+      l: "You can not scroll any<br>further up"
+    arrowDownRed:
+      n: "<red>Scroll Down"
+      l: "You can not scroll any<br>further down"
     pageIndicator:
       l: "Click to open a compact<br>GUI with quick access"
   fileManage:
@@ -123,4 +137,6 @@ items:
   userRestriction:
     n: "User"
     l: "The user that can access<br>the link (ip linking)"
+  navigateBack:
+    n: "Navigate Back"
 

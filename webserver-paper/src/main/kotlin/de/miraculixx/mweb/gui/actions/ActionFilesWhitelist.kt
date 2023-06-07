@@ -14,6 +14,7 @@ import de.miraculixx.mweb.gui.items.ItemWhitelists
 import de.miraculixx.mweb.gui.logic.GUIEvent
 import de.miraculixx.mweb.gui.logic.InventoryUtils.get
 import de.miraculixx.mweb.gui.logic.data.CustomInventory
+import de.miraculixx.mweb.module.permVisual
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,12 +50,14 @@ class ActionFilesWhitelist: GUIEvent, WhitelistHandling, ActionFiles {
                         when (it.hotbarButton) {
                             //Create global link
                             0 -> {
+                                if (!player.permVisual("mweb.whitelist.global")) return@event
                                 player.whitelistFile(path, WhitelistType.GLOBAL)
                                 player.soundEnable()
                                 inv.update()
                             }
                             //Create private link for the user
                             1 -> {
+                                if (!player.permVisual("mweb.whitelist.privat")) return@event
                                 if (file.isDirectory) {
                                     CoroutineScope(Dispatchers.Default).launch {
                                         GUITypes.LOADING.buildInventory(player, "LOADING", ItemLoading(), ActionEmpty())
@@ -70,10 +73,12 @@ class ActionFilesWhitelist: GUIEvent, WhitelistHandling, ActionFiles {
                             }
                             //Open custom link creator
                             2 -> {
+                                if (!player.permVisual("mweb.whitelist.custom")) return@event
                                 GUITypes.CREATE_CUSTOM_WHITELIST.buildInventory(player, "${player.uniqueId}-CREATE_WHITELIST", ItemCreateWhitelist(path), ActionCreateWhitelist())
                             }
                             //Manage file links
                             3 -> {
+                                if (!player.permVisual("mweb.whitelist.manage")) return@event
                                 if (ServerData.getWhitelists(file.path).isEmpty()) {
                                     player.soundStone()
                                     return@event

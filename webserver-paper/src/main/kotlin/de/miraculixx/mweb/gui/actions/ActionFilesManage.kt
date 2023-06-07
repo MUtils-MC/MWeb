@@ -11,6 +11,7 @@ import de.miraculixx.mweb.gui.items.ItemLoading
 import de.miraculixx.mweb.gui.logic.GUIEvent
 import de.miraculixx.mweb.gui.logic.InventoryUtils.get
 import de.miraculixx.mweb.gui.logic.data.CustomInventory
+import de.miraculixx.mweb.module.permVisual
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,7 +40,9 @@ class ActionFilesManage : GUIEvent, ActionFiles {
 
                     ClickType.NUMBER_KEY -> {
                         when (it.hotbarButton) {
+                            //Rename
                             0 -> {
+                                if (!player.permVisual("mweb.manage.rename")) return@event
                                 player.click()
                                 AwaitChatMessage(false, player, "Rename File", 60, file.name, true, msg("event.rename"), { msg ->
                                     val parent = file.parentFile
@@ -59,9 +62,9 @@ class ActionFilesManage : GUIEvent, ActionFiles {
                                     inv.open(player)
                                 }
                             }
-
+                            //ZIP Logic
                             1 -> {
-                                //ZIP Logic
+                                if (!player.permVisual("mweb.manage.zip")) return@event
                                 if (file.isDirectory) {
                                     GUITypes.LOADING.buildInventory(player, "LOADING", ItemLoading(), ActionEmpty())
                                     CoroutineScope(Dispatchers.Default).launch {
@@ -74,8 +77,9 @@ class ActionFilesManage : GUIEvent, ActionFiles {
                                     }
                                 } else player.soundStone()
                             }
-
+                            //Delete
                             2 -> {
+                                if (!player.permVisual("mweb.manage.delete")) return@event
                                 player.click()
                                 AwaitConfirm(player, {
                                     try {
@@ -99,6 +103,7 @@ class ActionFilesManage : GUIEvent, ActionFiles {
                             }
                             //Unzip Logic
                             3 -> {
+                                if (!player.permVisual("mweb.manage.zip")) return@event
                                 val type = FileType.getType(file.extension)
                                 if (type != FileType.ARCHIVE) {
                                     player.soundStone()

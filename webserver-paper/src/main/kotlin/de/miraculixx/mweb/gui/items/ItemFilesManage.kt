@@ -27,7 +27,7 @@ import java.nio.file.Files
 import java.time.Instant
 
 class ItemFilesManage(startFolder: File, private val guiType: GUITypes) : ItemProvider {
-    private val msgNavBack = cmp(msgString("items.navigateBack.n"))
+    private val msgNavBack = cmp(msgString("items.navigateBack.n"), cHighlight)
     private val msgButton = cmp(msgString("common.button") + " ", cHighlight)
     private val msgNone = msgString("common.none")
     private val msgDot = cmp("  • ", NamedTextColor.DARK_GRAY)
@@ -136,9 +136,9 @@ class ItemFilesManage(startFolder: File, private val guiType: GUITypes) : ItemPr
 
     override fun getExtra(): List<ItemStack> {
         return listOf(
-            getHeader(1, cmp(msgString("items.fileManage.n")), if (guiType == GUITypes.FILE_MANAGE) Head64.HASHTAG_LIGHT_BLUE else Head64.HASHTAG_BLUE),
-            getHeader(2, cmp(msgString("items.fileWhitelist.n")), if (guiType == GUITypes.FILE_WHITELISTING) Head64.ARROW_DOWN_LIGHT_BLUE else Head64.ARROW_DOWN_BLUE),
-            getHeader(3, cmp(msgString("items.fileUpload.n")), if (guiType == GUITypes.FILE_UPLOADING) Head64.PLUS_LIGHT_BLUE else Head64.PLUS_BLUE)
+            getHeader(1, cmp(msgString("items.fileManage.n"), cHighlight), if (guiType == GUITypes.FILE_MANAGE) Head64.HASHTAG_LIGHT_BLUE else Head64.HASHTAG_BLUE),
+            getHeader(2, cmp(msgString("items.fileWhitelist.n"), cHighlight), if (guiType == GUITypes.FILE_WHITELISTING) Head64.ARROW_DOWN_LIGHT_BLUE else Head64.ARROW_DOWN_BLUE),
+            getHeader(3, cmp(msgString("items.fileUpload.n"), cError), if (guiType == GUITypes.FILE_UPLOADING) Head64.PLUS_LIGHT_BLUE else Head64.PLUS_BLUE)
         )
     }
 

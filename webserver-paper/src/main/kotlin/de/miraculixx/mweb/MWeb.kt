@@ -19,21 +19,6 @@ import net.axay.kspigot.main.KSpigot
 import net.axay.kspigot.runnables.taskRunLater
 import java.io.File
 
-/**
- * Feature Roadmap
- * - Zip Files
- * - Whitelist files (publish)
- *      -> global
- *      -> player only
- *      -> IP only (nah)
- *      -> Password protected
- *    -> Unlimited
- *    -> Time limited
- *    -> Request limited
- * - Send Texture Packs
- *      -> Auto Packing
- * - Clear temp folder
- */
 class MWeb : KSpigot() {
     companion object {
         lateinit var INSTANCE: KSpigot
@@ -58,7 +43,7 @@ class MWeb : KSpigot() {
         val languages = listOf("en_US", "de_DE").map { it to javaClass.getResourceAsStream("/language/$it.yml") }
         localization = Localization(File("${configFolder.path}/language"), settings.lang, languages)
 
-        val responseFolder = File(configFolder, "webserver-data/responses")
+        val responseFolder = File(configFolder, "responses")
         if (!responseFolder.exists()) {
             responseFolder.mkdir()
             dumpRessourceFile("/responses/forbidden.html", File(responseFolder, "forbidden.html"))
