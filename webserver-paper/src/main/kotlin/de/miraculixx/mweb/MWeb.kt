@@ -79,5 +79,3 @@ class MWeb : KSpigot() {
         javaClass.getResourceAsStream(location)?.let { target.writeBytes(it.readAllBytes()) }
     }
 }
-
-val PluginInstance by lazy { MWeb.INSTANCE }
