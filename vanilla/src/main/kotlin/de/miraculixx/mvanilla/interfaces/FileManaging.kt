@@ -11,11 +11,7 @@ import java.io.File
 interface FileManaging {
     fun Audience.renameFile(path: String, newName: String) {
         val file = File(path)
-        if (!file.exists()) {
-            soundError()
-            sendMessage(prefix + cmp(msgString("event.fileNotFound", listOf(path))))
-            return
-        }
+        if (!fileExist(file)) return
         val parent = file.parentFile
         try {
             if (parent == null) file.renameTo(File(newName))
@@ -34,6 +30,7 @@ interface FileManaging {
 
     fun Audience.deleteFile(path: String) {
         val file = File(path)
+        if (!fileExist(file)) return
         try {
             if (file.isDirectory) file.deleteRecursively()
             else file.delete()
@@ -61,6 +58,7 @@ interface FileManaging {
 
     fun Audience.unzipFolder(path: String) {
         val file = File(path)
+        if (!fileExist(file)) return
         val type = FileType.getType(file.extension)
         if (type != FileType.ARCHIVE) {
             sendMessage(prefix + cmp(msgString("event.noArchive"), cError))
@@ -70,5 +68,13 @@ interface FileManaging {
         Zipping.unzipArchive(file, File(path.removeSuffix(".${file.extension}")))
         soundEnable()
         sendMessage(prefix + cmp(msgString("event.finishZip", listOf(file.name))))
+    }
+
+    private fun Audience.fileExist(file: File): Boolean {
+        return if (!file.exists()) {
+            soundError()
+            sendMessage(prefix + cmp(msgString("event.fileNotFound", listOf(file.path))))
+            false
+        } else true
     }
 }
