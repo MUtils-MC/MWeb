@@ -1,0 +1,147 @@
+#----------------------- Translation ------------------------#
+#       Content of all messages in MUtils-WebServer.         #
+#------------------------------------------------------------#
+# Some messages support MiniMessage styling (marked with #m) #
+#          and extra variables (marked with #v).             #
+# Syntax: <input-i> ->                                       #
+#         i is a number from 0 to the message max            #
+#------------------------------------------------------------#
+
+creator: MUtils
+version: 1.0.0
+
+#-----------------------------------------#
+#           Common Translations           #
+# Translation keys that persist in every  #
+#        project for simple values        #
+#-----------------------------------------#
+common:
+  boolTrue: "Aktiviert"
+  boolFalse: "Deaktiviert"
+  left: "Links"
+  right: "Rechts"
+  click: "Klick"
+  sneak: "Schleichen"
+  none: "Nichts"
+  confirm: "Bestätigen"
+  cancel: "Abbrechen"
+  button: "Taste"
+
+#-----------------------------------------#
+#            Command Responses            #
+#   Every command supports MiniMessages   #
+#-----------------------------------------#
+command:
+  copyLink: "<grey>Klicke <hover:show_text:'<grey>Klicke zum kopieren des Links</grey>'><click:copy_to_clipboard:'<input-1>'><color:#6e94ff>hier</color></click></hover> zum kopieren des Links"
+  passphraseWarning: "(Enthält Passwort)"
+
+#-----------------------------------------#
+#                 Events                  #
+# Messages that occur on multiple places  #
+#-----------------------------------------#
+event:
+  clickToCopy: "Klicke zum kopieren"
+  invalidName: "Konnte Datei nicht zu <input-1> umbenennen! Bitte prüfe deinen Input auf ungültige Zeichen" #v1
+  invalidDelete: "Konnte Datei <input-1> nicht löschen!" #v1
+  rename: "<grey><blue><b>Eingabe Formatierung</b></blue>\n ├> Dateinamen dürfen folgende Zeichen nicht enthalten: <color:#6e94ff>\\/<>:*|\"</color>\n ├> Nutze <color:#6e94ff>_</color> für Leerzeichen\n ├> <color:#6e94ff>#exit</color> zum abbrechen</grey>" #m
+  fileType:
+    folder: "Ordner"
+    config: "Konfigurationsdatei"
+    dangerous: "Systemdatei"
+    mc: "Minecraft Datei"
+    archive: "Komprimiertes Archive"
+    jar: "Jar Datei"
+    media: "Mediendatei"
+    default: "Sonstige Daten"
+  fileNotFound: "Fehler beim erfassen von <input-1>!" #v1
+  idNotFound: "Die ID <input-1> existiert nicht!" #v1
+  action:
+    riseDownloads: "Erhöhe Max Downloads"
+    riseTimeout: "Erhöhe Zeitlimit"
+    createGlobal: "Erstelle Globalen Link"
+    createPrivate: "Erstelle Privaten Link"
+    createCustom: "Erstelle Spezifischen Link"
+    manageLinks: "Bearbeite Links"
+    navigate: "Navigieren"
+    rename: "Umbenennen"
+    zip: "Zip"
+    unzip: "Unzip"
+    copyLink: "Kopiere Link"
+  texturepackPrompt: "<blue><b>Lade das Ressourcenpaket <input-1>" #m v1
+  setTimeout: "<grey><blue><b>Eingabe Formatierung</b></blue>\n ├> s = Sekunden, m = Minuten, h = Stunden, d = Tage\n ├> Nutze wie folgt: <color:#6e94ff>2d 5m</color>" #m
+  setMaxAmount: "<grey><blue><b>Eingabe Formatierung</b></blue>\n ├> Gebe eine positive Nummer wie <color:#6e94ff>25</color> ein" #m
+  setPassphrase: "<grey><blue><b>Eingabe Formatierung</b></blue>\n ├> Gebe jegliches Wort ein" #m
+  setPlayer: "<grey><blue><b>Eingabe Formatierung</b></blue>\n ├> Gebe den <color:#6e94ff>Namen</color> eines Spielers ein\n ├> Muss zuvor dem Server beigetreten sein (IP Verbindung)" #m
+  setName: "Datei umbenannt zu <input-1>" #v1
+  noPermission: "Fehlende Rechte: <input-1>" #v1
+  noFolder: "Die ausgewählte Datei ist kein Ordner!"
+  noArchive: "Die ausgewählte Datei ist kein Archive!"
+  startZip: "Datei wird bearbeitet..."
+  finishZip: "Datei <input-1> wurde erfolgreich bearbeitet!" #v1
+
+#-----------------------------------------#
+#                  Items                  #
+#   Messages only visible on GUI items    #
+# Syntax: n -> Item Name                  #
+#         l -> Item Lore                  #
+#-----------------------------------------#
+items:
+  general:
+    arrowRightEnd:
+      n: "<red>Scrolle nach rechts"
+      l: "Du kannst nicht weiter<br>nach rechts scrollen"
+    arrowLeftEnd:
+      n: "<red>Scrolle nach links"
+      l: "Du kannst nicht weiter<br>nach links scrollen"
+    arrowRight:
+      n: "<green>Scrolle nach rechts"
+      l: "<blue>Klicke ≫ +1 Seite<br><blue>Sneak-Click ≫ +5 Seiten"
+    arrowLeft:
+      n: "<green>Scrolle nach links"
+      l: "<blue>Klicke ≫ -1 Seite<br><blue>Sneak-Click ≫ -5 Seiten"
+    arrowUpGreen:
+      n: "<green>Scrolle nach oben"
+      l: "<blue>Klicke ≫ -1 Seite<br><blue>Sneak-Click ≫ -3 Seiten"
+    arrowDownGreen:
+      n: "<green>Scrolle nach unten"
+      l: "<blue>Klicke ≫ +1 Seite<br><blue>Sneak-Click ≫ +3 Seiten"
+    arrowUpRed:
+      n: "<red>Scrolle nach oben"
+      l: "Du kannst nicht weiter<br>nach oben scrollen"
+    arrowDownRed:
+      n: "<red>Scrolle nach unten"
+      l: "Du kannst nicht weiter<br>nach unten scrollen"
+    pageIndicator:
+      l: "Klicke, um eine kompakte<br>GUI mit schnellem Zugriff zu öffnen"
+  fileManage:
+    n: "Bearbeite Dateien"
+  fileWhitelist:
+    n: "Bearbeite Download Zugriff"
+  fileUpload:
+    n: "Bearbeite Upload Zugriff"
+  loading:
+    n: "Lade..."
+  GLOBAL:
+    n: "Globaler Zugriff"
+    l: "Ein Link, welcher von jeder<br>Person verwendet werden kann"
+  PASSPHRASE_RESTRICTED:
+    n: "Passwort Beschränkung"
+    l: "Ein Link, welcher gesichert<br>durch ein Passwort ist. Passwörter<br>sind sichtbar für alle Spieler mit den<br>mweb.whitelist.info Rechten!"
+  USER_RESTRICTED:
+    n: "Spieler Beschränkung"
+    l: "Ein Link, welcher beschränkt auf<br>einen Spieler ist. Der Spieler muss<br>zuvor auf dem Server gewesen sein! (IP Verlinkung)"
+  timeout:
+    n: "Link Zeitlimit"
+    l: "Nach der bestimmten Zeit<br>verfällt der Link. Kann vor und<br>nach Verfall modifiziert werden"
+  maxDownloads:
+    n: "Maximale Downloads"
+    l: "Nach der bestimmten Anzahl an<br>Downloads verfällt der Link. Kann im vor und<br>nach dem Verfall modifiziert werden"
+  passphrase:
+    n: "Passwort"
+    l: "Dass Passwort um den Link<br>nutzen zu können ('https://beispiel.url/d/<id>?pw=<pw>')"
+  userRestriction:
+    n: "Nutzer"
+    l: "Der Nutzer, welcher den Link<br>nutzen kann (IP Verlinkung)"
+  navigateBack:
+    n: "Zurück Navigieren"
+
