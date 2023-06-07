@@ -155,6 +155,10 @@ class MainCommand : WhitelistHandling, FileManaging {
                 }
             }
         }
+
+        argument(LiteralArgument("settings").withPermission("mweb.settings")) {
+
+        }
     }
 
     private fun Audience.loadTP(path: String, targets: List<Player>, force: Boolean) {
