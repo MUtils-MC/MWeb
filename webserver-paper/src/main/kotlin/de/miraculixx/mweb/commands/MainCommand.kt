@@ -37,7 +37,7 @@ class MainCommand : WhitelistHandling {
             GUITypes.FILE_MANAGE.buildInventory(player, "${player.uniqueId}-MANAGE", ItemFilesManage(File("./"), GUITypes.FILE_MANAGE), ActionFilesManage())
         }
 
-        argument(LiteralArgument("whitelist").withPermission("webserver.whitelist").withPermission("mweb.whitelist.list")) {
+        argument(LiteralArgument("whitelist").withPermission("mweb.whitelist.list")) {
             playerExecutor { player, _ ->
                 player.playSound(player, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 1f)
                 GUITypes.FILE_WHITELISTING.buildInventory(player, "${player.uniqueId}-WHITELIST", ItemFilesManage(File("./"), GUITypes.FILE_WHITELISTING), ActionFilesWhitelist())
@@ -85,6 +85,51 @@ class MainCommand : WhitelistHandling {
                     anyExecutor { sender, args ->
                         val id = args[0] as String
                         ServerData.getFileData(id)?.let { sender.printLink(it, id) } ?: sender.sendMessage(prefix + cmp(msgString("event.idNotFound", listOf(id)), cError))
+                    }
+                }
+            }
+        }
+
+        argument(LiteralArgument("manage").withPermission("mweb.manage.list")) {
+            playerExecutor { player, _ ->
+                player.playSound(player, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 1f)
+                GUITypes.FILE_MANAGE.buildInventory(player, "${player.uniqueId}-MANAGE", ItemFilesManage(File("./"), GUITypes.FILE_MANAGE), ActionFilesManage())
+            }
+            argument(LiteralArgument("rename").withPermission("mweb.manage.rename")) {
+                textArgument("file") {
+                    stringArgument("new-name") {
+                        anyExecutor { sender, args ->
+                            val path = args[0] as String
+                            val newName = args[1] as String
+                            //TODO
+                        }
+                    }
+                }
+            }
+
+            argument(LiteralArgument("delete").withPermission("mweb.manage.delete")) {
+                textArgument("file") {
+                    anyExecutor { sender, args ->
+                        val path = args[0] as String
+                        //TODO
+                    }
+                }
+            }
+
+            argument(LiteralArgument("zip").withPermission("mweb.manage.zip")) {
+                textArgument("file") {
+                    anyExecutor { sender, args ->
+                        val path = args[0] as String
+                        //TODO
+                    }
+                }
+            }
+
+            argument(LiteralArgument("unzip").withPermission("mweb.manage.zip")) {
+                textArgument("file") {
+                    anyExecutor { sender, args ->
+                        val path = args[0] as String
+                        //TODO
                     }
                 }
             }
