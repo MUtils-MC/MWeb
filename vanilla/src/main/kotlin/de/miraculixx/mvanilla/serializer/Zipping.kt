@@ -1,6 +1,6 @@
 package de.miraculixx.mvanilla.serializer
 
-import java.io.File
+import kotlin.io.path.Path
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.zip.ZipEntry
@@ -60,7 +60,7 @@ object Zipping {
 
         while (entry != null) {
             val entryPath = destFolderPath + File.separator + entry.name
-            val entryFile = File(entryPath)
+            val entryFile = Path(entryPath)
 
             if (entry.isDirectory) {
                 entryFile.mkdirs()

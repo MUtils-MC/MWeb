@@ -5,11 +5,11 @@ import de.miraculixx.mvanilla.web.WebServer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import java.io.File
+import kotlin.io.path.Path
 import java.util.*
 
 object ServerData {
-    private val dataFile = File(configFolder, "web-data.json")
+    private val dataFile = Path(configFolder, "web-data.json")
     private var webData = WebData()
 
     fun addWhitelist(id: String, data: WhitelistFile): Boolean {
@@ -20,7 +20,7 @@ object ServerData {
 
     fun removeWhitelist(id: String): Boolean {
         val data = webData.whitelistedFiles.remove(id) ?: return false
-        data.zippedTo?.let { File(it).delete() }
+        data.zippedTo?.let { Path(it).delete() }
         return true
     }
 

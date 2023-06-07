@@ -9,7 +9,7 @@ import net.axay.kspigot.items.customModel
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
-import java.io.File
+import kotlin.io.path.Path
 
 class ActionFilesUpload : GUIEvent, ActionFiles {
     override val run: (InventoryClickEvent, CustomInventory) -> Unit = event@{ it: InventoryClickEvent, inv: CustomInventory ->
@@ -22,7 +22,7 @@ class ActionFilesUpload : GUIEvent, ActionFiles {
         when (meta.customModel) {
             100 -> {
                 val path = meta.persistentDataContainer.get(provider.pathNamespace) ?: provider.currentFolder.path
-                val file = File(path)
+                val file = Path(path)
 
                 when (it.click) {
                     ClickType.LEFT -> file.navigate(player, provider, inv)

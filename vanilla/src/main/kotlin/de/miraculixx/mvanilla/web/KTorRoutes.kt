@@ -10,13 +10,13 @@ import io.ktor.server.plugins.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.pipeline.*
-import java.io.File
+import kotlin.io.path.Path
 
 fun Application.configureDownloads() {
-    val respondForbidden = File(configFolder, "responses/forbidden.html")
-    val respondNoID = File(configFolder, "responses/invalid.html")
-    val respondNotFound = File(configFolder, "responses/notfound.html")
-    val respondIndex = File(configFolder, "responses/index.html")
+    val respondForbidden = Path(configFolder, "responses/forbidden.html")
+    val respondNoID = Path(configFolder, "responses/invalid.html")
+    val respondNotFound = Path(configFolder, "responses/notfound.html")
+    val respondIndex = Path(configFolder, "responses/index.html")
 
     suspend fun PipelineContext<Unit, ApplicationCall>.handleDownloadRequest() {
         val id = call.parameters["id"]
@@ -44,9 +44,9 @@ fun Application.configureDownloads() {
         val playerID = ServerData.ipToPlayer(requestIP)
         val playerName = playerID?.let { uuid -> LoaderSpecific.INSTANCE?.uuidToPlayerName(uuid) ?: uuid } ?: requestIP
 
-        val realFileTarget = File(fileData.path)
+        val realFileTarget = Path(fileData.path)
         val finalFile = if (fileData.zippedTo != null) {
-            val zipFile = File(fileData.zippedTo)
+            val zipFile = Path(fileData.zippedTo)
             if (!zipFile.exists()) {
                 if (settings.logAccess) consoleAudience.sendMessage(prefix + cmp("REQUEST Zip target $id to ${zipFile.path}"))
                 Zipping.zipFolder(realFileTarget, zipFile)

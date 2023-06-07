@@ -7,7 +7,7 @@ import de.miraculixx.mvanilla.messages.plus
 import de.miraculixx.mvanilla.serializer.enumOf
 import org.yaml.snakeyaml.DumperOptions
 import org.yaml.snakeyaml.Yaml
-import java.io.File
+import kotlin.io.path.Path
 import java.io.InputStream
 
 class Config(stream: InputStream?, val name: String, private val destination: File) {

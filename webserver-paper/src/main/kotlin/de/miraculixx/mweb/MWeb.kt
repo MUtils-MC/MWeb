@@ -17,7 +17,7 @@ import kotlinx.serialization.encodeToString
 import net.axay.kspigot.extensions.console
 import net.axay.kspigot.main.KSpigot
 import net.axay.kspigot.runnables.taskRunLater
-import java.io.File
+import kotlin.io.path.Path
 
 class MWeb : KSpigot() {
     companion object {
@@ -29,7 +29,7 @@ class MWeb : KSpigot() {
         MiniMessageConvertor
         INSTANCE = this
         consoleAudience = console
-        configFolder = File(dataFolder.parent, "MUtils/Web")
+        configFolder = Path(dataFolder.parent, "MUtils/Web")
         if (!configFolder.exists()) configFolder.mkdirs()
 
         try {
@@ -43,13 +43,13 @@ class MWeb : KSpigot() {
         val languages = listOf("en_US", "de_DE").map { it to javaClass.getResourceAsStream("/language/$it.yml") }
         localization = Localization(File("${configFolder.path}/language"), settings.lang, languages)
 
-        val responseFolder = File(configFolder, "responses")
+        val responseFolder = Path(configFolder, "responses")
         if (!responseFolder.exists()) {
             responseFolder.mkdir()
-            dumpRessourceFile("/responses/forbidden.html", File(responseFolder, "forbidden.html"))
-            dumpRessourceFile("/responses/invalid.html", File(responseFolder, "invalid.html"))
-            dumpRessourceFile("/responses/notfound.html", File(responseFolder, "notfound.html"))
-            dumpRessourceFile("/responses/index.html", File(responseFolder, "index.html"))
+            dumpRessourceFile("/responses/forbidden.html", Path(responseFolder, "forbidden.html"))
+            dumpRessourceFile("/responses/invalid.html", Path(responseFolder, "invalid.html"))
+            dumpRessourceFile("/responses/notfound.html", Path(responseFolder, "notfound.html"))
+            dumpRessourceFile("/responses/index.html", Path(responseFolder, "index.html"))
         }
 
         CommandAPI.onLoad(CommandAPIConfig().verboseOutput(false).silentLogs(true))
@@ -72,7 +72,7 @@ class MWeb : KSpigot() {
         WebServer.stopServer()
         ServerData.saveData()
         CommandAPI.onDisable()
-        File(configFolder, "settings.json").writeText(WebServer.jsonFull.encodeToString(settings))
+        Path(configFolder, "settings.json").writeText(WebServer.jsonFull.encodeToString(settings))
     }
 
     private fun dumpRessourceFile(location: String, target: File) {

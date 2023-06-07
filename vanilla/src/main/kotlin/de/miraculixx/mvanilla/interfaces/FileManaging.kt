@@ -6,16 +6,17 @@ import de.miraculixx.mvanilla.data.prefix
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mvanilla.serializer.Zipping
 import net.kyori.adventure.audience.Audience
-import java.io.File
+import java.nio.file.Path
+import kotlin.io.path.*
 
 interface FileManaging {
     fun Audience.renameFile(path: String, newName: String) {
-        val file = File(path)
+        val file = Path(path)
         if (!fileExist(file)) return
-        val parent = file.parentFile
+        val parent = file.parent
         try {
             if (parent == null) file.renameTo(File(newName))
-            else file.renameTo(File(file.parentFile, newName))
+            else file.
         } catch (e: Exception) {
             consoleAudience.sendMessage(prefix + cmp("Failed to rename file ${file.path}! Reason...", cError))
             consoleAudience.sendMessage(prefix + cmp(e.message ?: "Unknown", cError))
@@ -29,11 +30,11 @@ interface FileManaging {
     }
 
     fun Audience.deleteFile(path: String) {
-        val file = File(path)
+        val file = Path(path)
         if (!fileExist(file)) return
         try {
-            if (file.isDirectory) file.deleteRecursively()
-            else file.delete()
+            if (file.isDirectory()) file.deleteRecursively()
+            else file.deleteIfExists()
         } catch (e: Exception) {
             consoleAudience.sendMessage(prefix + cmp("Failed to delete file ${path}! Reason...", cError))
             consoleAudience.sendMessage(prefix + cmp(e.message ?: "Unknown", cError))
@@ -45,19 +46,19 @@ interface FileManaging {
     }
 
     fun Audience.zipFolder(path: String) {
-        val file = File(path)
+        val file = Path(path)
         if (!file.isDirectory) {
             sendMessage(prefix + cmp(msgString("event.noFolder"), cError))
             return
         }
         sendMessage(prefix + cmp(msgString("event.startZip")))
-        Zipping.zipFolder(file, File("$path.zip"))
+        Zipping.zipFolder(file, Path("$path.zip"))
         soundEnable()
         sendMessage(prefix + cmp(msgString("event.finishZip", listOf(file.name))))
     }
 
     fun Audience.unzipFolder(path: String) {
-        val file = File(path)
+        val file = Path(path)
         if (!fileExist(file)) return
         val type = FileType.getType(file.extension)
         if (type != FileType.ARCHIVE) {
@@ -65,12 +66,12 @@ interface FileManaging {
             return
         }
         sendMessage(prefix + cmp(msgString("event.startZip")))
-        Zipping.unzipArchive(file, File(path.removeSuffix(".${file.extension}")))
+        Zipping.unzipArchive(file, Path(path.removeSuffix(".${file.extension}")))
         soundEnable()
         sendMessage(prefix + cmp(msgString("event.finishZip", listOf(file.name))))
     }
 
-    private fun Audience.fileExist(file: File): Boolean {
+    private fun Audience.fileExist(file: Path): Boolean {
         return if (!file.exists()) {
             soundError()
             sendMessage(prefix + cmp(msgString("event.fileNotFound", listOf(file.path))))

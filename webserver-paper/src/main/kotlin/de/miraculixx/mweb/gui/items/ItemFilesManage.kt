@@ -22,7 +22,7 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.persistence.PersistentDataType
-import java.io.File
+import kotlin.io.path.Path
 import java.nio.file.Files
 import java.time.Instant
 

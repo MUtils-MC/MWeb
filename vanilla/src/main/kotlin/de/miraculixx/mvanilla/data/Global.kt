@@ -7,7 +7,7 @@ import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
-import java.io.File
+import kotlin.io.path.Path
 
 lateinit var configFolder: File
 lateinit var settings: Settings

@@ -13,7 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import java.io.File
+import kotlin.io.path.Path
 import java.net.URL
 
 object WebServer {
@@ -28,7 +28,7 @@ object WebServer {
     }
     private lateinit var server: ApplicationEngine
     var publicIP = "localhost"
-    val tempFolder = File(configFolder, "temp")
+    val tempFolder = Path(configFolder, "temp")
     var isStarted = false
 
     fun startServer() {

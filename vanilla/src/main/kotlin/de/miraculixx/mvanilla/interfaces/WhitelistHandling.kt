@@ -6,7 +6,9 @@ import de.miraculixx.mvanilla.serializer.Zipping
 import de.miraculixx.mvanilla.web.WebServer
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.event.ClickEvent
-import java.io.File
+import java.nio.file.Path
+import kotlin.io.path.Path
+import kotlin.io.path.*
 import kotlin.random.Random
 import kotlin.random.nextInt
 import kotlin.time.Duration
@@ -24,14 +26,14 @@ interface WhitelistHandling {
      */
     fun Audience.whitelistFile(path: String, access: WhitelistType, restriction: String? = null, duration: Duration? = null, maxDownloads: Int? = null): Pair<String, WhitelistFile>? {
         val id = calcID()
-        val file = File(path)
+        val file = Path(path)
         if (!file.exists()) {
             soundError()
             sendMessage(prefix + cmp("The file $path does not exist!", cError))
             sendMessage(prefix + cmp("Note, the path starts in your server directory (or of the start script)"))
             return null
         }
-        val zipTarget = if (file.isDirectory) {
+        val zipTarget = if (file.isDirectory()) {
             val zipFile = calcTempZip(file.nameWithoutExtension, WebServer.tempFolder)
             Zipping.zipFolder(file, zipFile)
             zipFile.deleteOnExit() // Cache clean up
@@ -41,7 +43,7 @@ interface WhitelistHandling {
             System.currentTimeMillis() + duration.inWholeMilliseconds
         } else null
 
-        val data = WhitelistFile(file.path, zipTarget, access, restriction, timeoutTimestamp, maxDownloads)
+        val data = WhitelistFile(file.pathString, zipTarget, access, restriction, timeoutTimestamp, maxDownloads)
         ServerData.addWhitelist(id, data)
 
         sendMessage(prefix + cmp("New file access created!", cSuccess))
@@ -77,8 +79,8 @@ interface WhitelistHandling {
         }
     }
 
-    private fun calcTempZip(currentName: String, tempFolder: File): File {
-        val possibleFile = File(tempFolder, "$currentName.zip")
+    private fun calcTempZip(currentName: String, tempFolder: Path): Path {
+        val possibleFile = Path(tempFolder, "$currentName.zip")
         return if (possibleFile.exists()) calcTempZip(currentName + Random.nextInt(0..9), tempFolder)
         else possibleFile
     }

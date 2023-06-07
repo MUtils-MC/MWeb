@@ -9,7 +9,7 @@ import de.miraculixx.mweb.gui.items.ItemFilesManage
 import de.miraculixx.mweb.gui.logic.data.CustomInventory
 import de.miraculixx.mweb.module.permVisual
 import org.bukkit.entity.Player
-import java.io.File
+import kotlin.io.path.Path
 
 interface ActionFiles {
     fun File.navBack(provider: ItemFilesManage, player: Player, inv: CustomInventory) {

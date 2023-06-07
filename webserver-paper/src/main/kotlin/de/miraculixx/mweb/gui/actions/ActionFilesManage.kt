@@ -21,7 +21,7 @@ import net.axay.kspigot.runnables.sync
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
-import java.io.File
+import kotlin.io.path.Path
 
 class ActionFilesManage : GUIEvent, ActionFiles, FileManaging {
     override val run: (InventoryClickEvent, CustomInventory) -> Unit = event@{ it: InventoryClickEvent, inv: CustomInventory ->
@@ -34,7 +34,7 @@ class ActionFilesManage : GUIEvent, ActionFiles, FileManaging {
         when (meta.customModel) {
             100 -> {
                 val path = meta.persistentDataContainer.get(provider.pathNamespace) ?: provider.currentFolder.path
-                val file = File(path)
+                val file = Path(path)
 
                 when (it.click) {
                     ClickType.LEFT -> file.navigate(player, provider, inv)
@@ -58,7 +58,7 @@ class ActionFilesManage : GUIEvent, ActionFiles, FileManaging {
                                 if (file.isDirectory) {
                                     GUITypes.LOADING.buildInventory(player, "LOADING", ItemLoading(), ActionEmpty())
                                     CoroutineScope(Dispatchers.Default).launch {
-                                        Zipping.zipFolder(file, File("$path.zip"))
+                                        Zipping.zipFolder(file, Path("$path.zip"))
                                         sync {
                                             inv.update()
                                             inv.open(player)
@@ -93,7 +93,7 @@ class ActionFilesManage : GUIEvent, ActionFiles, FileManaging {
                                 player.click()
                                 GUITypes.LOADING.buildInventory(player, "LOADING", ItemLoading(), ActionEmpty())
                                 CoroutineScope(Dispatchers.Default).launch {
-                                    Zipping.unzipArchive(file, File(path.removeSuffix(".${file.extension}")))
+                                    Zipping.unzipArchive(file, Path(path.removeSuffix(".${file.extension}")))
                                     sync {
                                         inv.update()
                                         inv.open(player)

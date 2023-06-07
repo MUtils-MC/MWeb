@@ -26,7 +26,7 @@ import net.kyori.adventure.audience.Audience
 import org.apache.commons.codec.digest.DigestUtils
 import org.bukkit.Sound
 import org.bukkit.entity.Player
-import java.io.File
+import kotlin.io.path.Path
 import kotlin.time.Duration
 
 class MainCommand : WhitelistHandling, FileManaging {
@@ -170,7 +170,7 @@ class MainCommand : WhitelistHandling, FileManaging {
         taskRunLater(20 * 60) {
             console.removeWhitelist(whitelist.first)
         }
-        val file = File(whitelist.second.zippedTo ?: whitelist.second.path)
+        val file = Path(whitelist.second.zippedTo ?: whitelist.second.path)
         val hash = DigestUtils.getSha1Digest().digest(file.readBytes())
 
         val prompt = msg("event.texturepackPrompt", listOf(file.name))

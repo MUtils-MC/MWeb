@@ -15,7 +15,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.persistence.PersistentDataType
-import java.io.File
+import kotlin.io.path.Path
 
 class ItemWhitelists(private val file: File?) : ItemProvider {
     private val msgDot = cmp("  • ", NamedTextColor.DARK_GRAY)
@@ -30,7 +30,7 @@ class ItemWhitelists(private val file: File?) : ItemProvider {
         return buildMap {
             val whitelists = file?.let { f -> ServerData.getWhitelists(f.path) } ?: ServerData.getWhitelists()
             whitelists.forEach { (id, data) ->
-                val file = File(data.path)
+                val file = Path(data.path)
                 put(itemStack(Material.PLAYER_HEAD) {
                     meta {
                         name = cmp(file.name, cHighlight)

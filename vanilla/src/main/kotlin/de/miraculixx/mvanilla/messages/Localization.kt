@@ -1,7 +1,7 @@
 package de.miraculixx.mvanilla.messages
 
 import de.miraculixx.mvanilla.data.*
-import java.io.File
+import kotlin.io.path.Path
 import java.io.InputStream
 import java.util.*
 
@@ -53,7 +53,7 @@ class Localization(private val folder: File, active: String, keys: List<Pair<Str
     }
 
     fun setLanguage(key: String): Boolean {
-        val file = File("${folder.path}/$key.yml")
+        val file = Path("${folder.path}/$key.yml")
         if (!file.exists()) {
             if (settings.debug) consoleAudience.sendMessage(prefix + cmp("LANG - $key file not exist"))
             return false
@@ -80,7 +80,7 @@ class Localization(private val folder: File, active: String, keys: List<Pair<Str
         if (!folder.exists()) folder.mkdirs()
         keys.forEach {
             if (settings.debug) consoleAudience.sendMessage(prefix + cmp("LANG - Detect default language '${it.first}' - Corrupted: ${it.second == null}"))
-            it.second?.readAllBytes()?.let { bytes -> File("${folder.path}/${it.first}.yml").writeBytes(bytes) }
+            it.second?.readAllBytes()?.let { bytes -> Path("${folder.path}/${it.first}.yml").writeBytes(bytes) }
         }
         checkFiles()
         setLanguage(active)
