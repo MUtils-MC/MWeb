@@ -1,6 +1,7 @@
 package de.miraculixx.mweb.gui.actions
 
 import de.miraculixx.mvanilla.data.*
+import de.miraculixx.mvanilla.interfaces.FileManaging
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mvanilla.serializer.Zipping
 import de.miraculixx.mweb.await.AwaitChatMessage
@@ -22,7 +23,7 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import java.io.File
 
-class ActionFilesManage : GUIEvent, ActionFiles {
+class ActionFilesManage : GUIEvent, ActionFiles, FileManaging {
     override val run: (InventoryClickEvent, CustomInventory) -> Unit = event@{ it: InventoryClickEvent, inv: CustomInventory ->
         it.isCancelled = true
         val player = it.whoClicked as? Player ?: return@event
@@ -45,19 +46,8 @@ class ActionFilesManage : GUIEvent, ActionFiles {
                                 if (!player.permVisual("mweb.manage.rename")) return@event
                                 player.click()
                                 AwaitChatMessage(false, player, "Rename File", 60, file.name, true, msg("event.rename"), { msg ->
-                                    val parent = file.parentFile
-                                    try {
-                                        if (parent == null) file.renameTo(File(msg))
-                                        else file.renameTo(File(file.parentFile, msg))
-                                    } catch (e: Exception) {
-                                        consoleAudience.sendMessage(prefix + cmp("Failed to rename file ${file.path}! Reason...", cError))
-                                        consoleAudience.sendMessage(prefix + cmp(e.message ?: "Unknown", cError))
-                                        player.soundError()
-                                        player.sendMessage(prefix + cmp(msgString("event.invalidName", listOf(msg))))
-                                        return@AwaitChatMessage
-                                    }
+                                    player.renameFile(path, msg)
                                     inv.update()
-                                    player.soundEnable()
                                 }) {
                                     inv.open(player)
                                 }
@@ -82,18 +72,9 @@ class ActionFilesManage : GUIEvent, ActionFiles {
                                 if (!player.permVisual("mweb.manage.delete")) return@event
                                 player.click()
                                 AwaitConfirm(player, {
-                                    try {
-                                        if (file.isDirectory) file.deleteRecursively()
-                                        else file.delete()
-                                    } catch (e: Exception) {
-                                        consoleAudience.sendMessage(prefix + cmp("Failed to delete file ${file.path}! Reason...", cError))
-                                        consoleAudience.sendMessage(prefix + cmp(e.message ?: "Unknown", cError))
-                                        player.sendMessage(prefix + cmp(msgString("event.invalidDelete", listOf(file.name))))
-                                        player.closeInventory()
-                                        player.soundError()
-                                        return@AwaitConfirm
-                                    }
-                                    player.soundDelete()
+                                    if (!player.permVisual("mweb.manage.delete", true)) return@AwaitConfirm
+                                    player.deleteFile(path)
+                                    player.closeInventory()
                                     inv.update()
                                     inv.open(player)
                                 }) {

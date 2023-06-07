@@ -1,4 +1,4 @@
-package de.miraculixx.mvanilla.commands
+package de.miraculixx.mvanilla.interfaces
 
 import de.miraculixx.mvanilla.data.*
 import de.miraculixx.mvanilla.messages.*

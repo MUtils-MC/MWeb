@@ -2,11 +2,12 @@
 
 package de.miraculixx.mweb.commands
 
-import de.miraculixx.mvanilla.commands.WhitelistHandling
+import de.miraculixx.mvanilla.interfaces.WhitelistHandling
 import de.miraculixx.mvanilla.data.GUITypes
 import de.miraculixx.mvanilla.data.ServerData
 import de.miraculixx.mvanilla.data.WhitelistType
 import de.miraculixx.mvanilla.data.prefix
+import de.miraculixx.mvanilla.interfaces.FileManaging
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mvanilla.serializer.enumOf
 import de.miraculixx.mweb.gui.actions.ActionFilesManage
@@ -28,7 +29,7 @@ import org.bukkit.entity.Player
 import java.io.File
 import kotlin.time.Duration
 
-class MainCommand : WhitelistHandling {
+class MainCommand : WhitelistHandling, FileManaging {
     val command = commandTree("webserver") {
         withAliases("ws")
         playerExecutor { player, _ ->
@@ -101,7 +102,7 @@ class MainCommand : WhitelistHandling {
                         anyExecutor { sender, args ->
                             val path = args[0] as String
                             val newName = args[1] as String
-                            //TODO
+                            sender.renameFile(path, newName)
                         }
                     }
                 }
@@ -111,7 +112,7 @@ class MainCommand : WhitelistHandling {
                 textArgument("file") {
                     anyExecutor { sender, args ->
                         val path = args[0] as String
-                        //TODO
+                        sender.deleteFile(path)
                     }
                 }
             }
@@ -120,7 +121,7 @@ class MainCommand : WhitelistHandling {
                 textArgument("file") {
                     anyExecutor { sender, args ->
                         val path = args[0] as String
-                        //TODO
+                        sender.zipFolder(path)
                     }
                 }
             }
@@ -129,7 +130,7 @@ class MainCommand : WhitelistHandling {
                 textArgument("file") {
                     anyExecutor { sender, args ->
                         val path = args[0] as String
-                        //TODO
+                        sender.unzipFolder(path)
                     }
                 }
             }

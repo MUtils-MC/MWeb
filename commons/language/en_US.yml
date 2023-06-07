@@ -53,7 +53,7 @@ event:
     jar: "Jar File"
     media: "Media File"
     default: "Data File"
-  fileNotFound: "Failed to resolve file <input-1>. Refreshing all files..." #v1
+  fileNotFound: "Failed to resolve file <input-1>!" #v1
   idNotFound: "The id <input-1> does not exist!" #v1
   action:
     riseDownloads: "Rise Max Downloads"
@@ -72,7 +72,12 @@ event:
   setMaxAmount: "<grey><blue><b>Input Formatting</b></blue>\n ├> Enter a positive number like <color:#6e94ff>25</color>" #m
   setPassphrase: "<grey><blue><b>Input Formatting</b></blue>\n ├> Enter any phrase (no url characters)" #m
   setPlayer: "<grey><blue><b>Input Formatting</b></blue>\n ├> Enter the <color:#6e94ff>name</color> of any player\n ├> Must joined the server before (ip check)" #m
-  noPermission: "Missing Permissions: <input-1>"
+  setName: "Renamed file to <input-1>" #v1
+  noPermission: "Missing Permissions: <input-1>" #v1
+  noFolder: "Your selected file is not a directory!"
+  noArchive: "Your selected file is not an archive!"
+  startZip: "(Un-)Zipping the folder..."
+  finishZip: "Successfully (un-)zipped <input-1>!" #v1
 
 #-----------------------------------------#
 #                  Items                  #

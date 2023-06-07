@@ -1,6 +1,6 @@
 package de.miraculixx.mweb.gui.actions
 
-import de.miraculixx.mvanilla.commands.WhitelistHandling
+import de.miraculixx.mvanilla.interfaces.WhitelistHandling
 import de.miraculixx.mvanilla.data.GUITypes
 import de.miraculixx.mvanilla.data.ServerData
 import de.miraculixx.mvanilla.data.WhitelistType
