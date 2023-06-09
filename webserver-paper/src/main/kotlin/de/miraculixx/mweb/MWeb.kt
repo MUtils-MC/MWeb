@@ -1,6 +1,5 @@
 package de.miraculixx.mweb
 
-import de.miraculixx.mmconvertor.MiniMessageConvertor
 import de.miraculixx.mvanilla.data.*
 import de.miraculixx.mvanilla.messages.Localization
 import de.miraculixx.mvanilla.messages.cError
@@ -8,6 +7,7 @@ import de.miraculixx.mvanilla.messages.cmp
 import de.miraculixx.mvanilla.messages.plus
 import de.miraculixx.mvanilla.web.WebServer
 import de.miraculixx.mweb.commands.MainCommand
+import de.miraculixx.mweb.module.APIImplementation
 import de.miraculixx.mweb.module.GlobalListener
 import de.miraculixx.mweb.module.LoaderImplementation
 import dev.jorel.commandapi.CommandAPI
@@ -26,7 +26,6 @@ class MWeb : KSpigot() {
     }
 
     override fun load() {
-        MiniMessageConvertor
         INSTANCE = this
         consoleAudience = console
         configFolder = File(dataFolder.parent, "MUtils/Web")
@@ -52,6 +51,7 @@ class MWeb : KSpigot() {
             dumpRessourceFile("/responses/index.html", File(responseFolder, "index.html"))
         }
 
+        APIImplementation()
         CommandAPI.onLoad(CommandAPIConfig().verboseOutput(false).silentLogs(true))
     }
 
@@ -59,7 +59,7 @@ class MWeb : KSpigot() {
         LoaderImplementation()
         ServerData.loadData()
 
-        // Start after server loading
+        // Start after first tick
         taskRunLater(1) { WebServer.startServer() }
 
         // Register listener

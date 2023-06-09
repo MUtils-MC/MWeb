@@ -2,7 +2,7 @@ package de.miraculixx.mweb.gui.actions
 
 import de.miraculixx.mvanilla.interfaces.WhitelistHandling
 import de.miraculixx.mvanilla.data.ServerData
-import de.miraculixx.mvanilla.data.WhitelistType
+import de.miraculixx.mweb.api.data.WhitelistType
 import de.miraculixx.mvanilla.data.prefix
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mweb.await.AwaitChatMessage

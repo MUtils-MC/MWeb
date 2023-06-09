@@ -4,7 +4,7 @@ import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mweb.gui.logic.GUIEvent
 import de.miraculixx.mweb.gui.logic.data.CustomInventory
 import de.miraculixx.mweb.gui.logic.data.InventoryManager
-import de.miraculixx.mvanilla.data.Head64
+import de.miraculixx.mweb.api.data.Head64
 import de.miraculixx.mweb.gui.logic.items.ItemProvider
 import de.miraculixx.mweb.gui.logic.items.skullTexture
 import net.axay.kspigot.event.listen

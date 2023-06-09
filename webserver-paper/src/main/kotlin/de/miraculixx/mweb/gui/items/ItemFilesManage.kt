@@ -5,7 +5,7 @@ import de.miraculixx.mvanilla.data.GUITypes
 import de.miraculixx.mvanilla.data.ServerData
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mweb.gui.getItem
-import de.miraculixx.mvanilla.data.Head64
+import de.miraculixx.mweb.api.data.Head64
 import de.miraculixx.mweb.gui.logic.items.ItemProvider
 import de.miraculixx.mweb.gui.logic.items.skullTexture
 import net.axay.kspigot.items.customModel

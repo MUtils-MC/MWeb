@@ -4,8 +4,12 @@ import de.miraculixx.mvanilla.data.*
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mvanilla.serializer.Zipping
 import de.miraculixx.mvanilla.web.WebServer
+import de.miraculixx.mweb.api.data.WhitelistFile
+import de.miraculixx.mweb.api.data.WhitelistType
 import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
+import org.apache.commons.codec.digest.DigestUtils
 import java.io.File
 import kotlin.random.Random
 import kotlin.random.nextInt
@@ -49,13 +53,15 @@ interface WhitelistHandling {
         return id to data
     }
 
-    fun Audience.removeWhitelist(id: String) {
-        if (ServerData.removeWhitelist(id)) {
+    fun Audience.removeWhitelist(id: String): Boolean {
+        return if (ServerData.removeWhitelist(id)) {
             soundDisable()
             sendMessage(prefix + cmp("Successfully removed file access!", cSuccess))
+            true
         } else {
             soundError()
             sendMessage(prefix + cmp("Failed to remove file access! "))
+            false
         }
     }
 
@@ -66,6 +72,21 @@ interface WhitelistHandling {
                     .clickEvent(ClickEvent.copyToClipboard(ServerData.getLink(id)))
                     .addHover(cmp("Click to copy download link")) +
                 cmp(" to copy the download link ${if (fileData.accessType == WhitelistType.PASSPHRASE_RESTRICTED) "(passphrase included!)" else ""}"))
+    }
+
+    fun Audience.createResourcePackAccess(path: String): ResourcePackInfo? {
+        val whitelist = Audience.empty().whitelistFile(path, WhitelistType.GLOBAL)
+        if (whitelist == null) {
+            sendMessage(prefix + cmp(msgString("event.fileNotFound", listOf(path)), cError))
+            return null
+        }
+
+        val file = File(whitelist.second.zippedTo ?: whitelist.second.path)
+        val hash = DigestUtils.getSha1Digest().digest(file.readBytes())
+
+        val prompt = msg("event.texturepackPrompt", listOf(file.name))
+        val link = ServerData.getLink(whitelist.first)
+        return ResourcePackInfo(hash, prompt, link, whitelist.first)
     }
 
     private fun calcID(): String {
@@ -82,4 +103,7 @@ interface WhitelistHandling {
         return if (possibleFile.exists()) calcTempZip(currentName + Random.nextInt(0..9), tempFolder)
         else possibleFile
     }
+
+    @Suppress("ArrayInDataClass")
+    data class ResourcePackInfo(val hash: ByteArray, val prompt: Component, val link: String, val data: String)
 }

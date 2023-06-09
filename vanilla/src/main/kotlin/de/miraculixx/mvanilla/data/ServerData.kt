@@ -2,6 +2,8 @@ package de.miraculixx.mvanilla.data
 
 import de.miraculixx.mvanilla.serializer.UUIDSerializer
 import de.miraculixx.mvanilla.web.WebServer
+import de.miraculixx.mweb.api.data.WhitelistFile
+import de.miraculixx.mweb.api.data.WhitelistType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString

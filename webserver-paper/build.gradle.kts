@@ -5,9 +5,9 @@ plugins {
     id("xyz.jpenilla.run-paper")
 }
 
-group = "de.miraculixx.webserver"
-version = "1.0.0"
-setProperty("module_name", "webserver")
+group = "de.miraculixx.mweb"
+version = "1.1.0"
+setProperty("module_name", "mweb")
 
 repositories {
     mavenCentral()
@@ -18,11 +18,11 @@ dependencies {
 
     implementation("dev.jorel:commandapi-shade:8.8.0")
     implementation("dev.jorel:commandapi-kotlin:8.8.0")
-    implementation("de.miraculixx:minimessage-convertor:1.0.0")
 
     implementation("net.axay:kspigot:1.19.2")
 
     implementation(project(":vanilla"))
+    implementation(project(":api"))
 }
 
 sourceSets {

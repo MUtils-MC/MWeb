@@ -2,14 +2,13 @@
 
 package de.miraculixx.mweb.commands
 
+import de.miraculixx.mvanilla.data.*
 import de.miraculixx.mvanilla.interfaces.WhitelistHandling
-import de.miraculixx.mvanilla.data.GUITypes
-import de.miraculixx.mvanilla.data.ServerData
-import de.miraculixx.mvanilla.data.WhitelistType
-import de.miraculixx.mvanilla.data.prefix
 import de.miraculixx.mvanilla.interfaces.FileManaging
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mvanilla.serializer.enumOf
+import de.miraculixx.mweb.MWeb
+import de.miraculixx.mweb.api.data.WhitelistType
 import de.miraculixx.mweb.gui.actions.ActionFilesManage
 import de.miraculixx.mweb.gui.actions.ActionFilesWhitelist
 import de.miraculixx.mweb.gui.buildInventory
@@ -23,6 +22,7 @@ import dev.jorel.commandapi.kotlindsl.*
 import net.axay.kspigot.extensions.console
 import net.axay.kspigot.runnables.taskRunLater
 import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.text.event.ClickEvent
 import org.apache.commons.codec.digest.DigestUtils
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -157,26 +157,86 @@ class MainCommand : WhitelistHandling, FileManaging {
         }
 
         argument(LiteralArgument("settings").withPermission("mweb.settings")) {
+            literalArgument("port") {
+                anyExecutor { sender, _ ->
+                    sender.sendMessage(prefix + cmp("Current Port: ") + cmp("${settings.port}", cMark))
+                }
+                integerArgument("port", 0, 65535) {
+                    anyExecutor { sender, args ->
+                        val newValue = args[0] as Int
+                        settings.port = newValue
+                        sender.sendMessage(prefix + cmp("The port is now ") + cmp("$newValue", cMark))
+                    }
+                }
+            }
 
+            literalArgument("logaccess") {
+                anyExecutor { sender, _ ->
+                    sender.sendMessage(prefix + cmp("Log file access: ") + cmp(settings.logAccess.msg(), cMark))
+                }
+                booleanArgument("logaccess") {
+                    anyExecutor { sender, args ->
+                        val newValue = args[0] as Boolean
+                        settings.logAccess = newValue
+                        sender.sendMessage(prefix + cmp("Logging file access is now ") + cmp(newValue.msg(), cMark))
+                    }
+                }
+            }
+
+            literalArgument("debug") {
+                anyExecutor { sender, _ ->
+                    sender.sendMessage(prefix + cmp("Debuging mode: ") + cmp(settings.debug.msg(), cMark))
+                }
+                booleanArgument("debug") {
+                    anyExecutor { sender, args ->
+                        val newValue = args[0] as Boolean
+                        settings.debug = newValue
+                        sender.sendMessage(prefix + cmp("Debugging mode is now ") + cmp(newValue.msg(), cMark))
+                    }
+                }
+            }
+
+            literalArgument("proxy") {
+                anyExecutor { sender, _ ->
+                    sender.sendMessage(prefix + cmp("Current proxy link: ") + cmp(settings.proxy ?: msgNone, cMark))
+                }
+                textArgument("proxy") {
+                    anyExecutor { sender, args ->
+                        val newValue = args[0] as String
+                        settings.proxy = newValue
+                        sender.sendMessage(prefix + cmp("All links now use ") + cmp(newValue, cMark))
+                        sender.sendMessage(prefix + cmp("Make sure you can see the MWeb screen under ") + cmp(newValue, cMark, underlined = true).clickEvent(ClickEvent.openUrl(newValue)))
+                        sender.sendMessage(prefix + cmp("Issues? Ask us at ") + cmp("dc.mutils.net", cMark, underlined = true).clickEvent(ClickEvent.openUrl("https://dc.mutils.net")))
+                    }
+                }
+            }
+
+            literalArgument("language") {
+                anyExecutor { sender, _ ->
+                    sender.sendMessage(prefix + cmp("Current language: ") + cmp(settings.lang, cMark))
+                }
+                stringArgument("language") {
+                    anyExecutor { sender, args ->
+                        val newValue = args[0] as String
+                        if (MWeb.localization.setLanguage(newValue)) {
+                            settings.lang = newValue
+                            sender.sendMessage(prefix + cmp(msgString("command.switchLang")))
+                        } else {
+                            sender.sendMessage(prefix + cmp("Failed to apply language $newValue! Please check if $newValue.yml exist in the language folder", cError))
+                        }
+                    }
+                }
+            }
         }
     }
 
     private fun Audience.loadTP(path: String, targets: List<Player>, force: Boolean) {
-        val whitelist = Audience.empty().whitelistFile(path, WhitelistType.GLOBAL)
-        if (whitelist == null) {
-            sendMessage(prefix + cmp(msgString("event.fileNotFound", listOf(path)), cError))
-            return
-        }
+        val rpInfo = createResourcePackAccess(path) ?: return
         taskRunLater(20 * 60) {
-            console.removeWhitelist(whitelist.first)
+            console.removeWhitelist(rpInfo.data)
         }
-        val file = File(whitelist.second.zippedTo ?: whitelist.second.path)
-        val hash = DigestUtils.getSha1Digest().digest(file.readBytes())
-
-        val prompt = msg("event.texturepackPrompt", listOf(file.name))
-        val link = ServerData.getLink(whitelist.first)
         targets.forEach { player ->
-            player.setResourcePack(link, hash, prompt, force)
+            player.setResourcePack(rpInfo.link, rpInfo.hash, rpInfo.prompt, force)
         }
     }
 }

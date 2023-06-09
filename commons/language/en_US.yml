@@ -34,6 +34,7 @@ common:
 command:
   copyLink: "<grey>Click <hover:show_text:'<grey>Click to copy link</grey>'><click:copy_to_clipboard:'<input-1>'><color:#6e94ff>here</color></click></hover> to copy your link"
   passphraseWarning: "(passphrase included)"
+  switchLang: "MWeb language successfully switched to english! (en_US)"
 
 #-----------------------------------------#
 #                 Events                  #

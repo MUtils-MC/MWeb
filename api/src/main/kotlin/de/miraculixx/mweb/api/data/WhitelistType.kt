@@ -1,4 +1,4 @@
-package de.miraculixx.mvanilla.data
+package de.miraculixx.mweb.api.data
 
 enum class WhitelistType(val head: Head64) {
     GLOBAL(Head64.GLOBE),

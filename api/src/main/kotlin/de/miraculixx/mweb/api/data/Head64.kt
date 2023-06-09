@@ -1,4 +1,4 @@
-package de.miraculixx.mvanilla.data
+package de.miraculixx.mweb.api.data
 
 enum class Head64(val value: String) {
     // Arrows

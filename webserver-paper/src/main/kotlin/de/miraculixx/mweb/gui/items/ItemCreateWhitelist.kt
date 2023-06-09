@@ -1,7 +1,7 @@
 package de.miraculixx.mweb.gui.items
 
-import de.miraculixx.mvanilla.data.Head64
-import de.miraculixx.mvanilla.data.WhitelistType
+import de.miraculixx.mweb.api.data.Head64
+import de.miraculixx.mweb.api.data.WhitelistType
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mvanilla.serializer.toUUID
 import de.miraculixx.mweb.gui.logic.InventoryUtils

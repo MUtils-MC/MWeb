@@ -2,7 +2,7 @@ package de.miraculixx.mweb.gui.logic
 
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mweb.gui.logic.data.CustomInventory
-import de.miraculixx.mvanilla.data.Head64
+import de.miraculixx.mweb.api.data.Head64
 import de.miraculixx.mweb.gui.logic.items.skullTexture
 import net.axay.kspigot.items.customModel
 import net.axay.kspigot.items.itemStack

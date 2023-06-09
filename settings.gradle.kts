@@ -12,3 +12,4 @@ pluginManagement {
 include("webserver-fabric")
 include("webserver-paper")
 include("vanilla")
+include("api")
