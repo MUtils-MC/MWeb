@@ -135,7 +135,9 @@ class StorageGUI(
     }
 
     override fun update() {
-        val content = itemProvider?.getItemList()?.toMap(false)?.plus(itemProvider.getBooleanMap(0, 99)) ?: emptyMap()
+        val from = page * 9
+        val to = from + (9 * 4) - 1
+        val content = itemProvider?.getItemList(from, to)?.toMap(false)?.plus(itemProvider.getBooleanMap(0, 99)) ?: emptyMap()
         val filter = "NONE"
         fillPlaceholder(false)
 
@@ -148,9 +150,9 @@ class StorageGUI(
             }
 
             3 -> {
-                i.setItem(2, header[0])
+                i.setItem(3, header[0])
                 i.setItem(4, header[1])
-                i.setItem(6, header[2])
+                i.setItem(5, header[2])
             }
 
             4 -> {
@@ -210,15 +212,19 @@ class StorageGUI(
                 currentItem
             } else pair.first
             if (filterable && index >= 9 * 4) return
-            i.setItem(9 + index, finalItem)
+            i.setItem(18 + index, finalItem)
         }
     }
 
     private fun fillPlaceholder(full: Boolean) {
-        val darkHolder = itemStack(Items.GRAY_STAINED_GLASS_PANE) { setName(emptyComponent()) }
-        if (full) (0..8).forEach { i.setItem(it, darkHolder) }
+        val darkHolder = InventoryUtils.phPrimary
+        val blackHolder = InventoryUtils.phSecondary
+        if (full) {
+            (0..8).forEach { i.setItem(it, darkHolder) }
+            (9..17).forEach { i.setItem(it, blackHolder) }
+        }
 
-        (9..53 - (if (filterable) 9 else 0)).forEach { i.setItem(it, lightHolder) }
+        (18..53 - (if (filterable) 9 else 0)).forEach { i.setItem(it, lightHolder) }
         if (filterable) (45..53).forEach { i.setItem(it, darkHolder) }
     }
 

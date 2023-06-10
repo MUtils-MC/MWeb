@@ -13,6 +13,7 @@ import net.silkmc.silk.nbt.dsl.nbtCompound
 
 object InventoryUtils {
     val phPrimary = itemStack(Items.GRAY_STAINED_GLASS_PANE) { setName(emptyComponent()) }
+    val phSecondary = itemStack(Items.BLACK_STAINED_GLASS_PANE) { setName(emptyComponent()) }
 
     fun getCustomItem(key: String, id: Int, texture: Head64): ItemStack {
         return itemStack(Items.PLAYER_HEAD) {

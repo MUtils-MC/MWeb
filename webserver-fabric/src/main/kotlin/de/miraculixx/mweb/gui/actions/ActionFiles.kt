@@ -7,11 +7,8 @@ import de.miraculixx.mvanilla.messages.soundStone
 import de.miraculixx.mweb.gui.buildInventory
 import de.miraculixx.mweb.gui.items.ItemFilesManage
 import de.miraculixx.mweb.gui.logic.data.CustomInventory
-import de.miraculixx.mweb.gui.logic.item.adv
 import de.miraculixx.mweb.module.permVisual
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.player.Player
-import org.bukkit.entity.Player
 import java.io.File
 
 interface ActionFiles {

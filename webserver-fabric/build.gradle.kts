@@ -65,3 +65,9 @@ kotlin {
         }
     }
 }
+
+sourceSets {
+    main {
+        resources.srcDirs("$rootDir/commons/")
+    }
+}

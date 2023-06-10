@@ -2,9 +2,12 @@
 
 package de.miraculixx.mweb.commands
 
-import de.miraculixx.mvanilla.data.*
-import de.miraculixx.mvanilla.interfaces.WhitelistHandling
+import de.miraculixx.mvanilla.data.GUITypes
+import de.miraculixx.mvanilla.data.ServerData
+import de.miraculixx.mvanilla.data.prefix
+import de.miraculixx.mvanilla.data.settings
 import de.miraculixx.mvanilla.interfaces.FileManaging
+import de.miraculixx.mvanilla.interfaces.WhitelistHandling
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mvanilla.serializer.enumOf
 import de.miraculixx.mweb.MWeb
@@ -23,7 +26,6 @@ import net.axay.kspigot.extensions.console
 import net.axay.kspigot.runnables.taskRunLater
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.event.ClickEvent
-import org.apache.commons.codec.digest.DigestUtils
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import java.io.File

@@ -1,5 +1,6 @@
 package de.miraculixx.mweb.await
 
+import de.miraculixx.mvanilla.data.prefix
 import de.miraculixx.mvanilla.messages.*
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent

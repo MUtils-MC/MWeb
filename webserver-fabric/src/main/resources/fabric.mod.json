@@ -19,13 +19,10 @@
     "main": [
       {
         "adapter": "kotlin",
-        "value": "de.miraculixx.mtimer.MTimerKt::init"
+        "value": "de.miraculixx.mweb.MWebKt::init"
       }
     ]
   },
-  "mixins": [
-    "mutils-timer.mixins.json"
-  ],
 
   "depends": {
     "fabricloader": ">=0.14.10",

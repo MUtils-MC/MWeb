@@ -2,18 +2,12 @@ package de.miraculixx.mweb.gui.actions
 
 import de.miraculixx.mvanilla.messages.soundStone
 import de.miraculixx.mweb.gui.items.ItemFilesManage
-import de.miraculixx.mweb.gui.logic.GUIEvent
-import de.miraculixx.mweb.gui.logic.InventoryUtils.get
 import de.miraculixx.mweb.gui.logic.data.CustomInventory
 import de.miraculixx.mweb.gui.logic.data.GUIClick
 import de.miraculixx.mweb.gui.logic.data.GUIEvent
 import de.miraculixx.mweb.gui.logic.event.GUIClickEvent
 import de.miraculixx.mweb.gui.logic.item.InventoryUtils.getID
-import net.axay.kspigot.items.customModel
 import net.minecraft.server.level.ServerPlayer
-import org.bukkit.entity.Player
-import org.bukkit.event.inventory.ClickType
-import org.bukkit.event.inventory.InventoryClickEvent
 import java.io.File
 
 class ActionFilesUpload : GUIEvent, ActionFiles {
@@ -25,7 +19,7 @@ class ActionFilesUpload : GUIEvent, ActionFiles {
 
         when (item.getID()) {
             100 -> {
-                val path =  item.getTagElement("de.miraculixx.api")?.getString(provider.pathNamespace) ?: provider.currentFolder.path
+                val path = item.getTagElement("de.miraculixx.api")?.getString(provider.pathNamespace) ?: provider.currentFolder.path
                 val file = File(path)
 
                 when (it.click) {

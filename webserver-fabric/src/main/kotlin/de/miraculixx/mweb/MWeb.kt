@@ -6,6 +6,7 @@ import de.miraculixx.mvanilla.messages.cError
 import de.miraculixx.mvanilla.messages.cmp
 import de.miraculixx.mvanilla.messages.plus
 import de.miraculixx.mvanilla.web.WebServer
+import de.miraculixx.mweb.commands.MainCommand
 import de.miraculixx.mweb.module.APIImplementation
 import de.miraculixx.mweb.module.GlobalListener
 import de.miraculixx.mweb.module.LoaderImplementation
@@ -23,6 +24,7 @@ lateinit var server: MinecraftServer
 lateinit var adventure: FabricServerAudiences
 
 fun init() {
+    MainCommand()
     Events.Server.postStart.listen { event ->
         server = event.server
         adventure = FabricServerAudiences.of(server)
