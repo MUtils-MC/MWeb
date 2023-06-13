@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "mutils-web",
-  "version": "100",
+  "version": "101",
 
   "name": "MUtils-Web",
   "description": "MWeb - Create links to your server files to share them!",
@@ -27,7 +27,7 @@
   "depends": {
     "fabricloader": ">=0.14.10",
     "fabric-api": "*",
-    "minecraft": "~1.19",
+    "minecraft": ">=1.19",
     "java": ">=17"
   },
   "suggests": {}

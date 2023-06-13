@@ -1,6 +1,6 @@
 name: MUtils-Web
 load: STARTUP
-version: 100
+version: 101
 main: de.miraculixx.mweb.MWeb
 api-version: 1.16
 authors: [ Miraculixx ]
