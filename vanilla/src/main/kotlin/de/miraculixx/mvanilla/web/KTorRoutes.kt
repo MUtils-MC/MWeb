@@ -11,32 +11,41 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.pipeline.*
 import java.io.File
+import java.nio.file.Files
+import java.text.CharacterIterator
+import java.text.StringCharacterIterator
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+
 
 fun Application.configureDownloads() {
-    val respondForbidden = File(configFolder, "responses/forbidden.html")
-    val respondNoID = File(configFolder, "responses/invalid.html")
-    val respondNotFound = File(configFolder, "responses/notfound.html")
-    val respondIndex = File(configFolder, "responses/index.html")
+    val respondForbidden = File(configFolder, "responses/forbidden.html").takeIf { it.isFile }?.readText() ?: "Forbidden Access"
+    val respondNoID = File(configFolder, "responses/invalid.html").takeIf { it.isFile }?.readText() ?: "Invalid ID"
+    val respondNotFound = File(configFolder, "responses/notfound.html").takeIf { it.isFile }?.readText() ?: "Access not found"
+    val respondIndex = File(configFolder, "responses/index.html").takeIf { it.isFile }?.readText() ?: "Welcome to MWeb"
+    val respondFileInfo = File(configFolder, "responses/download.html").takeIf { it.isFile }?.readText() ?: "Download prompt is not configured"
 
     suspend fun PipelineContext<Unit, ApplicationCall>.handleDownloadRequest() {
         val id = call.parameters["id"]
         val passphrase = call.parameters["pw"]
+        val direct = call.parameters["direct"]
         if (id == null) {
-            call.respondText(respondNoID.takeIf { it.isFile }?.readText() ?: "Invalid ID", ContentType.Text.Html, HttpStatusCode.BadRequest)
+            call.respondText(respondNoID, ContentType.Text.Html, HttpStatusCode.BadRequest)
             return
         }
 
         // Check if file exist and is not timed out
         val fileData = ServerData.getFileData(id)
         if (fileData == null || ServerData.isUnavailable(fileData)) {
-            call.respondText(respondNotFound.takeIf { it.isFile }?.readText() ?: "Access not found", ContentType.Text.Html, HttpStatusCode.NotFound)
+            call.respondText(respondNotFound, ContentType.Text.Html, HttpStatusCode.NotFound)
             return
         }
 
         // Check if user has access to download
         val requestIP = call.request.origin.remoteHost
         if (!ServerData.hasAccess(requestIP, id, passphrase)) {
-            call.respondText(respondForbidden.takeIf { it.isFile }?.readText() ?: "Forbidden Access", ContentType.Text.Html, HttpStatusCode.Forbidden)
+            call.respondText(respondForbidden, ContentType.Text.Html, HttpStatusCode.Forbidden)
             return
         }
 
@@ -54,11 +63,21 @@ fun Application.configureDownloads() {
             }
             zipFile
         } else if (realFileTarget.isDirectory || !realFileTarget.exists()) {
-            call.respondText(respondNotFound.takeIf { it.isFile }?.readText() ?: "Access not found", ContentType.Text.Html, HttpStatusCode.NotFound)
+            call.respondText(respondNotFound, ContentType.Text.Html, HttpStatusCode.NotFound)
             return
         } else realFileTarget
-        if (settings.logAccess) consoleAudience.sendMessage(prefix + cmp("REQUEST $playerName: $id"))
 
+        // Check if file respond or prompt
+        if (direct != "true") {
+            call.respondText(respondFileInfo
+                .replace("\${fileName}", finalFile.name)
+                .replace("\${fileSize}", humanReadableByteCountSI(Files.size(finalFile.toPath())))
+                .replace("\${fileDate}", FileType.getTime(Instant.ofEpochMilli(finalFile.lastModified()))),
+            ContentType.Text.Html, HttpStatusCode.OK)
+            return
+        }
+
+        if (settings.logAccess) consoleAudience.sendMessage(prefix + cmp("REQUEST $playerName: $id"))
         call.response.header(HttpHeaders.ContentDisposition, "attachment; filename=\"${finalFile.name}\"")
         call.respondFile(finalFile)
 
@@ -73,6 +92,19 @@ fun Application.configureDownloads() {
         get("/d") { handleDownloadRequest() }
         get("/download/{id}") { handleDownloadRequest() }
         get("/download") { handleDownloadRequest() }
-        get{ call.respondText(respondIndex.takeIf { it.isFile }?.readText() ?: "Welcome to MWeb", ContentType.Text.Html, HttpStatusCode.OK) }
+        get{ call.respondText(respondIndex, ContentType.Text.Html, HttpStatusCode.OK) }
     }
+}
+
+fun humanReadableByteCountSI(bytes: Long): String {
+    var bytes = bytes
+    if (-1000 < bytes && bytes < 1000) {
+        return "$bytes B"
+    }
+    val ci: CharacterIterator = StringCharacterIterator("kMGTPE")
+    while (bytes <= -999950 || bytes >= 999950) {
+        bytes /= 1000
+        ci.next()
+    }
+    return String.format("%.1f %cB", bytes / 1000.0, ci.current())
 }

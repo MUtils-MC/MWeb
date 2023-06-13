@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="https://mutils.net/images/icons/mutils500.png">
+    <title>MWeb - Download</title>
+    <meta property="og:title" content="MWeb Download">
+    <meta name="description" content="Download ${fileName}. MWeb is a tool to create public or restricted links to your mc server files and more">
+    <meta property="og:description" content="Download ${fileName}. MWeb is a tool to create public or restricted links to your mc server files and more">
+    <meta property="og:image" content="https://mutils.net/images/icons/mutils500.png">
+</head>
+
+<body>
+<div style="background-color: #1a202c;">
+    <div class="flex flex-col items-center justify-center h-screen">
+        <div class="max-w-md w-full bg-gray-800 shadow-md rounded-md overflow-hidden">
+            <div class="p-6">
+                <a class="flex items-center mb-4" href="https://mutils.net">
+                    <img src="https://mutils.net/images/icons/mutils500.png" alt="MUtils Web" class="h-8 mr-2">
+                    <h1 class="text-2xl font-bold text-white">MUtils Web</h1>
+                </a>
+                <h2 class="text-2xl font-bold mb-2 text-white">Download</h2>
+                <div class="text-white">
+                    <span class="font-bold">• File Name</span><span> » ${fileName}</span>
+                </div>
+                <div class="text-white">
+                    <span class="font-bold">• File Size</span><span> » ${fileSize}</span>
+                </div>
+                <div class="text-white">
+                    <span class="font-bold">• Last Update</span><span> » ${fileDate}</span>
+                </div>
+                <div class="flex justify-center" style="padding-top: 1rem">
+                    <a href="?direct=true" class="font-bold transition-all px-4 py-2 bg-blue-500 text-white rounded-md border-2 border-blue-500 hover:bg-blue-600" style="padding: 0.5rem 1.5rem 0.5rem 1.5rem;">Download</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

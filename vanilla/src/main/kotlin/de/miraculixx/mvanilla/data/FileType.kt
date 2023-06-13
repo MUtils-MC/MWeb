@@ -22,7 +22,7 @@ enum class FileType(val desc: String) {
     ;
 
     companion object {
-        private const val pattern = "dd.MM.yyyy HH:mm:ss"
+        const val pattern = "dd.MM.yyyy HH:mm:ss"
         fun getType(extension: String): FileType {
             return when (extension) {
                 "zip", "rar", "tar", "gz" -> ARCHIVE

@@ -67,11 +67,17 @@ interface WhitelistHandling {
 
     fun Audience.printLink(fileData: WhitelistFile, id: String) {
         soundEnable()
-        sendMessage(prefix + cmp("Click ") +
-                cmp("here", cMark)
-                    .clickEvent(ClickEvent.copyToClipboard(ServerData.getLink(id)))
-                    .addHover(cmp("Click to copy download link")) +
-                cmp(" to copy the download link ${if (fileData.accessType == WhitelistType.PASSPHRASE_RESTRICTED) "(passphrase included!)" else ""}"))
+        if (this == consoleAudience) {
+            sendMessage(cmp("The access ID is ") + cmp(id, cMark))
+        } else {
+            sendMessage(
+                prefix + cmp("Click ") +
+                        cmp("here", cMark)
+                            .clickEvent(ClickEvent.copyToClipboard(ServerData.getLink(id)))
+                            .addHover(cmp("Click to copy download link")) +
+                        cmp(" to copy the download link ${if (fileData.accessType == WhitelistType.PASSPHRASE_RESTRICTED) "(passphrase included!)" else ""}")
+            )
+        }
     }
 
     fun Audience.createResourcePackAccess(path: String): ResourcePackInfo? {

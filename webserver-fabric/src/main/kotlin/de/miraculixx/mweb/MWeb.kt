@@ -12,6 +12,7 @@ import de.miraculixx.mweb.module.GlobalListener
 import de.miraculixx.mweb.module.LoaderImplementation
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
+import net.fabricmc.loader.api.FabricLoader
 import net.kyori.adventure.platform.fabric.FabricServerAudiences
 import net.minecraft.server.MinecraftServer
 import net.silkmc.silk.core.event.Events
@@ -25,7 +26,8 @@ lateinit var adventure: FabricServerAudiences
 
 fun init() {
     MainCommand()
-    Events.Server.postStart.listen { event ->
+    var isLoaded = false
+    Events.Server.postStart.listen event@{ event ->
         server = event.server
         adventure = FabricServerAudiences.of(server)
         consoleAudience = adventure.console()
@@ -45,12 +47,16 @@ fun init() {
         localization = Localization(File("${configFolder.path}/language"), settings.lang, languages)
 
         val responseFolder = File(configFolder, "responses")
-        if (!responseFolder.exists()) {
-            responseFolder.mkdir()
-            dumpRessourceFile("/responses/forbidden.html", File(responseFolder, "forbidden.html"))
-            dumpRessourceFile("/responses/invalid.html", File(responseFolder, "invalid.html"))
-            dumpRessourceFile("/responses/notfound.html", File(responseFolder, "notfound.html"))
-            dumpRessourceFile("/responses/index.html", File(responseFolder, "index.html"))
+        if (!responseFolder.exists()) responseFolder.mkdir()
+        File(responseFolder, "download.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/download.html")
+        File(responseFolder, "forbidden.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/forbidden.html")
+        File(responseFolder, "invalid.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/invalid.html")
+        File(responseFolder, "notfound.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/notfound.html")
+        File(responseFolder, "index.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/index.html")
+
+        val container = FabricLoader.getInstance().getModContainer("mutils-web").get()
+        if (!WebServer.checkVersion(container.metadata.version.friendlyString.toIntOrNull() ?: 0)) {
+            return@event
         }
 
         ServerData.loadData()
@@ -61,15 +67,17 @@ fun init() {
         APIImplementation()
         LoaderImplementation()
         GlobalListener
+        isLoaded = true
     }
 
     Events.Server.preStop.listen {
+        if (!isLoaded) return@listen
         WebServer.stopServer()
         ServerData.saveData()
         File(configFolder, "settings.json").writeText(WebServer.jsonFull.encodeToString(settings))
     }
 }
 
-private fun dumpRessourceFile(location: String, target: File) {
-    Unit::class.java.getResourceAsStream(location)?.let { target.writeBytes(it.readAllBytes()) }
+private fun File.dumpRessourceFile(location: String) {
+    Unit::class.java.getResourceAsStream(location)?.let { writeBytes(it.readAllBytes()) }
 }

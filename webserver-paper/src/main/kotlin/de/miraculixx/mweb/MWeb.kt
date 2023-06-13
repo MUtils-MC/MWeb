@@ -15,6 +15,7 @@ import dev.jorel.commandapi.CommandAPIConfig
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import net.axay.kspigot.extensions.console
+import net.axay.kspigot.extensions.pluginManager
 import net.axay.kspigot.main.KSpigot
 import net.axay.kspigot.runnables.taskRunLater
 import java.io.File
@@ -43,12 +44,18 @@ class MWeb : KSpigot() {
         localization = Localization(File("${configFolder.path}/language"), settings.lang, languages)
 
         val responseFolder = File(configFolder, "responses")
-        if (!responseFolder.exists()) {
-            responseFolder.mkdir()
-            dumpRessourceFile("/responses/forbidden.html", File(responseFolder, "forbidden.html"))
-            dumpRessourceFile("/responses/invalid.html", File(responseFolder, "invalid.html"))
-            dumpRessourceFile("/responses/notfound.html", File(responseFolder, "notfound.html"))
-            dumpRessourceFile("/responses/index.html", File(responseFolder, "index.html"))
+        if (!responseFolder.exists()) responseFolder.mkdir()
+        File(responseFolder, "download.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/download.html")
+        File(responseFolder, "forbidden.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/forbidden.html")
+        File(responseFolder, "invalid.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/invalid.html")
+        File(responseFolder, "notfound.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/notfound.html")
+        File(responseFolder, "index.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/index.html")
+
+
+        @Suppress("DEPRECATION") // Papers new description is incompatible with old versions
+        if (!WebServer.checkVersion(description.version.toIntOrNull() ?: 0)) {
+            pluginManager.disablePlugin(this)
+            return
         }
 
         APIImplementation()
@@ -69,13 +76,15 @@ class MWeb : KSpigot() {
     }
 
     override fun shutdown() {
+        println(WebServer.isStarted)
+        if (!WebServer.isStarted) return
         WebServer.stopServer()
         ServerData.saveData()
         CommandAPI.onDisable()
         File(configFolder, "settings.json").writeText(WebServer.jsonFull.encodeToString(settings))
     }
 
-    private fun dumpRessourceFile(location: String, target: File) {
-        javaClass.getResourceAsStream(location)?.let { target.writeBytes(it.readAllBytes()) }
+    private fun File.dumpRessourceFile(location: String) {
+        javaClass.getResourceAsStream(location)?.let { writeBytes(it.readAllBytes()) }
     }
 }
