@@ -29,8 +29,7 @@ object ServerData {
     /**
      * @return <ID, Data>
      */
-    fun getWhitelists() =
-        webData.whitelistedFiles
+    fun getWhitelists() = webData.whitelistedFiles
 
     /**
      * @return <ID, Data>

@@ -11,7 +11,7 @@ import de.miraculixx.mweb.module.APIImplementation
 import de.miraculixx.mweb.module.GlobalListener
 import de.miraculixx.mweb.module.LoaderImplementation
 import dev.jorel.commandapi.CommandAPI
-import dev.jorel.commandapi.CommandAPIConfig
+import dev.jorel.commandapi.CommandAPIBukkitConfig
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import net.axay.kspigot.extensions.console
@@ -45,11 +45,11 @@ class MWeb : KSpigot() {
 
         val responseFolder = File(configFolder, "responses")
         if (!responseFolder.exists()) responseFolder.mkdir()
-        File(responseFolder, "download.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/download.html")
-        File(responseFolder, "forbidden.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/forbidden.html")
-        File(responseFolder, "invalid.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/invalid.html")
-        File(responseFolder, "notfound.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/notfound.html")
-        File(responseFolder, "index.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/index.html")
+        File(responseFolder, "download.html").takeIf { !it.exists() }?.let { dumpRessourceFile(it, "/responses/download.html") }
+        File(responseFolder, "forbidden.html").takeIf { !it.exists() }?.let { dumpRessourceFile(it, "/responses/forbidden.html") }
+        File(responseFolder, "invalid.html").takeIf { !it.exists() }?.let { dumpRessourceFile(it, "/responses/invalid.html") }
+        File(responseFolder, "notfound.html").takeIf { !it.exists() }?.let { dumpRessourceFile(it, "/responses/notfound.html") }
+        File(responseFolder, "index.html").takeIf { !it.exists() }?.let { dumpRessourceFile(it, "/responses/index.html") }
 
 
         @Suppress("DEPRECATION") // Papers new description is incompatible with old versions
@@ -59,7 +59,7 @@ class MWeb : KSpigot() {
         }
 
         APIImplementation()
-        CommandAPI.onLoad(CommandAPIConfig().verboseOutput(false).silentLogs(true))
+        CommandAPI.onLoad(CommandAPIBukkitConfig(this).verboseOutput(false).silentLogs(true))
     }
 
     override fun startup() {
@@ -70,7 +70,7 @@ class MWeb : KSpigot() {
         taskRunLater(1) { WebServer.startServer() }
 
         // Register listener
-        CommandAPI.onEnable(this)
+        CommandAPI.onEnable()
         MainCommand()
         GlobalListener
     }
@@ -84,7 +84,7 @@ class MWeb : KSpigot() {
         File(configFolder, "settings.json").writeText(WebServer.jsonFull.encodeToString(settings))
     }
 
-    private fun File.dumpRessourceFile(location: String) {
-        javaClass.getResourceAsStream(location)?.let { writeBytes(it.readAllBytes()) }
+    private fun dumpRessourceFile(file: File, location: String) {
+        javaClass.getResourceAsStream(location)?.let { file.writeBytes(it.readAllBytes()) } ?: println("Failed to load $location!")
     }
 }

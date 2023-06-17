@@ -91,7 +91,7 @@ interface WhitelistHandling {
         val hash = DigestUtils.getSha1Digest().digest(file.readBytes())
 
         val prompt = msg("event.texturepackPrompt", listOf(file.name))
-        val link = ServerData.getLink(whitelist.first)
+        val link = ServerData.getLink(whitelist.first) + "?direct=true"
         return ResourcePackInfo(hash, prompt, link, whitelist.first)
     }
 

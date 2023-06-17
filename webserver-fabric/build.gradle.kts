@@ -20,7 +20,7 @@ val transitiveInclude: Configuration by configurations.creating {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.19.4")
+    minecraft("com.mojang:minecraft:1.20.1")
     mappings(loom.officialMojangMappings())
 
     val ktorVersion = property("ktorVersion")
@@ -29,9 +29,9 @@ dependencies {
     modImplementation("net.silkmc:silk-core:$silkVersion")
     modImplementation("net.silkmc:silk-nbt:$silkVersion")
     modImplementation("net.silkmc:silk-persistence:$silkVersion")
-    modImplementation("net.fabricmc:fabric-loader:0.14.19")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.80.0+1.19.4")
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.9.4+kotlin.1.8.21")
+    modImplementation("net.fabricmc:fabric-loader:0.14.21")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.83.1+1.20.1")
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.9.5+kotlin.1.8.22")
     modImplementation(include("me.lucko", "fabric-permissions-api", "0.2-SNAPSHOT"))
     modImplementation(include("net.kyori:adventure-platform-fabric:5.8.0")!!)
     modImplementation(include("org.yaml:snakeyaml:1.33")!!)

@@ -75,7 +75,9 @@ class MainCommand : WhitelistHandling, FileManaging {
             }
 
             argument(LiteralArgument("remove").withPermission("mweb.whitelist.delete")) {
-                argument(StringArgument("id").replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(ServerData.getWhitelists().map { StringTooltip.ofString(it.key, it.value.path) }))) {
+                argument(StringArgument("id").replaceSuggestions(ArgumentSuggestions.stringsWithTooltips {
+                    ServerData.getWhitelists().map { StringTooltip.ofString(it.key, it.value.path) }.toTypedArray()
+                })) {
                     anyExecutor { sender, args ->
                         val id = args[0] as String
                         sender.removeWhitelist(id)
@@ -84,7 +86,9 @@ class MainCommand : WhitelistHandling, FileManaging {
             }
 
             argument(LiteralArgument("get").withPermission("mweb.whitelist.info")) {
-                argument(StringArgument("id").replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(ServerData.getWhitelists().map { StringTooltip.ofString(it.key, it.value.path) }))) {
+                argument(StringArgument("id").replaceSuggestions(ArgumentSuggestions.stringsWithTooltips {
+                    ServerData.getWhitelists().map { StringTooltip.ofString(it.key, it.value.path) }.toTypedArray()
+                })) {
                     anyExecutor { sender, args ->
                         val id = args[0] as String
                         ServerData.getFileData(id)?.let { sender.printLink(it, id) } ?: sender.sendMessage(prefix + cmp(msgString("event.idNotFound", listOf(id)), cError))
