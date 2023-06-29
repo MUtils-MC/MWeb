@@ -1,10 +1,9 @@
 package de.miraculixx.mweb.api.data
 
+import de.miraculixx.mweb.api.utils.getTime
 import kotlinx.serialization.Serializable
 import net.kyori.adventure.text.Component
 import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 /**
  * @param path Real path to file
@@ -14,17 +13,17 @@ import java.time.format.DateTimeFormatter
  * @param timeout The epoch timestamp (in millis) when the file access is revoked
  */
 @Serializable
-data class WhitelistFile(
-    val path: String,
+data class AccessDownload(
+    override val path: String,
     val zippedTo: String? = null,
-    val accessType: WhitelistType,
-    val restriction: String? = null,
-    var timeout: Long? = null,
+    override val accessType: WhitelistType,
+    override val restriction: String? = null,
+    override var timeout: Long? = null,
     var maxAmount: Int? = null,
     var requestAmount: Int = 0,
-    var disabled: Boolean = false
-) {
-    fun fullLore(spacer: Component): List<Component> {
+    override var disabled: Boolean = false
+): AccessData {
+    override fun fullLore(spacer: Component): List<Component> {
         return buildList {
             add(spacer.append(Component.text(accessType.name)))
             restriction?.let { add(spacer.append(Component.text("Restriction: $it"))) }
@@ -34,13 +33,7 @@ data class WhitelistFile(
         }
     }
 
-    fun compactLore(spacer: Component): Component {
+    override fun compactLore(spacer: Component): Component {
         return spacer.append(Component.text("$accessType ($requestAmount${maxAmount?.let { "/$it" } ?: ""})"))
-    }
-
-    private val pattern = "dd.MM.yyyy HH:mm:ss"
-    private fun getTime(instant: Instant): String {
-        val formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault())
-        return formatter.format(instant)
     }
 }

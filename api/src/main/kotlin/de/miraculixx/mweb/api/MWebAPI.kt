@@ -1,6 +1,6 @@
 package de.miraculixx.mweb.api
 
-import de.miraculixx.mweb.api.data.WhitelistFile
+import de.miraculixx.mweb.api.data.AccessDownload
 import de.miraculixx.mweb.api.data.WhitelistType
 import java.io.File
 import java.util.UUID
@@ -18,9 +18,9 @@ abstract class MWebAPI {
      * @param restriction Restriction string for restricted access
      * @param duration Whitelist timeout
      * @param maxDownloads Download amount restriction
-     * @return Pair out ID & [WhitelistFile]
+     * @return Pair out ID & [AccessDownload]
      */
-    abstract fun whitelistFile(path: String, access: WhitelistType, restriction: String? = null, duration: Duration? = null, maxDownloads: Int? = null): Pair<String, WhitelistFile>?
+    abstract fun whitelistFile(path: String, access: WhitelistType, restriction: String? = null, duration: Duration? = null, maxDownloads: Int? = null): Pair<String, AccessDownload>?
 
     /**
      * Remove an existing whitelist for a file
