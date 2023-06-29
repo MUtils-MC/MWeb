@@ -18,7 +18,7 @@ import net.minecraft.server.level.ServerPlayer
 import java.net.URLEncoder
 import kotlin.time.Duration
 
-class ActionCreateWhitelist : GUIEvent, WhitelistHandling {
+class ActionCreateWhitelist(download: Boolean) : GUIEvent, WhitelistHandling {
     override val run: (GUIClickEvent, CustomInventory) -> Unit = event@{ it: GUIClickEvent, inv: CustomInventory ->
         it.isCancelled = true
         val player = it.player as? ServerPlayer ?: return@event
@@ -94,8 +94,28 @@ class ActionCreateWhitelist : GUIEvent, WhitelistHandling {
                 }
             }
 
+            6 -> {
+                AwaitChatMessage(false, player, "Max File Size (mb)", 30, null, false, msg("event.setMaxFileSize"), {
+                    provider.maxFileSize = it.toLongOrNull()
+                    player.soundEnable()
+                }) {
+                    inv.update()
+                    inv.open(player)
+                }
+            }
+
+            7 -> {
+                AwaitChatMessage(false, player, "Max File Amount", 30, null, false, msg("event.setMaxFileSize"), {
+                    provider.maxFileAmount = it.toIntOrNull() ?: 0
+                    player.soundEnable()
+                }) {
+                    inv.update()
+                    inv.open(player)
+                }
+            }
+
             10 -> {
-                if (!player.permVisual("mweb.whitelist.custom", true)) return@event
+                if (!player.permVisual("mweb.${if (download) "whitelist" else "upload"}.custom", true)) return@event
                 val type = provider.whitelistType
                 if ((type == WhitelistType.PASSPHRASE_RESTRICTED || type == WhitelistType.USER_RESTRICTED) && provider.restriction == null) {
                     player.soundError()
@@ -103,7 +123,8 @@ class ActionCreateWhitelist : GUIEvent, WhitelistHandling {
                 }
 
                 player.closeContainer()
-                player.whitelistFile(provider.path, type, provider.restriction, provider.timeout, provider.maxRequests)
+                if (download) player.whitelistFile(provider.path, type, provider.restriction, provider.timeout, provider.maxRequests)
+                else player.whitelistUpload(provider.path, type, provider.restriction, provider.maxFileSize, provider.maxFileAmount, provider.timeout)
             }
         }
     }

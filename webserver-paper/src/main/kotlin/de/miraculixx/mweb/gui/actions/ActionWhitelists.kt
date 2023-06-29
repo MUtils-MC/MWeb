@@ -3,6 +3,7 @@ package de.miraculixx.mweb.gui.actions
 import de.miraculixx.mvanilla.data.ServerData
 import de.miraculixx.mvanilla.data.prefix
 import de.miraculixx.mvanilla.messages.*
+import de.miraculixx.mweb.api.data.AccessDownload
 import de.miraculixx.mweb.await.AwaitChatMessage
 import de.miraculixx.mweb.await.AwaitConfirm
 import de.miraculixx.mweb.gui.items.ItemWhitelists
@@ -16,7 +17,7 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import kotlin.time.Duration
 
-class ActionWhitelists(previous: CustomInventory) : GUIEvent {
+class ActionWhitelists(previous: CustomInventory, download: Boolean) : GUIEvent {
     override val run: (InventoryClickEvent, CustomInventory) -> Unit = event@{ it: InventoryClickEvent, inv: CustomInventory ->
         it.isCancelled = true
         val player = it.whoClicked as? Player ?: return@event
@@ -30,7 +31,8 @@ class ActionWhitelists(previous: CustomInventory) : GUIEvent {
             return@event
         }
         val id = meta.persistentDataContainer.get(provider.idKey) ?: return@event
-        val data = ServerData.getFileData(id)
+        val data = if (download) ServerData.getFileData(id) else ServerData.getUploadData(id)
+        val perm = if (download) "whitelist" else "upload"
 
         if (data == null) {
             player.soundError()
@@ -40,14 +42,14 @@ class ActionWhitelists(previous: CustomInventory) : GUIEvent {
 
         when (it.click) {
             ClickType.LEFT -> {
-                if (!player.permVisual("mweb.whitelist.toggle")) return@event
+                if (!player.permVisual("mweb.$perm.toggle")) return@event
                 data.disabled = player.toggle(data.disabled)
                 inv.update()
             }
 
             ClickType.RIGHT -> {
                 player.closeInventory()
-                player.sendMessage(prefix + msg("command.copyLink", listOf(ServerData.getLink(id))))
+                player.sendMessage(prefix + msg("command.copyLink", listOf(ServerData.getLink(id, download))))
                 player.soundEnable()
             }
 
@@ -55,10 +57,10 @@ class ActionWhitelists(previous: CustomInventory) : GUIEvent {
                 when (it.hotbarButton) {
                     // Delete Whitelist
                     0 -> {
-                        if (!player.permVisual("mweb.whitelist.delete")) return@event
+                        if (!player.permVisual("mweb.$perm.delete")) return@event
                         AwaitConfirm(player, {
-                            if (!player.permVisual("mweb.whitelist.delete", true)) return@AwaitConfirm
-                            ServerData.removeWhitelist(id)
+                            if (!player.permVisual("mweb.$perm.delete", true)) return@AwaitConfirm
+                            if (download) ServerData.removeWhitelist(id) else ServerData.removeUpload(id)
                             player.soundDelete()
                             inv.update()
                             inv.open(player)
@@ -69,7 +71,7 @@ class ActionWhitelists(previous: CustomInventory) : GUIEvent {
                     }
                     // Rise max downloads
                     1 -> {
-                        if (!player.permVisual("mweb.whitelist.edit")) return@event
+                        if (!player.permVisual("mweb.whitelist.edit") || data !is AccessDownload) return@event
                         data.maxAmount?.let {
                             AwaitChatMessage(false, player, "Amount", 30, null, false, cmp("\n "), {
                                 if (!player.permVisual("mweb.whitelist.edit")) return@AwaitChatMessage
@@ -89,17 +91,17 @@ class ActionWhitelists(previous: CustomInventory) : GUIEvent {
                     }
                     // Rise timeout
                     2 -> {
-                        if (!player.permVisual("mweb.whitelist.edit")) return@event
+                        if (!player.permVisual("mweb.$perm.edit")) return@event
                         data.timeout?.let {
                             AwaitChatMessage(false, player, "Time", 30, null, false, cmp("\n"), {
-                                if (!player.permVisual("mweb.whitelist.edit")) return@AwaitChatMessage
+                                if (!player.permVisual("mweb.$perm.edit")) return@AwaitChatMessage
                                 val duration = try {
                                     Duration.parse(it)
                                 } catch (_: Exception) {
                                     player.soundError()
                                     return@AwaitChatMessage
                                 }
-                                if (data.timeout != null) data.timeout = data.timeout!! + duration.inWholeMilliseconds
+                                if (data.timeout != null) data.timeout = (data.timeout!! + duration.inWholeMilliseconds)
                                 player.soundEnable()
                             }) {
                                 inv.update()

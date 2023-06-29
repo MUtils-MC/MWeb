@@ -4,6 +4,7 @@ import de.miraculixx.mvanilla.data.FileType
 import de.miraculixx.mvanilla.data.GUITypes
 import de.miraculixx.mvanilla.data.ServerData
 import de.miraculixx.mvanilla.messages.*
+import de.miraculixx.mweb.api.data.AccessData
 import de.miraculixx.mweb.gui.getItem
 import de.miraculixx.mweb.api.data.Head64
 import de.miraculixx.mweb.gui.logic.items.ItemProvider
@@ -33,12 +34,13 @@ class ItemFilesManage(startFolder: File, private val guiType: GUITypes) : ItemPr
     private val msgDot = cmp("  • ", NamedTextColor.DARK_GRAY)
     private val loreInfo = listOf(emptyComponent(), cmp("• ", NamedTextColor.DARK_GRAY, bold = true) + cmp("Info", cHighlight, underlined = true))
     private val loreWhitelists = listOf(emptyComponent(), cmp("• ", NamedTextColor.DARK_GRAY, bold = true) + cmp("File Access", cHighlight, underlined = true))
+    private val loreUploads = listOf(emptyComponent(), cmp("• ", NamedTextColor.DARK_GRAY, bold = true) + cmp("Uploads", cHighlight, underlined = true))
 
     private val msgNavigate = msgString("event.action.navigate")
-    private val msgCreateGlobal = if (guiType == GUITypes.FILE_WHITELISTING) msgString("event.action.createGlobal") else ""
-    private val msgCreatePrivate = if (guiType == GUITypes.FILE_WHITELISTING) msgString("event.action.createPrivate") else ""
-    private val msgCreateCustom = if (guiType == GUITypes.FILE_WHITELISTING) msgString("event.action.createCustom") else ""
-    private val msgManageLinks = if (guiType == GUITypes.FILE_WHITELISTING) msgString("event.action.manageLinks") else ""
+    private val msgCreateGlobal = if (guiType != GUITypes.FILE_MANAGE) msgString("event.action.createGlobal") else ""
+    private val msgCreatePrivate = if (guiType != GUITypes.FILE_MANAGE) msgString("event.action.createPrivate") else ""
+    private val msgCreateCustom = if (guiType != GUITypes.FILE_MANAGE) msgString("event.action.createCustom") else ""
+    private val msgManageLinks = if (guiType != GUITypes.FILE_MANAGE) msgString("event.action.manageLinks") else ""
     private val msgRename = if (guiType == GUITypes.FILE_MANAGE) msgString("event.action.rename") else ""
     private val msgZIP = if (guiType == GUITypes.FILE_MANAGE) msgString("event.action.zip") else ""
     private val msgUnZIP = if (guiType == GUITypes.FILE_MANAGE) msgString("event.action.unzip") else ""
@@ -107,30 +109,39 @@ class ItemFilesManage(startFolder: File, private val guiType: GUITypes) : ItemPr
             }
             GUITypes.FILE_WHITELISTING -> buildList {
                 addAll(loreWhitelists)
-                val whitelists = ServerData.getWhitelists(path)
-                when (whitelists.size) {
-                    0 -> add(msgDot + cmp(msgNone, italic = true))
-                    1 -> {
-                        val key = whitelists.keys.first()
-                        val whitelist = whitelists[key] ?: return@buildList
-                        addAll(whitelist.fullLore(msgDot))
-                    }
-                    2 -> {
-                        whitelists.forEach { (_, data) ->
-                            add(data.compactLore(msgDot))
-                        }
-                    }
-                }
-                add(emptyComponent())
-                if (isFolder) add(msgClickLeft + cmp(msgNavigate))
-                add(msgButton + Component.keybind("key.hotbar.1", cHighlight) + cmp(" ≫ $msgCreateGlobal"))
-                add(msgButton + Component.keybind("key.hotbar.2", cHighlight) + cmp(" ≫ $msgCreatePrivate"))
-                add(msgButton + Component.keybind("key.hotbar.3", cHighlight) + cmp(" ≫ $msgCreateCustom"))
-                if (whitelists.isNotEmpty()) add(msgButton + Component.keybind("key.hotbar.4", cHighlight) + cmp(" ≫ $msgManageLinks"))
+                addAll(getAccessLore(ServerData.getWhitelists(path)))
             }
-            GUITypes.FILE_UPLOADING -> emptyList()
+            GUITypes.FILE_UPLOADING -> buildList {
+                if (!isDirectory) return@buildList
+                addAll(loreUploads)
+                addAll(getAccessLore(ServerData.getUploads(path)))
+            }
 
             else -> emptyList()
+        }
+    }
+
+    private fun File.getAccessLore(data: Map<String, AccessData>): List<Component> {
+        return buildList {
+            when (data.size) {
+                0 -> add(msgDot + cmp(msgNone, italic = true))
+                1 -> {
+                    val key = data.keys.first()
+                    val whitelist = data[key] ?: return@buildList
+                    addAll(whitelist.fullLore(msgDot))
+                }
+                else -> {
+                    data.forEach { (_, data) ->
+                        add(data.compactLore(msgDot))
+                    }
+                }
+            }
+            add(emptyComponent())
+            if (isDirectory) add(msgClickLeft + cmp(msgNavigate))
+            add(msgButton + Component.keybind("key.hotbar.1", cHighlight) + cmp(" ≫ $msgCreateGlobal"))
+            add(msgButton + Component.keybind("key.hotbar.2", cHighlight) + cmp(" ≫ $msgCreatePrivate"))
+            add(msgButton + Component.keybind("key.hotbar.3", cHighlight) + cmp(" ≫ $msgCreateCustom"))
+            if (data.isNotEmpty()) add(msgButton + Component.keybind("key.hotbar.4", cHighlight) + cmp(" ≫ $msgManageLinks"))
         }
     }
 
@@ -138,7 +149,7 @@ class ItemFilesManage(startFolder: File, private val guiType: GUITypes) : ItemPr
         return listOf(
             getHeader(1, cmp(msgString("items.fileManage.n"), cHighlight), if (guiType == GUITypes.FILE_MANAGE) Head64.HASHTAG_LIGHT_BLUE else Head64.HASHTAG_BLUE),
             getHeader(2, cmp(msgString("items.fileWhitelist.n"), cHighlight), if (guiType == GUITypes.FILE_WHITELISTING) Head64.ARROW_DOWN_LIGHT_BLUE else Head64.ARROW_DOWN_BLUE),
-            getHeader(3, cmp(msgString("items.fileUpload.n"), cError), if (guiType == GUITypes.FILE_UPLOADING) Head64.PLUS_LIGHT_BLUE else Head64.PLUS_BLUE)
+            getHeader(3, cmp(msgString("items.fileUpload.n"), cHighlight), if (guiType == GUITypes.FILE_UPLOADING) Head64.PLUS_LIGHT_BLUE else Head64.PLUS_BLUE)
         )
     }
 

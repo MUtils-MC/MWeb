@@ -53,7 +53,7 @@ class ActionFilesWhitelist : GUIEvent, WhitelistHandling, ActionFiles {
                                 player.soundEnable()
                                 inv.update()
                             }
-                            //Create private link for the user
+                            //Create a private link for the user
                             1 -> {
                                 if (!player.permVisual("mweb.whitelist.privat")) return@event
                                 if (file.isDirectory) {
@@ -72,7 +72,7 @@ class ActionFilesWhitelist : GUIEvent, WhitelistHandling, ActionFiles {
                             //Open custom link creator
                             2 -> {
                                 if (!player.permVisual("mweb.whitelist.custom")) return@event
-                                GUITypes.CREATE_CUSTOM_WHITELIST.buildInventory(player, "${player.uuid}-CREATE_WHITELIST", ItemCreateWhitelist(path), ActionCreateWhitelist())
+                                GUITypes.CREATE_CUSTOM_WHITELIST.buildInventory(player, "${player.uuid}-CREATE_WHITELIST", ItemCreateWhitelist(path, true), ActionCreateWhitelist(true))
                             }
                             //Manage file links
                             3 -> {
@@ -82,7 +82,7 @@ class ActionFilesWhitelist : GUIEvent, WhitelistHandling, ActionFiles {
                                     return@event
                                 }
                                 player.click()
-                                GUITypes.MANAGE_WHITELISTS.buildInventory(player, "${player.uuid}-MANAGE_WHITELIST", ItemWhitelists(file), ActionWhitelists(inv))
+                                GUITypes.MANAGE_WHITELISTS.buildInventory(player, "${player.uuid}-MANAGE_WHITELIST", ItemWhitelists(file, true), ActionWhitelists(inv, true))
                             }
 
                             else -> player.soundStone()

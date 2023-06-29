@@ -45,7 +45,7 @@ interface ActionFiles {
 
     fun ServerPlayer.openUpload(provider: ItemFilesManage) {
         if (!permVisual("mweb.upload.list")) return
-        soundError()
-//        GUITypes.FILE_UPLOADING.buildInventory(this, "${uniqueId}-UPLOAD", ItemFilesManage(provider.currentFolder, GUITypes.FILE_UPLOADING), ActionFilesUpload())
+        click()
+        GUITypes.FILE_UPLOADING.buildInventory(this, "${uuid}-UPLOAD", ItemFilesManage(provider.currentFolder, GUITypes.FILE_UPLOADING), ActionFilesUpload())
     }
 }

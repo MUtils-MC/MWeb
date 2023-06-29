@@ -101,6 +101,66 @@ class MainCommand : WhitelistHandling, FileManaging {
             }
         }
 
+        literal("upload") {
+            requires { it.player?.permVisual("mweb.upload.list") ?: true }
+            runs {
+                val player = source.player ?: return@runs
+                player.playSound(Sound.sound(Key.key("block.ender_chest.open"), Sound.Source.MASTER, 0.5f, 1f))
+                GUITypes.FILE_UPLOADING.buildInventory(player, "${player.uuid}-WHITELIST", ItemFilesManage(File("./"), GUITypes.FILE_UPLOADING), ActionFilesWhitelist())
+            }
+            literal("add") {
+                requires { it.player?.permVisual("mweb.whitelist.custom") ?: true }
+                argument<String>("file", StringArgumentType.string()) { file ->
+                    argument<String>("access", StringArgumentType.string()) { access ->
+                        suggestList { WhitelistType.values().map { it.name } }
+                        runs {
+                            val acc = enumOf<WhitelistType>(access()) ?: WhitelistType.GLOBAL
+                            source.whitelistFile(file(), acc)
+                        }
+                        argument<String>("restriction", StringArgumentType.string()) { restriction ->
+                            runs {
+                                val acc = enumOf<WhitelistType>(access()) ?: WhitelistType.GLOBAL
+                                source.whitelistFile(file(), acc, restriction())
+                            }
+                            argument<String>("timeout", StringArgumentType.string()) { timeout ->
+                                runs {
+                                    val acc = enumOf<WhitelistType>(access()) ?: WhitelistType.GLOBAL
+                                    val timed = try {
+                                        Duration.parse(timeout())
+                                    } catch (_: Exception) {
+                                        source.soundError()
+                                        return@runs
+                                    }
+                                    source.whitelistFile(file(), acc, restriction(), timed)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            literal("remove") {
+                requires { it.player?.permVisual("mweb.whitelist.delete") ?: true }
+                argument<String>("id", StringArgumentType.string()) { id ->
+                    suggestListWithTooltips { ServerData.getWhitelists().map { it.key to Component.literal(it.value.path) }.asIterable() }
+                    runs {
+                        source.removeWhitelist(id())
+                    }
+                }
+            }
+
+            literal("get") {
+                requires { it.player?.permVisual("mweb.whitelist.info") ?: true }
+                argument<String>("id", StringArgumentType.string()) { id ->
+                    suggestListWithTooltips { ServerData.getWhitelists().map { it.key to Component.literal(it.value.path) }.asIterable() }
+                    runs {
+                        val stringID = id()
+                        ServerData.getFileData(stringID)?.let { source.printLink(it, stringID) } ?: source.sendMessage(prefix + cmp(msgString("event.idNotFound", listOf(stringID)), cError))
+                    }
+                }
+            }
+        }
+
         literal("manage") {
             requires { it.player?.permVisual("mweb.manage.list") ?: true }
             runs {

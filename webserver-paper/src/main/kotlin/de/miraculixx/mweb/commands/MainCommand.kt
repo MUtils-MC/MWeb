@@ -13,6 +13,7 @@ import de.miraculixx.mvanilla.serializer.enumOf
 import de.miraculixx.mweb.MWeb
 import de.miraculixx.mweb.api.data.WhitelistType
 import de.miraculixx.mweb.gui.actions.ActionFilesManage
+import de.miraculixx.mweb.gui.actions.ActionFilesUpload
 import de.miraculixx.mweb.gui.actions.ActionFilesWhitelist
 import de.miraculixx.mweb.gui.buildInventory
 import de.miraculixx.mweb.gui.items.ItemFilesManage
@@ -92,6 +93,61 @@ class MainCommand : WhitelistHandling, FileManaging {
                     anyExecutor { sender, args ->
                         val id = args[0] as String
                         ServerData.getFileData(id)?.let { sender.printLink(it, id) } ?: sender.sendMessage(prefix + cmp(msgString("event.idNotFound", listOf(id)), cError))
+                    }
+                }
+            }
+        }
+
+        argument(LiteralArgument("upload").withPermission("mweb.upload.list")) {
+            playerExecutor { player, _ ->
+                player.playSound(player, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 1f)
+                GUITypes.FILE_UPLOADING.buildInventory(player, "${player.uniqueId}-UPLOAD", ItemFilesManage(File("./"), GUITypes.FILE_UPLOADING), ActionFilesUpload())
+            }
+            argument(LiteralArgument("add").withPermission("mweb.upload.custom")) {
+                stringArgument("file") {
+                    argument(StringArgument("access").replaceSuggestions(ArgumentSuggestions.strings(WhitelistType.values().map { it.name }))) {
+                        integerArgument("maxAmount", 1) {
+                            longArgument("maxSize", 1) {
+                                anyExecutor { sender, args ->
+                                    val access = enumOf<WhitelistType>(args[1] as String) ?: WhitelistType.GLOBAL
+                                    sender.whitelistUpload(args[0] as String, access, null, args[3] as Long, args[2] as Int)
+                                }
+                                stringArgument("restriction") {
+                                    anyExecutor { sender, args ->
+                                        val access = enumOf<WhitelistType>(args[1] as String) ?: WhitelistType.GLOBAL
+                                        sender.whitelistUpload(args[0] as String, access, args[4] as String, args[3] as Long, args[2] as Int)
+                                    }
+                                    stringArgument("timeout") {
+                                        anyExecutor { sender, args ->
+                                            val access = enumOf<WhitelistType>(args[1] as String) ?: WhitelistType.GLOBAL
+                                            val timeout = Duration.parse(args[3] as String)
+                                            sender.whitelistUpload(args[0] as String, access, args[4] as String, args[3] as Long, args[2] as Int, timeout)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            argument(LiteralArgument("remove").withPermission("mweb.upload.delete")) {
+                argument(StringArgument("id").replaceSuggestions(ArgumentSuggestions.stringsWithTooltips {
+                    ServerData.getUploads().map { StringTooltip.ofString(it.key, it.value.path) }.toTypedArray()
+                })) {
+                    anyExecutor { sender, args ->
+                        sender.removeUpload(args[0] as String)
+                    }
+                }
+            }
+
+            argument(LiteralArgument("get").withPermission("mweb.upload.info")) {
+                argument(StringArgument("id").replaceSuggestions(ArgumentSuggestions.stringsWithTooltips {
+                    ServerData.getUploads().map { StringTooltip.ofString(it.key, it.value.path) }.toTypedArray()
+                })) {
+                    anyExecutor { sender, args ->
+                        val id = args[0] as String
+                        ServerData.getUploadData(id)?.let { sender.printLink(it, id) } ?: sender.sendMessage(prefix + cmp(msgString("event.idNotFound", listOf(id)), cError))
                     }
                 }
             }

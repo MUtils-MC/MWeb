@@ -4,7 +4,7 @@ import de.miraculixx.mvanilla.data.FileType
 import de.miraculixx.mvanilla.interfaces.WhitelistHandling
 import de.miraculixx.mvanilla.serializer.Zipping
 import de.miraculixx.mweb.api.MWebAPI
-import de.miraculixx.mweb.api.data.WhitelistFile
+import de.miraculixx.mweb.api.data.AccessDownload
 import de.miraculixx.mweb.api.data.WhitelistType
 import net.axay.kspigot.runnables.taskRunLater
 import net.kyori.adventure.audience.Audience
@@ -18,7 +18,7 @@ class APIImplementation : MWebAPI(), WhitelistHandling {
         INSTANCE = this
     }
 
-    override fun whitelistFile(path: String, access: WhitelistType, restriction: String?, duration: Duration?, maxDownloads: Int?): Pair<String, WhitelistFile>? =
+    override fun whitelistFile(path: String, access: WhitelistType, restriction: String?, duration: Duration?, maxDownloads: Int?): Pair<String, AccessDownload>? =
         Audience.empty().whitelistFile(path, access, restriction, duration, maxDownloads)
 
     override fun removeWhitelist(id: String) = Audience.empty().removeWhitelist(id)

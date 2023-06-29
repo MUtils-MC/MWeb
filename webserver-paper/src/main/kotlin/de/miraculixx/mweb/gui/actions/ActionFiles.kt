@@ -2,7 +2,6 @@ package de.miraculixx.mweb.gui.actions
 
 import de.miraculixx.mvanilla.data.GUITypes
 import de.miraculixx.mvanilla.messages.click
-import de.miraculixx.mvanilla.messages.soundError
 import de.miraculixx.mvanilla.messages.soundStone
 import de.miraculixx.mweb.gui.buildInventory
 import de.miraculixx.mweb.gui.items.ItemFilesManage
@@ -45,7 +44,7 @@ interface ActionFiles {
 
     fun Player.openUpload(provider: ItemFilesManage) {
         if (!permVisual("mweb.upload.list")) return
-        soundError()
-//        GUITypes.FILE_UPLOADING.buildInventory(this, "${uniqueId}-UPLOAD", ItemFilesManage(provider.currentFolder, GUITypes.FILE_UPLOADING), ActionFilesUpload())
+        click()
+        GUITypes.FILE_UPLOADING.buildInventory(this, "${uniqueId}-UPLOAD", ItemFilesManage(provider.currentFolder, GUITypes.FILE_UPLOADING), ActionFilesUpload())
     }
 }
