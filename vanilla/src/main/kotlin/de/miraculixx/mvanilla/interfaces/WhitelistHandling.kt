@@ -4,7 +4,9 @@ import de.miraculixx.mvanilla.data.*
 import de.miraculixx.mvanilla.messages.*
 import de.miraculixx.mvanilla.serializer.Zipping
 import de.miraculixx.mvanilla.web.WebServer
-import de.miraculixx.mweb.api.data.WhitelistFile
+import de.miraculixx.mweb.api.data.AccessData
+import de.miraculixx.mweb.api.data.AccessDownload
+import de.miraculixx.mweb.api.data.AccessUpload
 import de.miraculixx.mweb.api.data.WhitelistType
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
@@ -26,7 +28,7 @@ interface WhitelistHandling {
      * @param restriction Needed if access type is restricted. UUID, passphrase, ...
      * @param duration Access only for a limited duration. Null = infinity
      */
-    fun Audience.whitelistFile(path: String, access: WhitelistType, restriction: String? = null, duration: Duration? = null, maxDownloads: Int? = null): Pair<String, WhitelistFile>? {
+    fun Audience.whitelistFile(path: String, access: WhitelistType, restriction: String? = null, duration: Duration? = null, maxDownloads: Int? = null): Pair<String, AccessDownload>? {
         val id = calcID()
         val file = File(path)
         if (!file.exists()) {
@@ -45,10 +47,31 @@ interface WhitelistHandling {
             System.currentTimeMillis() + duration.inWholeMilliseconds
         } else null
 
-        val data = WhitelistFile(file.path, zipTarget, access, restriction, timeoutTimestamp, maxDownloads)
+        val data = AccessDownload(file.path, zipTarget, access, restriction, timeoutTimestamp, maxDownloads)
         ServerData.addWhitelist(id, data)
 
         sendMessage(prefix + cmp("New file access created!", cSuccess))
+        printLink(data, id)
+        return id to data
+    }
+
+    fun Audience.whitelistUpload(path: String, access: WhitelistType, restriction: String? = null, maxFileSize: Long? = null, maxFileAmount: Int = 1, duration: Duration? = null): Pair<String, AccessUpload>? {
+        val id = calcID()
+        val file = File(path)
+        if (!file.isDirectory) {
+            soundError()
+            sendMessage(prefix + cmp("The file $path is not a directory!", cError))
+            return null
+        }
+
+        val timeoutTimestamp = if (duration != null) {
+            System.currentTimeMillis() + duration.inWholeMilliseconds
+        } else null
+
+        val data = AccessUpload(file.path, access, restriction, maxFileSize, maxFileAmount, timeoutTimestamp)
+        ServerData.addUpload(id, data)
+
+        sendMessage(prefix + cmp("New upload folder access created!", cSuccess))
         printLink(data, id)
         return id to data
     }
@@ -60,12 +83,24 @@ interface WhitelistHandling {
             true
         } else {
             soundError()
-            sendMessage(prefix + cmp("Failed to remove file access! "))
+            sendMessage(prefix + cmp("Failed to remove file access!", cError))
             false
         }
     }
 
-    fun Audience.printLink(fileData: WhitelistFile, id: String) {
+    fun Audience.removeUpload(id: String): Boolean {
+        return if (ServerData.removeUpload(id)) {
+            soundDisable()
+            sendMessage(prefix + cmp("Successfully removed upload access", cSuccess))
+            true
+        } else {
+            soundError()
+            sendMessage(prefix + cmp("Failed to remove upload access", cError))
+            false
+        }
+    }
+
+    fun Audience.printLink(fileData: AccessData, id: String) {
         soundEnable()
         if (this == consoleAudience) {
             sendMessage(cmp("The access ID is ") + cmp(id, cMark))
@@ -73,9 +108,9 @@ interface WhitelistHandling {
             sendMessage(
                 prefix + cmp("Click ") +
                         cmp("here", cMark)
-                            .clickEvent(ClickEvent.copyToClipboard(ServerData.getLink(id)))
-                            .addHover(cmp("Click to copy download link")) +
-                        cmp(" to copy the download link ${if (fileData.accessType == WhitelistType.PASSPHRASE_RESTRICTED) "(passphrase included!)" else ""}")
+                            .clickEvent(ClickEvent.copyToClipboard(ServerData.getLink(id, fileData is AccessDownload)))
+                            .addHover(cmp("Click to copy access link")) +
+                        cmp(" to copy the access link ${if (fileData.accessType == WhitelistType.PASSPHRASE_RESTRICTED) "(passphrase included!)" else ""}")
             )
         }
     }
@@ -91,7 +126,7 @@ interface WhitelistHandling {
         val hash = DigestUtils.getSha1Digest().digest(file.readBytes())
 
         val prompt = msg("event.texturepackPrompt", listOf(file.name))
-        val link = ServerData.getLink(whitelist.first) + "?direct=true"
+        val link = ServerData.getLink(whitelist.first, true) + "?direct=true"
         return ResourcePackInfo(hash, prompt, link, whitelist.first)
     }
 
