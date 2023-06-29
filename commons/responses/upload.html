@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="https://mutils.net/images/icons/mutils500.png">
+    <title>MWeb - Upload</title>
+    <meta property="og:title" content="MWeb Upload">
+    <meta name="description" content="Upload up to ${fileAmount} file/s. MWeb is a tool to create public or restricted links to your mc server files and more">
+    <meta property="og:description" content="Upload up to ${fileAmount} file/s. MWeb is a tool to create public or restricted links to your mc server files and more">
+    <meta property="og:image" content="https://mutils.net/images/icons/mutils500.png">
+</head>
+
+<body>
+<div style="background-color: #1a202c;">
+    <div class="flex flex-col items-center justify-center h-screen">
+        <div class="max-w-md w-full bg-gray-800 shadow-md rounded-md overflow-hidden">
+            <div class="p-6">
+                <a class="flex items-center mb-4" href="https://mutils.net/mweb">
+                    <img src="https://mutils.net/images/icons/mutils500.png" alt="MUtils Web" class="h-8 mr-2">
+                    <h1 class="text-2xl font-bold text-white">MUtils Web</h1>
+                </a>
+                <h2 class="text-2xl font-bold mb-2 text-white">Upload</h2>
+                <div class="text-white">
+                    <span class="font-bold">• Max File Size</span><span> » ${fileSize}</span>
+                </div>
+                <div class="text-white">
+                    <span class="font-bold">• Max File Amount</span><span> » ${fileAmount}</span>
+                </div>
+                <div class="flex justify-center" style="padding-top: 1rem">
+                    <form class="max-w-md flex" action="" method="POST" enctype="multipart/form-data">
+                        <label for="file-upload" class="font-bold transition-all px-4 py-2 bg-blue-500 text-white rounded-md border-2 border-blue-500 hover:bg-blue-600" style="padding: 0.5rem 1.5rem 0.5rem 1.5rem;">
+                            <span class="mr-2">Select File/s</span>
+                            <input id="file-upload" name="file" type="file" multiple class="hidden" onchange="this.form.submit()">
+                        </label>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

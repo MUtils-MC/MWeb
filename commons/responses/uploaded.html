@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://mutils.net/images/icons/mutils500.png">
-    <title>MWeb - Forbidden</title>
-    <meta property="og:title" content="MWeb Forbidden">
-    <meta name="description" content="Access forbidden. MWeb is a tool to create public or restricted links to your mc server files and more">
-    <meta property="og:description" content="Access forbidden. MWeb is a tool to create public or restricted links to your mc server files and more">
+    <title>MWeb - Upload ✔</title>
+    <meta property="og:title" content="MWeb Upload ✔">
+    <meta name="description" content="Uploaded ${fileName} file/s. MWeb is a tool to create public or restricted links to your mc server files and more">
+    <meta property="og:description" content="Uploaded ${fileName} file/s. MWeb is a tool to create public or restricted links to your mc server files and more">
     <meta property="og:image" content="https://mutils.net/images/icons/mutils500.png">
 </head>
 
@@ -22,8 +22,13 @@
                     <img src="https://mutils.net/images/icons/mutils500.png" alt="MUtils Web" class="h-8 mr-2">
                     <h1 class="text-2xl font-bold text-white">MUtils Web</h1>
                 </a>
-                <h2 class="text-2xl font-bold mb-2 text-white">Forbidden</h2>
-                <p class="text-white">You are not allowed to access this upload/download.</p>
+                <h2 class="text-2xl font-bold mb-2 text-white">Uploaded</h2>
+                <div class="text-white">
+                    <span class="font-bold">• File Name/s</span><span> » ${fileName}</span>
+                </div>
+                <div class="text-white">
+                    <span class="font-bold">• Total Size</span><span> » ${fileSize}</span>
+                </div>
             </div>
         </div>
     </div>
