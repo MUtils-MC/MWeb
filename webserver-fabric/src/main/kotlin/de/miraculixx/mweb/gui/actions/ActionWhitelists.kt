@@ -41,7 +41,7 @@ class ActionWhitelists(previous: CustomInventory, download: Boolean) : GUIEvent 
         when (it.click) {
             GUIClick.LEFT_CLICK -> {
                 if (!player.permVisual("mweb.$perm.toggle")) return@event
-                data.disabled = player.toggle(data.disabled)
+                data.disabled = !player.toggle(!data.disabled)
                 inv.update()
             }
 

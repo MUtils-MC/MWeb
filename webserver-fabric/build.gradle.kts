@@ -6,6 +6,7 @@ plugins {
 
 repositories {
     mavenCentral()
+    mavenLocal()
     maven {
         name = "JitPack"
         setUrl("https://jitpack.io")
@@ -33,7 +34,7 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.83.1+1.20.1")
     modImplementation("net.fabricmc:fabric-language-kotlin:1.9.5+kotlin.1.8.22")
     modImplementation(include("me.lucko", "fabric-permissions-api", "0.2-SNAPSHOT"))
-    modImplementation(include("net.kyori:adventure-platform-fabric:5.8.0")!!)
+    modImplementation(include("net.kyori:adventure-platform-fabric:5.10.0-SNAPSHOT")!!)
     modImplementation(include("org.yaml:snakeyaml:1.33")!!)
 
     transitiveInclude("io.ktor:ktor-server-core-jvm:$ktorVersion")

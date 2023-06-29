@@ -313,7 +313,7 @@ class MainCommand : WhitelistHandling, FileManaging {
         val hash = DigestUtils.getSha1Digest().digest(file.readBytes())
 
         val prompt = msg("event.texturepackPrompt", listOf(file.name))
-        val link = ServerData.getLink(whitelist.first)
+        val link = ServerData.getLink(whitelist.first, true)
         targets.forEach { player ->
             (player as ServerPlayer).sendTexturePack(link, hash.decodeToString(), force, prompt.native())
         }
