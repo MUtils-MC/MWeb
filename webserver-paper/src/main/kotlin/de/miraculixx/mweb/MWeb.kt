@@ -50,6 +50,8 @@ class MWeb : KSpigot() {
         File(responseFolder, "invalid.html").takeIf { !it.exists() }?.let { dumpRessourceFile(it, "/responses/invalid.html") }
         File(responseFolder, "notfound.html").takeIf { !it.exists() }?.let { dumpRessourceFile(it, "/responses/notfound.html") }
         File(responseFolder, "index.html").takeIf { !it.exists() }?.let { dumpRessourceFile(it, "/responses/index.html") }
+        File(responseFolder, "upload.html").takeIf { !it.exists() }?.let { dumpRessourceFile(it, "/responses/upload.html") }
+        File(responseFolder, "uploaded.html").takeIf { !it.exists() }?.let { dumpRessourceFile(it, "/responses/uploaded.html") }
 
 
         @Suppress("DEPRECATION") // Papers new description is incompatible with old versions

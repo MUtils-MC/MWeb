@@ -53,6 +53,9 @@ fun init() {
         File(responseFolder, "invalid.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/invalid.html")
         File(responseFolder, "notfound.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/notfound.html")
         File(responseFolder, "index.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/index.html")
+        File(responseFolder, "upload.html").takeIf { !it.exists() }?.dumpRessourceFile( "/responses/upload.html")
+        File(responseFolder, "uploaded.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/uploaded.html")
+
 
         val container = FabricLoader.getInstance().getModContainer("mutils-web").get()
         if (!WebServer.checkVersion(container.metadata.version.friendlyString.toIntOrNull() ?: 0)) {
