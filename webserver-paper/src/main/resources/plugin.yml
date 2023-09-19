@@ -1,6 +1,6 @@
 name: MUtils-Web
 load: STARTUP
-version: 105
+version: 131
 main: de.miraculixx.mweb.MWeb
 api-version: 1.16
 authors: [ Miraculixx ]
@@ -11,7 +11,7 @@ libraries:
   - "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-Beta"
   - "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.0-Beta"
   - "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0"
-  - "net.axay:kspigot:1.19.2"
+  - "net.axay:kspigot:1.20.1"
   - "io.ktor:ktor-server-core-jvm:2.3.0"
   - "io.ktor:ktor-server-content-negotiation-jvm:2.3.0"
   - "io.ktor:ktor-serialization-kotlinx-json-jvm:2.3.0"

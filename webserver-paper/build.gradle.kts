@@ -20,7 +20,7 @@ dependencies {
     implementation("dev.jorel:commandapi-bukkit-shade:9.0.3")
     implementation("dev.jorel:commandapi-bukkit-kotlin:9.0.3")
 
-    implementation("net.axay:kspigot:1.19.2")
+    implementation("net.axay:kspigot:1.20.1")
 
     implementation(project(":vanilla"))
     implementation(project(":api"))

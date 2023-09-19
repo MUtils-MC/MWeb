@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "mutils-web",
-  "version": "105",
+  "version": "131",
 
   "name": "MUtils-Web",
   "description": "MWeb - Create links to your server files to share them!",
