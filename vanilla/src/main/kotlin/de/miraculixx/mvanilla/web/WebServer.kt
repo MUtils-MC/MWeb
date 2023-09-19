@@ -83,8 +83,14 @@ object WebServer {
     }
 
     fun stopServer() {
-        server.stop(0, 0)
-        consoleAudience.sendMessage(prefix + cmp("Web Server stopped."))
+        try {
+            server.stop(0, 0)
+            consoleAudience.sendMessage(prefix + cmp("Web Server stopped"))
+        } catch (e: Exception) {
+            consoleAudience.sendMessage(prefix + cmp("Something went wrong while disabling the server!", cError))
+            consoleAudience.sendMessage(prefix + cmp("Error: ${e.message}", cError))
+        }
+
     }
 
     @Serializable

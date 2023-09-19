@@ -54,7 +54,7 @@ class MWeb : KSpigot() {
         File(responseFolder, "uploaded.html").takeIf { !it.exists() }?.let { dumpRessourceFile(it, "/responses/uploaded.html") }
 
 
-        @Suppress("DEPRECATION") // Papers new description is incompatible with old versions
+        @Suppress("DEPRECATION") // Paper's new description is incompatible with old versions
         if (!WebServer.checkVersion(description.version.toIntOrNull() ?: 0)) {
             pluginManager.disablePlugin(this)
             return
@@ -80,9 +80,9 @@ class MWeb : KSpigot() {
     override fun shutdown() {
         println(WebServer.isStarted)
         if (!WebServer.isStarted) return
-        WebServer.stopServer()
         ServerData.saveData()
         CommandAPI.onDisable()
+        WebServer.stopServer()
         File(configFolder, "settings.json").writeText(WebServer.jsonFull.encodeToString(settings))
     }
 
