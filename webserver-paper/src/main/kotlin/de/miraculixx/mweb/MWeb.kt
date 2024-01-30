@@ -6,13 +6,13 @@ import de.miraculixx.mvanilla.messages.cError
 import de.miraculixx.mvanilla.messages.cmp
 import de.miraculixx.mvanilla.messages.plus
 import de.miraculixx.mvanilla.web.WebServer
+import de.miraculixx.mweb.commands.LogBackCommand
 import de.miraculixx.mweb.commands.MainCommand
 import de.miraculixx.mweb.module.APIImplementation
 import de.miraculixx.mweb.module.GlobalListener
 import de.miraculixx.mweb.module.LoaderImplementation
 import dev.jorel.commandapi.CommandAPI
 import dev.jorel.commandapi.CommandAPIBukkitConfig
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import net.axay.kspigot.extensions.console
 import net.axay.kspigot.extensions.pluginManager
@@ -74,12 +74,11 @@ class MWeb : KSpigot() {
         // Register listener
         CommandAPI.onEnable()
         MainCommand()
+        LogBackCommand()
         GlobalListener
     }
 
     override fun shutdown() {
-        println(WebServer.isStarted)
-        if (!WebServer.isStarted) return
         ServerData.saveData()
         CommandAPI.onDisable()
         WebServer.stopServer()

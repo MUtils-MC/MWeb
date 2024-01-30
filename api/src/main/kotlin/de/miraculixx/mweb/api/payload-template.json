@@ -1,0 +1,14 @@
+{
+  "code": "abc",
+  "timestamp": "12345",
+  "mweb-version": "1.0.0",
+  "mod": {
+    "id": "mweb",
+    "version": "1.0.0"
+  },
+  "server": {
+    "version": "1.20.4",
+    "loader": "paper-13.42.1",
+    "system": "linux"
+  }
+}

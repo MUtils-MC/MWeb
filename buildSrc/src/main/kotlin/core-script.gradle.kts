@@ -16,12 +16,9 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-cio:$ktorVersion")
-//    implementation("io.ktor:ktor-server-websockets:$ktorVersion")
-//    implementation("io.ktor:ktor-client-core:$ktorVersion")
-//    implementation("io.ktor:ktor-client-cio:$ktorVersion")
-//    implementation("io.ktor:ktor-server-cors:$ktorVersion")
-//    implementation("io.ktor:ktor-server-cors-jvm:$ktorVersion")
-//    implementation("ch.qos.logback:logback-classic:$ktorVersion")
+
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
 
     implementation("org.yaml:snakeyaml:1.33")
     implementation("commons-codec:commons-codec:1.15")
@@ -29,16 +26,16 @@ dependencies {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(18))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
 tasks {
     compileJava {
         options.encoding = "UTF-8"
-        options.release.set(18)
+        options.release.set(17)
     }
     compileKotlin {
-        kotlinOptions.jvmTarget = "18"
+        kotlinOptions.jvmTarget = "17"
     }
 }

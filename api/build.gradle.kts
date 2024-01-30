@@ -22,7 +22,7 @@ dependencies {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(18))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
     withSourcesJar()
     withJavadocJar()
@@ -31,10 +31,10 @@ java {
 tasks {
     compileJava {
         options.encoding = "UTF-8"
-        options.release.set(18)
+        options.release.set(17)
     }
     compileKotlin {
-        kotlinOptions.jvmTarget = "18"
+        kotlinOptions.jvmTarget = "17"
     }
     register("release") {
         group = "publishing"

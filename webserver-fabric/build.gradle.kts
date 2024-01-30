@@ -21,21 +21,19 @@ val transitiveInclude: Configuration by configurations.creating {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.20.1")
+    minecraft("com.mojang:minecraft:1.20.4")
     mappings(loom.officialMojangMappings())
 
     val ktorVersion = property("ktorVersion")
-    val silkVersion = "1.9.8"
-    modImplementation("net.silkmc:silk-commands:$silkVersion")
-    modImplementation("net.silkmc:silk-core:$silkVersion")
-    modImplementation("net.silkmc:silk-nbt:$silkVersion")
-    modImplementation("net.silkmc:silk-persistence:$silkVersion")
-    modImplementation("net.fabricmc:fabric-loader:0.14.21")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.83.1+1.20.1")
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.9.5+kotlin.1.8.22")
+    modImplementation("net.silkmc:silk-commands:1.10.3")
+    modImplementation("net.silkmc:silk-core:1.10.3")
+    modImplementation("net.silkmc:silk-nbt:1.10.3")
+    modImplementation("net.fabricmc:fabric-loader:0.15.2")
+    modImplementation(include("net.kyori:adventure-platform-fabric:5.10.1")!!)
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.91.3+1.20.4")
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.16+kotlin.1.9.21")
     modImplementation(include("me.lucko", "fabric-permissions-api", "0.2-SNAPSHOT"))
-    modImplementation(include("net.kyori:adventure-platform-fabric:5.10.0-SNAPSHOT")!!)
-    modImplementation(include("org.yaml:snakeyaml:1.33")!!)
+    transitiveInclude(implementation("org.yaml:snakeyaml:2.2")!!)
 
     transitiveInclude("io.ktor:ktor-server-core-jvm:$ktorVersion")
     transitiveInclude("io.ktor:ktor-server-content-negotiation-jvm:$ktorVersion")
@@ -53,7 +51,7 @@ dependencies {
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "18"
+            jvmTarget = "17"
             freeCompilerArgs += "-Xskip-prerelease-check"
         }
     }

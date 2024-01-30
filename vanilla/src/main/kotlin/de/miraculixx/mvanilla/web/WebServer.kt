@@ -12,9 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import net.kyori.adventure.text.Component
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
@@ -40,11 +38,11 @@ object WebServer {
         val version = try {
             val url = URL("https://api.mutils.de/public/version")
             val con = url.openConnection() as HttpURLConnection
-            con.requestMethod = "GET";
+            con.requestMethod = "GET"
             con.setRequestProperty("User-Agent", "MUtils-API-1.1")
             con.setRequestProperty("Service", "MUtils-Web")
-            con.doInput = true;
-            con.doOutput = true;
+            con.doInput = true
+            con.doOutput = true
             con.connect()
             json.decodeFromString<Version>(con.inputStream.readBytes().decodeToString())
         } catch (e: Exception) {
@@ -77,7 +75,12 @@ object WebServer {
             publicIP = URL("http://ifconfig.me/ip").readText().trim()
             val port = settings.port
             consoleAudience.sendMessage(prefix + cmp("Creating web server via $publicIP:$port..."))
-            server = embeddedServer(CIO, port = port, host = "0.0.0.0", module = Application::module).start(wait = false)
+            try {
+                server = embeddedServer(CIO, port = port, host = "0.0.0.0", module = Application::module).start(wait = false)
+            } catch (e: Exception) {
+                consoleAudience.sendMessage(prefix + cmp("Failed to start internal webserver!", cError))
+                consoleAudience.sendMessage(prefix + cmp("Error: ${e.message}", cError))
+            }
             isStarted = true
         }
     }

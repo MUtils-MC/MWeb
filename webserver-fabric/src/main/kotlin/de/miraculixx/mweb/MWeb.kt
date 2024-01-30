@@ -10,7 +10,6 @@ import de.miraculixx.mweb.commands.MainCommand
 import de.miraculixx.mweb.module.APIImplementation
 import de.miraculixx.mweb.module.GlobalListener
 import de.miraculixx.mweb.module.LoaderImplementation
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import net.fabricmc.loader.api.FabricLoader
 import net.kyori.adventure.platform.fabric.FabricServerAudiences
@@ -53,7 +52,7 @@ fun init() {
         File(responseFolder, "invalid.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/invalid.html")
         File(responseFolder, "notfound.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/notfound.html")
         File(responseFolder, "index.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/index.html")
-        File(responseFolder, "upload.html").takeIf { !it.exists() }?.dumpRessourceFile( "/responses/upload.html")
+        File(responseFolder, "upload.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/upload.html")
         File(responseFolder, "uploaded.html").takeIf { !it.exists() }?.dumpRessourceFile("/responses/uploaded.html")
 
 
@@ -74,7 +73,6 @@ fun init() {
     }
 
     Events.Server.preStop.listen {
-        if (!isLoaded) return@listen
         WebServer.stopServer()
         ServerData.saveData()
         File(configFolder, "settings.json").writeText(WebServer.jsonFull.encodeToString(settings))

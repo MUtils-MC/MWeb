@@ -47,6 +47,19 @@ object Zipping {
         }
     }
 
+    fun zipFiles(files: List<File>, zipFile: File) {
+        ZipOutputStream(FileOutputStream(zipFile)).use { zipStream ->
+            files.forEach { file ->
+                FileInputStream(file).use { fileInputStream ->
+                    val entry = ZipEntry(file.name)
+                    zipStream.putNextEntry(entry)
+                    fileInputStream.copyTo(zipStream)
+                    zipStream.closeEntry()
+                }
+            }
+        }
+    }
+
     fun unzipArchive(zipFile: File, destFolder: File) {
         val destFolderPath = destFolder.path
 

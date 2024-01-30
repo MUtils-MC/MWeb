@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(project(":api"))
+    implementation("io.ktor:ktor-client-cio-jvm:2.3.7")
 }
 
 group = "de.miraculixx.mvanilla"

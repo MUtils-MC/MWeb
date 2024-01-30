@@ -9,6 +9,7 @@ import de.miraculixx.mweb.api.data.WhitelistType
 import de.miraculixx.mweb.gui.logic.item.native
 import de.miraculixx.mweb.server
 import net.kyori.adventure.audience.Audience
+import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket
 import net.silkmc.silk.core.task.mcCoroutineTask
 import java.io.File
 import java.util.*
@@ -30,7 +31,7 @@ class APIImplementation : MWebAPI(), WhitelistHandling {
         mcCoroutineTask(true, delay = 1.minutes) { Audience.empty().removeWhitelist(rpInfo.data) }
         targets.forEach { uuid ->
             val player = server.playerList.getPlayer(uuid) ?: return@forEach
-            player.sendTexturePack(rpInfo.link, rpInfo.hash.decodeToString(), force, rpInfo.prompt.native())
+            player.connection.send(ClientboundResourcePackPushPacket(UUID.randomUUID(), rpInfo.link, rpInfo.hash.decodeToString(), force, rpInfo.prompt.native()))
         }
         return true
     }

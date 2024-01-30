@@ -22,12 +22,14 @@ import net.kyori.adventure.text.event.ClickEvent
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.commands.arguments.selector.EntitySelector
 import net.minecraft.network.chat.Component
+import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 import net.silkmc.silk.commands.command
 import net.silkmc.silk.core.task.mcCoroutineTask
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.File
+import java.util.*
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
@@ -52,7 +54,7 @@ class MainCommand : WhitelistHandling, FileManaging {
                 requires { it.player?.permVisual("mweb.whitelist.custom") ?: true }
                 argument<String>("file", StringArgumentType.string()) { file ->
                     argument<String>("access", StringArgumentType.string()) { access ->
-                        suggestList { WhitelistType.values().map { it.name } }
+                        suggestList { WhitelistType.entries.map { it.name } }
                         runs {
                             val acc = enumOf<WhitelistType>(access()) ?: WhitelistType.GLOBAL
                             source.whitelistFile(file(), acc)
@@ -112,7 +114,7 @@ class MainCommand : WhitelistHandling, FileManaging {
                 requires { it.player?.permVisual("mweb.whitelist.custom") ?: true }
                 argument<String>("file", StringArgumentType.string()) { file ->
                     argument<String>("access", StringArgumentType.string()) { access ->
-                        suggestList { WhitelistType.values().map { it.name } }
+                        suggestList { WhitelistType.entries.map { it.name } }
                         runs {
                             val acc = enumOf<WhitelistType>(access()) ?: WhitelistType.GLOBAL
                             source.whitelistFile(file(), acc)
@@ -315,7 +317,7 @@ class MainCommand : WhitelistHandling, FileManaging {
         val prompt = msg("event.texturepackPrompt", listOf(file.name))
         val link = ServerData.getLink(whitelist.first, true)
         targets.forEach { player ->
-            (player as ServerPlayer).sendTexturePack(link, hash.decodeToString(), force, prompt.native())
+            (player as ServerPlayer).connection.send(ClientboundResourcePackPushPacket(UUID.randomUUID(), link, hash.decodeToString(), force, prompt.native()))
         }
     }
 }
