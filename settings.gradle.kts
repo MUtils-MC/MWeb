@@ -1,5 +1,5 @@
 
-rootProject.name = "MinecraftWebServer"
+rootProject.name = "MWeb"
 
 pluginManagement {
     repositories {

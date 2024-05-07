@@ -1,31 +1,22 @@
 package de.miraculixx.mweb.module
 
 import de.miraculixx.mvanilla.data.FileType
-import de.miraculixx.mvanilla.data.consoleAudience
-import de.miraculixx.mvanilla.data.prefix
-import de.miraculixx.mvanilla.interfaces.LogPayloads
 import de.miraculixx.mvanilla.interfaces.WhitelistHandling
-import de.miraculixx.mvanilla.messages.cmp
-import de.miraculixx.mvanilla.messages.plus
 import de.miraculixx.mvanilla.serializer.Zipping
-import de.miraculixx.mvanilla.web.WebClient
-import de.miraculixx.mweb.MWeb
 import de.miraculixx.mweb.api.MWebAPI
-import de.miraculixx.mweb.api.data.*
-import net.axay.kspigot.extensions.server
+import de.miraculixx.mweb.api.data.AccessDownload
+import de.miraculixx.mweb.api.data.WhitelistType
 import net.axay.kspigot.runnables.taskRunLater
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.resource.ResourcePackInfo
 import net.kyori.adventure.resource.ResourcePackRequest
 import org.bukkit.Bukkit
-import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 import java.net.URI
-import java.net.URL
 import java.util.*
 import kotlin.time.Duration
 
-class APIImplementation : MWebAPI(), WhitelistHandling, LogPayloads {
+class APIImplementation : MWebAPI(), WhitelistHandling {
     init {
         INSTANCE = this
     }
@@ -75,26 +66,5 @@ class APIImplementation : MWebAPI(), WhitelistHandling, LogPayloads {
             Zipping.unzipArchive(zip, target)
             true
         } else false
-    }
-
-    override fun registerLogSending(modInstance: Any, modID: String, webhookURL: URL, files: Set<File>, cooldown: Int, zip: Boolean): Boolean {
-        val plugin = modInstance as? JavaPlugin ?: return false
-        val metadata = plugin.description
-        if (metadata.name != modID) return false
-        val logSender = LogPayloadData(
-            "-1", -1, MWeb.INSTANCE.description.version,
-            LogPayloadModData(metadata.name, metadata.version),
-            LogPayloadServerData(server.minecraftVersion, server.version, System.getProperty("os.name"))
-        )
-        WebClient.logbacks[modID] = LogPayload(files, cooldown, webhookURL.toString(), zip, logSender)
-        consoleAudience.sendMessage(prefix + cmp("Registered log sending for $modID"))
-        return true
-    }
-
-    override fun unregisterLogSending(modInstance: Any, modID: String): Boolean {
-        val plugin = modInstance as? JavaPlugin ?: return false
-        val metadata = plugin.description
-        if (metadata.name != modID) return false
-        return WebClient.logbacks.remove(modID) != null
     }
 }

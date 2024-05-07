@@ -14,11 +14,11 @@ repositories {
 }
 
 dependencies {
-    paperweight.paperDevBundle("1.20.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.20.6-R0.1-SNAPSHOT")
 
 
-    implementation("dev.jorel:commandapi-bukkit-shade:9.3.0")
-    implementation("dev.jorel:commandapi-bukkit-kotlin:9.3.0")
+    implementation("dev.jorel:commandapi-bukkit-shade:9.4.0")
+    implementation("dev.jorel:commandapi-bukkit-kotlin:9.4.0")
 
     implementation("net.axay:kspigot:1.20.1")
 

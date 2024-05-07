@@ -317,7 +317,7 @@ class MainCommand : WhitelistHandling, FileManaging {
         val prompt = msg("event.texturepackPrompt", listOf(file.name))
         val link = ServerData.getLink(whitelist.first, true)
         targets.forEach { player ->
-            (player as ServerPlayer).connection.send(ClientboundResourcePackPushPacket(UUID.randomUUID(), link, hash.decodeToString(), force, prompt.native()))
+            (player as ServerPlayer).connection.send(ClientboundResourcePackPushPacket(UUID.randomUUID(), link, hash.decodeToString(), force, Optional.of(prompt.native())))
         }
     }
 }

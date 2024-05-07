@@ -17,6 +17,8 @@ import de.miraculixx.mweb.gui.logic.item.setName
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.text.Component
+import net.minecraft.core.component.DataComponentPatch
+import net.minecraft.core.component.DataComponents
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -208,7 +210,7 @@ class StorageGUI(
                 }
 
                 currentItem.enchant(Enchantments.MENDING, 1)
-                currentItem.hideTooltipPart(ItemStack.TooltipPart.ENCHANTMENTS)
+                currentItem.applyComponents(DataComponentPatch.builder().set(DataComponents.HIDE_TOOLTIP, net.minecraft.util.Unit.valueOf("true")).build())
                 currentItem
             } else pair.first
             if (filterable && index >= 9 * 4) return

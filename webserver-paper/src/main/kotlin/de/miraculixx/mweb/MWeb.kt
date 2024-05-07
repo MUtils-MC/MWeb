@@ -6,7 +6,6 @@ import de.miraculixx.mvanilla.messages.cError
 import de.miraculixx.mvanilla.messages.cmp
 import de.miraculixx.mvanilla.messages.plus
 import de.miraculixx.mvanilla.web.WebServer
-import de.miraculixx.mweb.commands.LogBackCommand
 import de.miraculixx.mweb.commands.MainCommand
 import de.miraculixx.mweb.module.APIImplementation
 import de.miraculixx.mweb.module.GlobalListener
@@ -74,7 +73,6 @@ class MWeb : KSpigot() {
         // Register listener
         CommandAPI.onEnable()
         MainCommand()
-        LogBackCommand()
         GlobalListener
     }
 

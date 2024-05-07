@@ -21,17 +21,18 @@ val transitiveInclude: Configuration by configurations.creating {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.20.4")
+    minecraft("com.mojang:minecraft:1.20.6")
     mappings(loom.officialMojangMappings())
 
     val ktorVersion = property("ktorVersion")
-    modImplementation("net.silkmc:silk-commands:1.10.3")
-    modImplementation("net.silkmc:silk-core:1.10.3")
-    modImplementation("net.silkmc:silk-nbt:1.10.3")
-    modImplementation("net.fabricmc:fabric-loader:0.15.2")
-    modImplementation(include("net.kyori:adventure-platform-fabric:5.10.1")!!)
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.91.3+1.20.4")
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.16+kotlin.1.9.21")
+    val silkVersion = property("silkVersion")
+    modImplementation("net.silkmc:silk-commands:$silkVersion")
+    modImplementation("net.silkmc:silk-core:$silkVersion")
+    modImplementation("net.silkmc:silk-nbt:$silkVersion")
+    modImplementation("net.fabricmc:fabric-loader:0.15.11")
+    modImplementation(include("net.kyori:adventure-platform-fabric:5.12.0")!!)
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.97.8+1.20.6")
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.19+kotlin.1.9.23")
     modImplementation(include("me.lucko", "fabric-permissions-api", "0.2-SNAPSHOT"))
     transitiveInclude(implementation("org.yaml:snakeyaml:2.2")!!)
 
@@ -51,7 +52,7 @@ dependencies {
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "17"
+            jvmTarget = "21"
             freeCompilerArgs += "-Xskip-prerelease-check"
         }
     }

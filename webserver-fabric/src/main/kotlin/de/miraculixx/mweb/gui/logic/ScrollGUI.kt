@@ -16,6 +16,8 @@ import de.miraculixx.mweb.gui.logic.item.setName
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.text.Component
+import net.minecraft.core.component.DataComponentPatch
+import net.minecraft.core.component.DataComponents
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -157,7 +159,7 @@ class ScrollGUI(
         content.toList().forEachIndexed { index, data ->
             if (data.second) {
                 data.first.enchant(Enchantments.MENDING, 1)
-                data.first.hideTooltipPart(ItemStack.TooltipPart.ENCHANTMENTS)
+                data.first.applyComponents(DataComponentPatch.builder().set(DataComponents.HIDE_TOOLTIP, net.minecraft.util.Unit.valueOf("true")).build())
             }
             i.setItem(index + 19, itemStack(if (data.second) Items.LIME_STAINED_GLASS_PANE else Items.RED_STAINED_GLASS_PANE) {
                 setName(if (data.second) activated else deactivated)
